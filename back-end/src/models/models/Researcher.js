@@ -2,7 +2,7 @@ const model = require('../model')
 const mysql = require('mysql');
 
 
-const attrs = ['id','email','password','contact_no','first_name','last_name','profile_picture','institution','bio','last_login','created_at','updated_at','_deleted']
+const attrs = ['id','email','password','contact_no','first_name','last_name','profile_picture','institution','bio','last_login','created_at','updated_at','_deleted','token']
 
 function Researcher(data={}){
     model.call(this,'researcher',Researcher,data,attrs)

@@ -13,6 +13,7 @@ CREATE TABLE researcher(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     _deleted boolean DEFAULT FALSE,
+    token varchar(255) DEFAULT NULL,
 
     PRIMARY KEY(id)
 
