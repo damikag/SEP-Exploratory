@@ -50,4 +50,15 @@ Researcher.prototype._update = function () {
   return this.update(params);
 };
 
+Researcher.prototype.find_by_name = function (search_string) {
+  var params = [];
+  console.log(search_string);
+  var param = mysql
+    .escapeId("first_name")
+    .concat(" LIKE ")
+    .concat(mysql.escape(search_string.concat("%")));
+  params.push(param);
+  return this.find_all(params);
+};
+
 module.exports = Researcher;

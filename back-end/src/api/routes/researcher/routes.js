@@ -1,8 +1,12 @@
-const router = require('express').Router();
+const router = require("express").Router();
 
-const researcherController = require('../../../controllers/researcher/researcherController');
-const {valid_jwt_needed} =  require('../../middleware/authorization');
+const researcherController = require("../../../controllers/researcher/researcherController");
+const { valid_jwt_needed } = require("../../middleware/authorization");
 
-router.get('/',valid_jwt_needed, researcherController.indexAction);
+router.get("/", valid_jwt_needed, researcherController.indexAction);
+router.post(
+  "/suggestions",
+  researcherController.searchRelatedResearchersAction
+);
 
-module.exports = router
+module.exports = router;

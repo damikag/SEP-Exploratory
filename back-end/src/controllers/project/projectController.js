@@ -2,10 +2,6 @@ var Project = require("../../models/models/Project");
 var Collaborate = require("../../models/models/Collaborate");
 const db_service = require("../../db/db_service");
 const { create_project_validation } = require("./validation");
-const { clean_object } = require("../../api/helpers/helper");
-
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
 module.exports.indexAction = (req, res) => {
   return res.status(200).send("You are at project index");
@@ -27,8 +23,6 @@ module.exports.createProjectAction = (req, res) => {
     .insert()
     .then(async (result) => {
       if (result) {
-        // res.status(200).json({ id: result.insertId });
-
         var modals = [];
         await collaborators.forEach((collaborator) => {
           var collaborators_modal = new Collaborate({
@@ -47,12 +41,6 @@ module.exports.createProjectAction = (req, res) => {
     .catch((err) => {
       return res.status(500).json({ error: err.message });
     })
-    // .then((result) => {
-    // var author = req.body.author;
-    // var title = req.body.title;
-    // var project = new Project(req.body);
-    // return res.status(200).json({ id: result.result.insertId });
-    // })
     .catch((error) => {
       return res.status(500).send("server error");
     });
