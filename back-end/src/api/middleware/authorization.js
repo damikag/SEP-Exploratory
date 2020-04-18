@@ -13,18 +13,23 @@ module.exports.valid_jwt_needed = function (req, res, next) {
         const verified = jwt.verify(token, process.env.TOKEN_SECRET);
         var researcher = new Researcher();
         req.user = verified;
-        researcher.find_by_email(req.body.email)
+        
+        researcher.find_by_email(req.user.email)
             .then((result) => {
                 if(result.token == token){
                     next();
                 }
                 else{
-                    return res.status(401).json({error:'Invalid Token'});
+                    return res.status(401).json(
+                        {isAuth: false,
+                        error:'Invalid Token'});
                 }
                 
             })
             .catch((err) => {
-                return res.status(500).json({error:err.message});
+                return res.status(500).json({
+                    isAuth: false,
+                    error:err.message});
             })
         
        
