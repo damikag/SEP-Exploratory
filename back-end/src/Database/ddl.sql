@@ -62,12 +62,11 @@ CREATE TABLE institution
             AUTO_INCREMENT,
     title varchar
             (255) NOT NULL,
-    description text NOT NULL,    
-    created_by int
+    goal text NOT NULL,  
+    poster_image text DEFAULT "default.jpg",  
+    creator int
             (10),
     visibility_public boolean DEFAULT TRUE,
-    institution_id int
-            (10),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
@@ -75,10 +74,7 @@ CREATE TABLE institution
     PRIMARY KEY
             (id),
     FOREIGN KEY
-            (created_by) REFERENCES researcher
-            (id),
-    FOREIGN KEY
-            (institution_id) REFERENCES institution
+            (creator) REFERENCES researcher
             (id)
 
 )AUTO_INCREMENT=10001;
@@ -262,7 +258,7 @@ CREATE TABLE institution
                                     FOREIGN KEY(project_id) REFERENCES project(id)
                                 );
 
-                                CREATE TABLE colloborate
+                                CREATE TABLE collaborate
                                 (
                                     researcher_id int(10) NOT NULL,
                                     project_id int(10) NOT NULL,
