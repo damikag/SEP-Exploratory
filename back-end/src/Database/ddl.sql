@@ -6,7 +6,6 @@ CREATE TABLE institution(
     address varchar(255) DEFAULT NULL,
     official_web_site text DEFAULT NULL,
     email varchar(50) NOT NULL,
-    _deleted boolean DEFAULT FALSE,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -29,7 +28,6 @@ CREATE TABLE researcher(
     last_login TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    _deleted boolean DEFAULT FALSE,
     token varchar(255) DEFAULT NULL,
 
     PRIMARY KEY(id),
@@ -44,11 +42,11 @@ CREATE TABLE project(
     description text NOT NULL,    
     created_by int(10),
     visibility_public boolean DEFAULT TRUE,
-    _deleted boolean DEFAULT FALSE,
     institution_id int(10),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
+    published_at TIMESTAMP NULL DEFAULT NULL
 
     PRIMARY KEY(id),
     FOREIGN KEY(created_by) REFERENCES researcher(id),
@@ -61,7 +59,6 @@ CREATE TABLE project_comment(
     comment text NOT NULL,
     commentor_id int(10),
     project_id int(10),
-    _deleted boolean DEFAULT FALSE,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -80,7 +77,6 @@ CREATE TABLE task(
     start_date TIMESTAMP NULL,   
     end_date TIMESTAMP NULL,
     progress VARCHAR(200),
-    _deleted boolean DEFAULT FALSE,
     creator_id int(10),
     project_id int(10),
     
@@ -98,7 +94,6 @@ CREATE TABLE note(
     description text NOT NULL,
     task_id int(10),
     project_id int(10),
-    _deleted boolean DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL,
@@ -117,7 +112,6 @@ CREATE TABLE task_comment(
 
     comment text NOT NULL,
     commentor_id int(10),
-    _deleted boolean DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL,
@@ -134,7 +128,6 @@ CREATE TABLE notification(
     _read boolean DEFAULT FALSE,
     researcher_id int(10),
     message text NOT NULL,
-    _deleted boolean DEFAULT FALSE,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

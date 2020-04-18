@@ -4,5 +4,6 @@ const researcherController = require('../../../controllers/researcher/researcher
 const {valid_jwt_needed} =  require('../../middleware/authorization');
 
 router.get('/',valid_jwt_needed, researcherController.indexAction);
+// router.get('/feed',valid_jwt_needed, researcherController.feedAction);
 
 module.exports = router
