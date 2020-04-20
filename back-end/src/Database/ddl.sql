@@ -70,6 +70,7 @@ CREATE TABLE institution
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
+    published_at TIMESTAMP NULL DEFAULT NULL
 
     PRIMARY KEY
             (id),
@@ -173,7 +174,6 @@ CREATE TABLE institution
     comment text NOT NULL,
     commentor_id int
                             (10),
-    _deleted boolean DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
