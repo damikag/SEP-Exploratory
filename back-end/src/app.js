@@ -3,6 +3,9 @@ var express = require("express");
 const homeRoute = require("./api/routes/home/routes");
 const researcherRoute = require("./api/routes/researcher/routes");
 const projectRoute = require("./api/routes/project/routes");
+const editorRoute = require("./api/routes/editor/routes");
+
+const config = require("./mongo/connect");
 
 var cors = require("cors");
 
@@ -20,5 +23,6 @@ app.use(express.json());
 app.use("/", homeRoute);
 app.use("/researcher", researcherRoute);
 app.use("/project", projectRoute);
+app.use("/editor", editorRoute);
 
 module.exports = app;
