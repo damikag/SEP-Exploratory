@@ -2,7 +2,6 @@ var Researcher = require("../../models/models/Researcher");
 
 const { login_validation, register_validation } = require("./validation");
 const { clean_object } = require("../../api/helpers/helper");
-
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -85,12 +84,28 @@ module.exports.loginAction = (req, res) => {
       return res.status(500).json({ error: err.message });
     });
 };
-
+module.exports.authAction = (req, res) => {
+  var researcher = new Researcher();
+  console.log(req.user.email);
+  researcher.find_by_email(req.user.email).then(async (user) => {
+    user = Object.assign({}, user);
+    console.log(user);
+    return res.status(200).json({
+      _id: user.id,
+      isAuth: true,
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      institution: user.institution,
+      profile_picture: user.profile_picture,
+    });
+  });
+};
 module.exports.logoutAction = (req, res) => {
   var researcher = new Researcher();
-
+  console.log(req.user);
   researcher
-    .find_by_email(req.body.email)
+    .find_by_email(req.user.email)
     .then(async (user) => {
       user = Object.assign(user, { token: "" });
       user

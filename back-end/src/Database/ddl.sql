@@ -39,7 +39,7 @@ CREATE TABLE institution
         (10) DEFAULT NULL,
     bio text DEFAULT NULL,
 
-    last_login TIMESTAMP NULL,
+    last_login TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
@@ -53,6 +53,7 @@ CREATE TABLE institution
         (institution) REFERENCES institution
         (id)
 
+    -- FOREIGN KEY(institution) REFERENCES institution(id)
 
 )AUTO_INCREMENT=10001;
 

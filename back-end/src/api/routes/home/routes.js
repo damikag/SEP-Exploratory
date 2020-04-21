@@ -11,4 +11,6 @@ router.post('/register',userController.registerAction);
 router.post('/logout',valid_jwt_needed,userController.logoutAction);
 router.post('/login',userController.loginAction);
 
+router.get('/auth',valid_jwt_needed,userController.authAction);
+
 module.exports = router
