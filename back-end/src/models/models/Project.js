@@ -4,8 +4,9 @@ const mysql = require("mysql");
 const attrs = [
   "id",
   "title",
-  "goal",
+  "description",
   "creator",
+  "visibility_public",
   "poster_image",
   "created_at",
   "updated_at",

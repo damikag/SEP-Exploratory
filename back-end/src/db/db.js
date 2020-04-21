@@ -167,3 +167,7 @@ module.exports.exec_transaction_query = function exec_transaction_query(sql, cb)
         }
     });
 }
+
+module.exports.query = function query(sql, params, cb) {
+    con.query(sql, params, cb);
+}
