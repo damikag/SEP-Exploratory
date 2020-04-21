@@ -320,11 +320,25 @@ CREATE TABLE institution
                                     (
                                         id int(10)
                                         AUTO_INCREMENT,
-    title varchar
+                                        title varchar
                                         (255) NOT NULL, 
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP NULL DEFAULT NULL,
-    PRIMARY KEY
+                                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        deleted_at TIMESTAMP NULL DEFAULT NULL,
+                                        PRIMARY KEY
                                         (id)
-)AUTO_INCREMENT=10001;
+                                    )AUTO_INCREMENT=10001;
+
+                                        CREATE TABLE tag_project
+                                        (
+                                            tag_id int(10) NOT NULL,
+                                            project_id int(10) NOT NULL,
+                                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                            deleted_at TIMESTAMP NULL DEFAULT NULL,
+                                            PRIMARY KEY (tag_id,project_id),
+                                            FOREIGN KEY(tag_id) REFERENCES tag(id),
+                                            FOREIGN KEY(project_id) REFERENCES project(id),
+                                        );
+
+
