@@ -308,6 +308,7 @@ CREATE TABLE collaborate(
                                         FOREIGN KEY(task_id) REFERENCES task(id)
                                     );
 
+
 CREATE TABLE tag
 (
     id int(10) AUTO_INCREMENT,

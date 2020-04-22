@@ -12,6 +12,7 @@ module.exports.createProjectAction = (req, res) => {
     return res.status(400).json({ error: error.details[0].message });
   }
 
+
   ProjectService.createProject(req.body)
   .then(async (result) => {
     res.status(200).json(result);
