@@ -6,10 +6,12 @@ const attrs = [
   "title",
   "description",
   "creator",
-  "poster_image",
+  "visibility_public",
+  
   "created_at",
   "updated_at",
   "deleted_at",
+  "published_at",
 ];
 
 function Project(data = {}) {

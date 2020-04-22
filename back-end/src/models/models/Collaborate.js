@@ -4,6 +4,7 @@ const mysql = require("mysql");
 const attrs = [
   "project_id",
   "researcher_id",
+  "isAdmin",
   "created_at",
   "updated_at",
   "deleted_at",

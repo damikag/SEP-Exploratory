@@ -86,10 +86,10 @@ module.exports.loginAction = (req, res) => {
 };
 module.exports.authAction = (req, res) => {
   var researcher = new Researcher();
-  console.log(req.user.email);
+  //console.log(req.user.email);
   researcher.find_by_email(req.user.email).then(async (user) => {
     user = Object.assign({}, user);
-    console.log(user);
+    //console.log(user);
     return res.status(200).json({
       _id: user.id,
       isAuth: true,
@@ -103,7 +103,7 @@ module.exports.authAction = (req, res) => {
 };
 module.exports.logoutAction = (req, res) => {
   var researcher = new Researcher();
-  console.log(req.user);
+  //console.log(req.user);
   researcher
     .find_by_email(req.user.email)
     .then(async (user) => {

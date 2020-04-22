@@ -57,27 +57,20 @@ CREATE TABLE institution
 
 )AUTO_INCREMENT=10001;
 
-        CREATE TABLE project
-        (
-            id int(10)
-            AUTO_INCREMENT,
-    title varchar
-            (255) NOT NULL,
-    goal text NOT NULL,  
+CREATE TABLE project(
+    id int(10) AUTO_INCREMENT,
+    title varchar(255) NOT NULL,
+    description text NOT NULL,  
     poster_image text DEFAULT "default.jpg",  
-    creator int
-            (10),
+    creator int(10),
     visibility_public boolean DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
     published_at TIMESTAMP NULL DEFAULT NULL
 
-    PRIMARY KEY
-            (id),
-    FOREIGN KEY
-            (creator) REFERENCES researcher
-            (id)
+    PRIMARY KEY(id),
+    FOREIGN KEY(creator) REFERENCES researcher(id)
 
 )AUTO_INCREMENT=10001;
 
@@ -285,20 +278,19 @@ CREATE TABLE institution
                                         FOREIGN KEY(project_id) REFERENCES project(id)
                                     );
 
-                                    CREATE TABLE collaborate
-                                    (
-                                        researcher_id int(10) NOT NULL,
-                                        project_id int(10) NOT NULL,
-                                        privilage varchar(50) NOT NULL,
+CREATE TABLE collaborate(
+    researcher_id int(10) NOT NULL,
+    project_id int(10) NOT NULL,
+    isAdmin Boolean DEFAULT 0,
 
-                                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                        deleted_at TIMESTAMP NULL DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
 
-                                        PRIMARY KEY(researcher_id,project_id),
-                                        FOREIGN KEY(researcher_id) REFERENCES researcher(id),
-                                        FOREIGN KEY(project_id) REFERENCES project(id)
-                                    );
+    PRIMARY KEY(researcher_id,project_id),
+    FOREIGN KEY(researcher_id) REFERENCES researcher(id),
+    FOREIGN KEY(project_id) REFERENCES project(id)
+);
 
                                     CREATE TABLE task_responsibility
                                     (
@@ -316,29 +308,27 @@ CREATE TABLE institution
                                         FOREIGN KEY(task_id) REFERENCES task(id)
                                     );
 
-                                    CREATE TABLE tag
-                                    (
-                                        id int(10)
-                                        AUTO_INCREMENT,
-                                        title varchar
-                                        (255) NOT NULL, 
-                                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                        deleted_at TIMESTAMP NULL DEFAULT NULL,
-                                        PRIMARY KEY
-                                        (id)
-                                    )AUTO_INCREMENT=10001;
 
-                                        CREATE TABLE tag_project
-                                        (
-                                            tag_id int(10) NOT NULL,
-                                            project_id int(10) NOT NULL,
-                                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            deleted_at TIMESTAMP NULL DEFAULT NULL,
-                                            PRIMARY KEY (tag_id,project_id),
-                                            FOREIGN KEY(tag_id) REFERENCES tag(id),
-                                            FOREIGN KEY(project_id) REFERENCES project(id)
-                                        );
+CREATE TABLE tag
+(
+    id int(10) AUTO_INCREMENT,
+    title varchar(255) NOT NULL, 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY(id)
+)AUTO_INCREMENT=10001;
+
+CREATE TABLE tag_project
+(
+    tag_id int(10) NOT NULL,
+    project_id int(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (tag_id,project_id),
+    FOREIGN KEY(tag_id) REFERENCES tag(id),
+    FOREIGN KEY(project_id) REFERENCES project(id)
+);
 
 

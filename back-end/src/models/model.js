@@ -143,7 +143,8 @@ model.prototype.bulk_insert = function bulk_insert(models) {
     var obj = [];
     for (const attr of attrs) {
       if (model[attr] === undefined || model[attr] === null) {
-        obj.push("DEFAULT");
+        // obj.push("DEFAULT");
+        obj.push(model[attr]);
       } else {
         obj.push(model[attr]);
       }
@@ -214,7 +215,8 @@ model.prototype.get_db_object = function (for_update = false) {
     for (const attr of this.attrs) {
       obj[attr] = this[attr];
       if (obj[attr] === undefined || obj[attr] === null) {
-        obj[attr] = "DEFAULT";
+        // obj[attr] = "DEFAULT";
+        continue
       }
     }
   }
