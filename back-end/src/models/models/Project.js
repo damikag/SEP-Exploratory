@@ -7,10 +7,11 @@ const attrs = [
   "description",
   "creator",
   "visibility_public",
-  "poster_image",
+  
   "created_at",
   "updated_at",
   "deleted_at",
+  "published_at",
 ];
 
 function Project(data = {}) {

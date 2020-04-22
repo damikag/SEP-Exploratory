@@ -14,7 +14,7 @@ const attrs = [
   "last_login",
   "created_at",
   "updated_at",
-  "deleted_at",
+  // "deleted_at",
   "token",
 ];
 
