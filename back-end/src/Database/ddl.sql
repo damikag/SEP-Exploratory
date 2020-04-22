@@ -338,7 +338,7 @@ CREATE TABLE institution
                                             deleted_at TIMESTAMP NULL DEFAULT NULL,
                                             PRIMARY KEY (tag_id,project_id),
                                             FOREIGN KEY(tag_id) REFERENCES tag(id),
-                                            FOREIGN KEY(project_id) REFERENCES project(id),
+                                            FOREIGN KEY(project_id) REFERENCES project(id)
                                         );
 
 

@@ -5,6 +5,6 @@ const { valid_jwt_needed } = require("../../middleware/authorization");
 
 router.get("/", projectController.indexAction);
 
-router.post("/createProject", projectController.createProjectAction);
+router.post("/create-project", projectController.createProjectAction);
 
 module.exports = router;
