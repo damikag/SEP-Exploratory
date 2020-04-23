@@ -11,6 +11,7 @@ CREATE TABLE institution
     official_web_site text DEFAULT NULL,
     email varchar
     (50) NOT NULL,
+    display_image varchar(255),
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -2,106 +2,90 @@ const db = require('../../db/db')
 var Researcher = require('./Researcher')
 var Project = require('./Project')
 var Insitution = require('./Institution')
+var mysql = require('mysql');
 
 function Search(searchString){
-
     this.searchString=searchString
-    this.search_result={
-        researchers:[],
-        projects:[],
-        institutions:[],
-    }
-
 }
 
 
-Search.prototype.getProjects() = function getProjects(){
+Search.prototype.getProjects = function getProjects(){
     
     return new Promise((resolve, reject) => {
         const cb = function (error, results, fields) {
             if (error) {
               reject(error);
             } else {
-              if (results.length > 0) {
-                var res_array = [];
-                results.forEach(function (result, index) {
-                  res_array.push(new Project(result));
-                });
-                this.search_result.projects=res_array
-                resolve(true);
-              } else {
-                resolve(false);
-              }
+              resolve(results)
             }
-          };
-
-        db.query('SELECT id,title,description,poster_image FROM project WHERE  MATCH(title,description) AGAINST(? IN NATURAL LANGUAGE MODE) AND deleted_at IS NULL AND visibility_public=TRUE', this.searchString, cb);
+        };
+        var sql= mysql.format('SELECT id,title,description,poster_image FROM project WHERE  MATCH(title,description) AGAINST(? IN NATURAL LANGUAGE MODE) AND project.deleted_at IS NULL AND project.visibility_public=TRUE',[this.searchString])
+        db.query(sql, cb);
     });
 }
 
-Search.prototype.getResearchers() = function getResearchers(){
+Search.prototype.getResearchers = function getResearchers(){
     
     return new Promise((resolve, reject) => {
         const cb = function (error, results, fields) {
             if (error) {
               reject(error);
             } else {
-              if (results.length > 0) {
-                var res_array = [];
-                results.forEach(function (result, index) {
-                  res_array.push(new Researcher(result));
-                });
-                this.search_result.researchers=res_array
-                resolve(true);
-              } else {
-                resolve(false);
+              resolve(results)
               }
-            }
-          };
-
-        db.query('SELECT researcher.id AS id, first_name AS first_name, last_name,profile_picture, institution.name as institution FROM project,institution WHERE  MATCH(title,description) AGAINST(? IN NATURAL LANGUAGE MODE) AND deleted_at IS NULL AND visibility_public=TRUE AND researcher.institution=institution.id', this.searchString, cb);
+        }
+        var sql= mysql.format('SELECT researcher.id AS id, first_name AS first_name, last_name,profile_picture, institution.name as institution FROM researcher,institution WHERE  MATCH(first_name,last_name) AGAINST(? IN NATURAL LANGUAGE MODE) AND researcher.deleted_at IS NULL AND researcher.institution=institution.id',[this.searchString])
+        db.query(sql, cb);
     });
 }
 
-Search.prototype.getInstitutions() = function getInstitutions(){
+Search.prototype.getInstitutions = function getInstitutions(){
     
     return new Promise((resolve, reject) => {
         const cb = function (error, results, fields) {
             if (error) {
               reject(error);
             } else {
-              if (results.length > 0) {
-                var res_array = [];
-                results.forEach(function (result, index) {
-                  res_array.push(new Insitution(result));
-                });
-                this.search_result.institutions=res_array
-                resolve(true);
-              } else {
-                resolve(false);
-              }
+              resolve(results)
             }
           };
-
-        db.query('SELECT id,name FROM institution WHERE  MATCH(title,description) AGAINST(? IN NATURAL LANGUAGE MODE) AND deleted_at IS NULL', this.searchString, cb);
+        var sql= mysql.format('SELECT id,name,display_image FROM institution WHERE  MATCH(name) AGAINST(? IN NATURAL LANGUAGE MODE) AND deleted_at IS NULL',[this.searchString])
+        db.query(sql, cb);
     });
 }
 
-Search.prototype.getSearch() = function getSearch(){
-    
+Search.prototype.getSearch = function getSearch(){
+  var search_result={
+    researchers:[],
+    projects:[],
+    institutions:[],
+}
     return new Promise((resolve, reject) => {
 
-        
-        Promise.all([
-            this.getProjects(),
-            this.getResearchers(),
-            this.getInstitutions(),
-        ])
+        this.getProjects()
         .then( (res) =>{
-            resolve(this.search_result)
+
+          search_result.projects=res
+
+          this.getResearchers()
+          .then((res2) => {
+
+              search_result.researchers=res2;
+              
+              this.getInstitutions()
+              .then((res3)=>{
+
+                search_result.institutions=res3
+                resolve(search_result)
+
+              })
+              .catch((err)=>{ reject(err)})
+              
+          })
+          .catch((err)=>{ reject(err)})
+      
         })
         .catch((err)=>{
-            console.log(err)
             reject(err)
         })
 
