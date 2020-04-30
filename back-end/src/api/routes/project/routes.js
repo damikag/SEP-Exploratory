@@ -7,4 +7,6 @@ router.get("/", projectController.indexAction);
 
 router.post("/create-project", projectController.createProjectAction);
 
+router.post("/view-project", projectController.renderProjectAction);
+
 module.exports = router;

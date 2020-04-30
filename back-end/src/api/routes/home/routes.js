@@ -12,5 +12,6 @@ router.post('/logout',valid_jwt_needed,userController.logoutAction);
 router.post('/login',userController.loginAction);
 
 router.get('/auth',valid_jwt_needed,userController.authAction);
+router.post('/search',homeController.SearchAction)
 
 module.exports = router

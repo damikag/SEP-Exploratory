@@ -216,7 +216,7 @@ model.prototype.get_db_object = function (for_update = false) {
       obj[attr] = this[attr];
       if (obj[attr] === undefined || obj[attr] === null) {
         // obj[attr] = "DEFAULT";
-        continue
+        continue;
       }
     }
   }
