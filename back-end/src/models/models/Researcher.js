@@ -36,6 +36,12 @@ Researcher.prototype.find_by_email = function (email) {
   return this.find_first(params);
 };
 
+Researcher.prototype.find_by_id = function () {
+  var params = [];
+  params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(this.id)));
+  return this.find_first(params);
+};
+
 Researcher.prototype.find_by_email_or_id = function (email, id) {
   var params = [];
   var param = mysql.escapeId("email").concat(" = ").concat(mysql.escape(email));
