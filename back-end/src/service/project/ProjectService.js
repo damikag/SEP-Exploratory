@@ -2,6 +2,7 @@ var Project = require("../../models/models/Project");
 //create project
 var Collaborate = require("../../models/models/Collaborate");
 var TagProject = require("../../models/models/TagProject");
+var ProjectCommentReply = require("../../models/views/ProjectCommentReply");
 var db_service = require("../../db/db_service");
 //get project
 var CollaborateResearcherInstitute = require("../../models/views/CollaborateResearcherInstitute");
@@ -78,14 +79,18 @@ class ProjectService {
       var images = new Image({ project_id: body.id });
       var promise4 = images.find_by_project_id();
 
-      await Promise.all([promise1, promise2, promise3, promise4])
-        .then(async ([result1, result2, result3, result4]) => {
+      var comments = new ProjectCommentReply({ project_id: body.id });
+      var promise5 = comments.find_by_project_id();
+
+      await Promise.all([promise1, promise2, promise3, promise4, promise5])
+        .then(async ([result1, result2, result3, result4, result5]) => {
           var project_details = await {
             project: result1,
             collaborators: result2,
             admins: getAdminList(result2),
             tags: result3,
             related_images: result4,
+            comments: result5,
           };
           resolve({ project_details });
         })

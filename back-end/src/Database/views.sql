@@ -55,3 +55,26 @@ CREATE VIEW tag_project_tag AS (
     	tag.title 
     FROM tag_project LEFT JOIN tag ON tag_project.tag_id=tag.id  
 );
+
+CREATE VIEW project_comment_reply AS (
+SELECT 
+    project_comment.project_id,
+    project_comment.id as comment_id,
+    comment_reply.id as message_id,
+    comment_reply.author_id,
+    comment_reply.message,
+    comment_reply.no_of_likes,
+    comment_reply.initial_comment,
+    researcher.first_name,
+    researcher.last_name,
+    institution.name AS institution,
+    researcher.profile_picture,
+    comment_reply.created_at,
+    comment_reply.updated_at,
+    comment_reply.deleted_at
+FROM project_comment 
+    LEFT JOIN comment_reply ON project_comment.id=comment_reply.comment_id
+    LEFT JOIN researcher ON comment_reply.author_id=researcher.id
+    LEFT JOIN institution ON researcher.institution=institution.id
+ORDER BY comment_reply.created_at DESC
+);

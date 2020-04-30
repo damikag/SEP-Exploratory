@@ -75,30 +75,37 @@ CREATE TABLE project(
 
 )AUTO_INCREMENT=10001;
 
-            CREATE TABLE project_comment
-            (
-                id int(10)
-                AUTO_INCREMENT,
-    comment text NOT NULL,
-    commentor_id int
-                (10),
-    project_id int
-                (10),
+CREATE TABLE project_comment(
+    id int(10) AUTO_INCREMENT,  
+    project_id int(10),    
 
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
 
-    PRIMARY KEY
-                (id,project_id),
-    FOREIGN KEY
-                (commentor_id) REFERENCES researcher
-                (id),
-    FOREIGN KEY
-                (project_id) REFERENCES project
-                (id)
+    PRIMARY KEY (id,project_id),
+    FOREIGN KEY (project_id) REFERENCES project(id)
 
 )AUTO_INCREMENT=10001;
+
+CREATE TABLE comment_reply(
+    id int(10) AUTO_INCREMENT PRIMARY KEY,
+    message text NOT NULL,
+    author_id int(10) NOT NULL,
+    comment_id int(10) NOT NULL,
+    no_of_likes int(10) DEFAULT 0 NOT NULL,
+    initial_comment boolean DEFAULT false NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+
+    FOREIGN KEY(comment_id) REFERENCES project_comment(id),
+    FOREIGN KEY(replier_id) REFERENCES researcher(id)
+
+)AUTO_INCREMENT=10001;
+
+
 
                 CREATE TABLE task
                 (
