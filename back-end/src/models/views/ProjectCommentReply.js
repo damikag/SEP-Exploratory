@@ -37,6 +37,10 @@ ProjectCommentReply.prototype.find_by_project_id = function () {
     mysql.escapeId("initial_comment"),
     " = ",
     " 1 "
+    // " AND ",
+    // mysql.escapeId("deleted_at"),
+    // " = ",
+    // " NULL "
   );
 
   params.push(param);

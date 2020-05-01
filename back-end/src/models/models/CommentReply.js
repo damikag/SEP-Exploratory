@@ -22,15 +22,36 @@ CommentReply.prototype = Object.create(model.prototype);
 CommentReply.prototype.find_by_id = function () {
   var params = [];
   params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(this.id)));
-  params.push(
-    mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
-  );
+  // params.push(
+  //   mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
+  // );
   return this.find_first(params);
 };
 
-CommentReply.prototype.update = function () {
+CommentReply.prototype._update = function () {
   var params = [];
   params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(this.id)));
+
+  return this.update(params);
+};
+
+CommentReply.prototype._delete = function () {
+  var params = [];
+  params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(this.id)));
+
+  this.find_by_id;
+
+  return this.update(params);
+};
+
+CommentReply.prototype._delete_by_comment_id = function () {
+  var params = [];
+  params.push(
+    mysql
+      .escapeId("comment_id")
+      .concat(" = ")
+      .concat(mysql.escape(this.comment_id))
+  );
 
   return this.update(params);
 };
