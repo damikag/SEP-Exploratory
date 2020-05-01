@@ -17,7 +17,7 @@ ProjectComment.prototype.find_by_project_id = function () {
       .concat(" = ")
       .concat(mysql.escape(this.project_id))
   );
-  params.push(mysql.escapeId("deleted_at").concat(" = ").concat(" null "));
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
 
   return this.find_first(params);
 };
@@ -25,7 +25,9 @@ ProjectComment.prototype.find_by_project_id = function () {
 ProjectComment.prototype.find_by_comment_id = function () {
   var params = [];
   params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(this.id)));
-  params.push(mysql.escapeId("deleted_at").concat(" = ").concat(" null "));
+  params.push(
+    mysql.escapeId("deleted_at").concat(" IS ").concat(mysql.escape(null))
+  );
 
   return this.find_first(params);
 };

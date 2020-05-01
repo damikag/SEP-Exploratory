@@ -35,15 +35,6 @@ ProjectTagCollaborateImage.prototype.find_by_project_id = function () {
       .concat(mysql.escape(this.project_id))
   );
   return this.find_all(params);
-  // var log = this.find_all(params);
-  // console.log(log);
-  // log
-  //   .then((result) => {
-  //     return result;
-  //   })
-  //   .catch((err) => {
-  //     return false;
-  //   });
 };
 
 module.exports = ProjectTagCollaborateImage;

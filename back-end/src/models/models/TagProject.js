@@ -20,6 +20,7 @@ TagProject.prototype.find_by_id = function (project_id) {
   params.push(
     mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
   );
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
   return this.find_all(params);
 };
 
