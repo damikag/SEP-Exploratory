@@ -24,4 +24,10 @@ Message.prototype.find_by_chat_id = function (chat_id) {
   return this.find_first(params);
 };
 
+Message.prototype.find_by_id = function (chat_id) {
+  var params = [];
+  params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(chat_id)));
+  return this.find_first(params);
+};
+
 module.exports = Message;
