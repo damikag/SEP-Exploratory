@@ -35,6 +35,9 @@ io.on('connection', function (client) {
       // handleMessage,
       handleGetChatrooms,
       handleMessage,
+      handleCreateChatroom,
+      handleSearchResearcher,
+      handleAllResearcher,
       // handleGetAvailableUsers,
       // handleDisconnect
     } = makeHandlers(user_id,client, clientManager)
@@ -49,7 +52,9 @@ io.on('connection', function (client) {
     client.on('chatrooms', handleGetChatrooms)
 
     client.on('message', handleMessage)
-  
+    client.on('createChatroom',handleCreateChatroom)
+    client.on('searchReseacher',handleSearchResearcher)
+    client.on('allResearcher',handleAllResearcher)
     client.on('disconnect', function () {
       // console.log('client disconnect...', client.id)
       clientManager.removeClient(user_id,client.id)
@@ -69,6 +74,31 @@ io.on('connection', function (client) {
   // ChatServices.getChats(10005).then((res)=>{
   //   console.log(res)
   // }).catch(err =>{console.log(err)})
+
+  // var ChatRoomService = require('./service/ChatroomService')
+  // ChatRoomService.allResearchers().then(res=>{console.log(res)})
+  // .catch(err=>{console.log(err)})
+  
+  // ChatRoomService.createChatRoom({
+  //   name:"Group 3 new",
+  //   description:"dummy description",
+  //   creator_id:10002,
+  //   participants:[
+  //     {
+  //       user_id:10001,
+  //       isAdmin:1
+  //     },
+  //     {
+  //       user_id:10002,
+  //       isAdmin:1
+  //     }, 
+  //     {
+  //       user_id:10003,
+  //       isAdmin:0
+  //     }
+  //   ]
+  // }).then(res=>{console.log(res)})
+  // .catch(err=> {console.log(res)})
 
 server.listen(process.env.PORT, function (err) {
     if (err) throw err

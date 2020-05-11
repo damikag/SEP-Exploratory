@@ -6,6 +6,7 @@ const attrs = [
   "name",
   "description",
   "logo",
+  "creator_id",
   "created_at",
   "updated_at",
   "deleted_at",

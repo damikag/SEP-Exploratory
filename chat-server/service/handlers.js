@@ -1,5 +1,6 @@
 const ChatServices = require('./ChatService')
 const MessageServices = require('./MessageService')
+const ChatroomService = require('./ChatroomService')
 
 module.exports = function (user_id, client, clientManager) {
   
@@ -37,16 +38,30 @@ module.exports = function (user_id, client, clientManager) {
       
     })
     .catch(err=>{console.log(err)})
-    // const createEntry = () => ({ message })
+  
+  }
 
-    // handleEvent(chatroomName, createEntry)
-    //   .then(() => callback(null))
-    //   .catch(callback)
+  function handleCreateChatroom(chatDetails,callback){
+      ChatroomService.createChatRoom(chatDetails)
+      .then(res=>{callback(res)}).catch(err=>callback(err))
+  }
+
+  function handleSearchResearcher(searchString,callback){
+    ChatroomService.searchResearchers(searchString)
+    .then(res=>{callback(res)}).catch(err=>{console.log(err);callback(null)})
+  }
+
+  function handleAllResearcher(callback){
+    ChatroomService.allResearchers()
+    .then(res=>{callback(res)}).catch(err=>{console.log(err);callback(null)})
   }
  
   return {
     // handleRegister,
     handleGetChatrooms,
-    handleMessage
+    handleMessage,
+    handleCreateChatroom,
+    handleSearchResearcher,
+    handleAllResearcher,
   }
 }
