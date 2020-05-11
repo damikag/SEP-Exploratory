@@ -5,14 +5,13 @@ const researcherRoute = require("./api/routes/researcher/routes");
 const projectRoute = require("./api/routes/project/routes");
 const editorRoute = require("./api/routes/editor/routes");
 const commentRoute = require("./api/routes/comment/routes");
-
 const config = require("./mongo/connect");
 
 var cors = require("cors");
 
 var app = express();
 
-app.use(cors());
+// app.use(cors());
 
 app.use((req, res, next) => {
   res.header("Access-Control-Expose-Headers", "exp-auth-token");
@@ -27,4 +26,4 @@ app.use("/project", projectRoute);
 app.use("/project/comments", commentRoute);
 app.use("/editor", editorRoute);
 
-module.exports = app;
+module.exports = { app };
