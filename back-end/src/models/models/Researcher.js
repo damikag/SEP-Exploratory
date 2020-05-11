@@ -14,7 +14,7 @@ const attrs = [
   "last_login",
   "created_at",
   "updated_at",
-  "deleted_at",
+  // "deleted_at",
   "token",
 ];
 
@@ -36,10 +36,18 @@ Researcher.prototype.find_by_email = function (email) {
   return this.find_first(params);
 };
 
+Researcher.prototype.find_by_id = function () {
+  var params = [];
+  params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(this.id)));
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
+  return this.find_first(params);
+};
+
 Researcher.prototype.find_by_email_or_id = function (email, id) {
   var params = [];
   var param = mysql.escapeId("email").concat(" = ").concat(mysql.escape(email));
   param = param.concat(" OR ", mysql.escapeId("id"), " = ", mysql.escape(id));
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
   params.push(param);
   return this.find_first(params);
 };
@@ -58,6 +66,7 @@ Researcher.prototype.find_by_name = function (search_string) {
     .concat(" LIKE ")
     .concat(mysql.escape(search_string.concat("%")));
   params.push(param);
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
   return this.find_all(params);
 };
 

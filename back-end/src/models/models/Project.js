@@ -8,9 +8,11 @@ const attrs = [
   "creator",
   "visibility_public",
   "poster_image",
+  "final_paper",
   "created_at",
   "updated_at",
   "deleted_at",
+  "published_at",
 ];
 
 function Project(data = {}) {
@@ -19,9 +21,11 @@ function Project(data = {}) {
 
 Project.prototype = Object.create(model.prototype);
 
-Project.prototype.find_by_id = function (id) {
+Project.prototype.find_by_id = function () {
   var params = [];
-  params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(id)));
+  params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(this.id)));
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
+
   return this.find_first(params);
 };
 
