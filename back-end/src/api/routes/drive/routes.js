@@ -13,7 +13,11 @@ router.post('/getfolders',valid_jwt_needed,driveController.getFoldersAction);
 router.post('/searchfolder',valid_jwt_needed,driveController.searchFoldersAction);
 router.post('/getfiles',valid_jwt_needed,driveController.getGroupFilesAction);
 router.post('/gettxtfiles',valid_jwt_needed,driveController.getGroupTxtFilesAction);
-
+router.post('/readtxtfile',valid_jwt_needed,driveController.readFileAction);
+router.post('/sharefile',valid_jwt_needed,driveController.shareFileAction);
+router.post('/notsharefile',valid_jwt_needed,driveController.notshareFileAction);
+router.post('/deletefile',valid_jwt_needed,driveController.deleteFilesAction);
+router.post('/downloadfile',valid_jwt_needed,driveController.getFileAction);
 module.exports = router;
   //  body-parser multer multer-gridfs-storage gridfs-stream method-override
   

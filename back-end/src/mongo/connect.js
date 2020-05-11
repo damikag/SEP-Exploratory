@@ -5,6 +5,7 @@ const config = require("./config/key");
 const multer = require('multer');
 const crypto = require('crypto');
 const path = require('path');
+
 // const mongoose = require("mongoose");
 // mongoose
 //   .connect(config.mongoURI, { useNewUrlParser: true })
@@ -16,7 +17,11 @@ const connect = mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUn
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
- 
+const dbm = mongoose.connection;
+var db= mongoose.connection;
+dbm.once("open", function() {
+  db=dbm.db
+});
 const Grid = require('gridfs-stream');
 
 //console.log(mongoose.connection.client.db)
@@ -24,8 +29,9 @@ var gfs =new Grid(mongoose.connection,mongoose);
 
 var storage = GridFsStorage({
   url: config.mongoURI,
-  db:mongoose.connection,
+  db:db,
   file: (req, file) => {
+    console.log(req.body)
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {
         if (err) {
@@ -35,7 +41,7 @@ var storage = GridFsStorage({
         const fileInfo = {
           filename: filename,
           bucketName: 'uploads',
-          metadata: { originalname: file.originalname,group:req.body.group,sensitivity:req.body.sensitivity,folder:req.body.folder }
+          metadata: { originalname: file.originalname }
     
         };
         resolve(fileInfo);
