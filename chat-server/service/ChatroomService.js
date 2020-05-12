@@ -39,7 +39,7 @@ class ChatroomServices {
             .then(res2 => {
               resolve({ success: true, message: "Successfully Created the Group" })
             })
-            .catch(err => { reject({ success: false, message: "Group creation Failed." }) })
+            .catch(err => { reject({ success: false, message: "Participant addition Failed." }) })
         }).catch(err => { reject({ success: false, message: "Group creation Failed." }) })
     });
 

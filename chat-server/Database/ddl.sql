@@ -2,7 +2,7 @@ CREATE TABLE chat(
     id int(10) AUTO_INCREMENT,
     name varchar(255) NOT NULL,
     description text,
-    logo varchar(255),
+    logo text,
     creator_id int(10) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
