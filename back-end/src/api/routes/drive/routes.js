@@ -1,8 +1,8 @@
-const { mongo, connection } = require('mongoose');
-const router = require('express').Router();
-const driveController = require('../../../controllers/drive/driveController');
-const {valid_jwt_needed} =  require('../../middleware/authorization');
-const uploadvar=require ('../../../mongo/connect')
+const { mongo, connection } = require("mongoose");
+const router = require("express").Router();
+const driveController = require("../../../controllers/drive/driveController");
+const { valid_jwt_needed } = require("../../middleware/authorization");
+const uploadvar = require("../../../mongo/connect");
 
   //upload file to db
  
@@ -18,6 +18,6 @@ router.post('/sharefile',valid_jwt_needed,driveController.shareFileAction);
 router.post('/notsharefile',valid_jwt_needed,driveController.notshareFileAction);
 router.post('/deletefile',valid_jwt_needed,driveController.deleteFilesAction);
 router.post('/downloadfile',valid_jwt_needed,driveController.getFileAction);
+
 module.exports = router;
-  //  body-parser multer multer-gridfs-storage gridfs-stream method-override
-  
+//  body-parser multer multer-gridfs-storage gridfs-stream method-override

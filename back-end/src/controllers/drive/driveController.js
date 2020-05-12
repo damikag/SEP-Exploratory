@@ -11,8 +11,6 @@ db.once("open", function() {
 });
 //console.log(mongoose.connection.client.db)
 
-
-
 module.exports.getAllFilesAction = (req, res) => {
     gfs.collection('uploads');
     gfs.files.find().toArray((err, files) => {
@@ -50,13 +48,18 @@ module.exports.notshareFileAction = (req, res) => {
 
 
 module.exports.getGroupFilesAction = (req, res) => {
-    gfs.collection('uploads'); //set collection name to lookup into
-    /** First check if file exists */
-    gfs.files.find({"metadata.group" : req.body.group,"metadata.folder" : req.body.folder}).toArray(function(err, files){
-        if (err) return res.status(400).send(err);
-        res.status(200).json({ success: true, files })
+  gfs.collection("uploads"); //set collection name to lookup into
+  /** First check if file exists */
+  gfs.files
+    .find({
+      "metadata.group": req.body.group,
+      "metadata.folder": req.body.folder,
+    })
+    .toArray(function (err, files) {
+      if (err) return res.status(400).send(err);
+      res.status(200).json({ success: true, files });
     });
-}
+};
 
 module.exports.getGroupTxtFilesAction = (req, res) => {
     gfs.collection('uploads'); //set collection name to lookup into
@@ -65,7 +68,7 @@ module.exports.getGroupTxtFilesAction = (req, res) => {
         if (err) return res.status(400).send(err);
         res.status(200).json({ success: true, files })
     });
-}
+};
 //app.get('/file/:filename', function(req, res){
 module.exports.getFileAction = (req, res) => {
     gfs.collection('uploads'); //set collection name to lookup into
@@ -83,10 +86,16 @@ module.exports.getFileAction = (req, res) => {
             filename: files[0].filename,
             root: "uploads"
         });
-        /** set the proper content type */
-        res.set('Content-Type', files[0].contentType)
-        /** return response */
-        return readstream.pipe(res);
+      }
+      /** create read stream */
+      var readstream = gfs.createReadStream({
+        filename: files[0].filename,
+        root: "uploads",
+      });
+      /** set the proper content type */
+      res.set("Content-Type", files[0].contentType);
+      /** return response */
+      return readstream.pipe(res);
     });
 }
 module.exports.readFileAction = (req, res) => {
@@ -135,35 +144,40 @@ module.exports.deleteFilesAction = (req, res) => {
     })
 }
 //////////////////////////////////////folder actions
-module.exports.createFolderAction= (req, res) => {
-    let folder = new Folder({  group: req.body.group, name:req.body.name,folder:req.body.folder });
+module.exports.createFolderAction = (req, res) => {
+  let folder = new Folder({
+    group: req.body.group,
+    name: req.body.name,
+    folder: req.body.folder,
+  });
 
-    folder.save((err, postInfo) => {
-        if (err) return res.json({ success: false, err });
-        return res.status(200).json({ success: true, postInfo })
-    })
-}
-module.exports.deleteFolderAction= (req, res) => {
-    console.log(req.body)
-    Folder.deleteOne({ "_id": req.body.folderId })
-        .exec((err,obj) => {
-            if (err) return res.status(400).send(err);
-            res.status(200).json({ success: true })
-        })
-}
-module.exports.getFoldersAction= (req, res) => {
-    Folder.find({ "group": req.body.group,"folder":req.body.folder})
-        .exec((err, folders) => {
-            if (err) return res.status(400).send(err);
-            res.status(200).json({ success: true, folders });
-        });
+  folder.save((err, postInfo) => {
+    if (err) return res.json({ success: false, err });
+    return res.status(200).json({ success: true, postInfo });
+  });
 };
-module.exports.searchFoldersAction= (req, res) => {
-    Folder.find({ "group": req.body.group,"folder":req.body.folder,"name":req.body.name})
-        .exec((err, folders) => {
-            if (err) return res.status(400).send(err);
-            res.status(200).json({ success: true, folders });
-        });
+module.exports.deleteFolderAction = (req, res) => {
+  console.log(req.body);
+  Folder.deleteOne({ _id: req.body.folderId }).exec((err, obj) => {
+    if (err) return res.status(400).send(err);
+    res.status(200).json({ success: true });
+  });
 };
-
-
+module.exports.getFoldersAction = (req, res) => {
+  Folder.find({ group: req.body.group, folder: req.body.folder }).exec(
+    (err, folders) => {
+      if (err) return res.status(400).send(err);
+      res.status(200).json({ success: true, folders });
+    }
+  );
+};
+module.exports.searchFoldersAction = (req, res) => {
+  Folder.find({
+    group: req.body.group,
+    folder: req.body.folder,
+    name: req.body.name,
+  }).exec((err, folders) => {
+    if (err) return res.status(400).send(err);
+    res.status(200).json({ success: true, folders });
+  });
+};
