@@ -1,21 +1,52 @@
 const { Folder } = require("../../mongo/models/Folder");
 const mongoose = require("mongoose");
+const config = require("../../mongo/config/key");
+const Grid = require('gridfs-stream');
+const fs = require("fs")
+const db = mongoose.connection;
 
-const Grid = require("gridfs-stream");
-const fs = require("fs");
+let gfs=new Grid(mongoose.connection,mongoose);
+db.once("open", function() {
+  gfs = Grid(db.db, mongoose.mongo);
+});
 //console.log(mongoose.connection.client.db)
-var gfs = new Grid(mongoose.connection, mongoose);
+
 module.exports.getAllFilesAction = (req, res) => {
-  gfs.collection("uploads");
-  gfs.files.find().toArray((err, files) => {
-    if (!files || files.length === 0) {
-      return res.status(404).json({
-        message: "Could not find files",
-      });
-    }
-    return res.json(files);
-  });
-};
+    gfs.collection('uploads');
+    gfs.files.find().toArray((err, files) => {
+        if(!files || files.length === 0){
+          return res.status(404).json({
+            message: "Could not find files"
+          });
+        }
+        return res.json(files);
+    });
+} 
+module.exports.shareFileAction = (req, res) => {
+    gfs.collection('uploads');
+    
+    gfs.files.update(
+        { filename:  req.body.name },
+        { $set: { 'metadata.sensitivity': 'public'  } }, (err) => {
+            if (err) return res.status(500).json({ success: false })
+            return res.json({ success: true });
+        })
+      
+    
+} 
+module.exports.notshareFileAction = (req, res) => {
+    gfs.collection('uploads');
+    gfs.files.update(
+        { filename:  req.body.name },
+        { $set: { 'metadata.sensitivity': 'private' } }, (err) => {
+            if (err) return res.status(500).json({ success: false })
+            return res.json({ success: true });
+        })
+      
+    
+} 
+
+
 module.exports.getGroupFilesAction = (req, res) => {
   gfs.collection("uploads"); //set collection name to lookup into
   /** First check if file exists */
@@ -31,32 +62,29 @@ module.exports.getGroupFilesAction = (req, res) => {
 };
 
 module.exports.getGroupTxtFilesAction = (req, res) => {
-  console.log("awa");
-  gfs.collection("uploads"); //set collection name to lookup into
-  /** First check if file exists */
-  gfs.files
-    .find({ "metadata.group": req.body.group, contentType: "text/plain" })
-    .toArray(function (err, files) {
-      if (err) return res.status(400).send(err);
-      res.status(200).json({ success: true, files });
+    gfs.collection('uploads'); //set collection name to lookup into
+    /** First check if file exists */
+    gfs.files.find({"metadata.group" : req.body.group,"contentType" : "text/plain"}).toArray(function(err, files){
+        if (err) return res.status(400).send(err);
+        res.status(200).json({ success: true, files })
     });
 };
 //app.get('/file/:filename', function(req, res){
 module.exports.getFileAction = (req, res) => {
-  gfs.collection("uploads"); //set collection name to lookup into
-
-  /** First check if file exists */
-  gfs.files
-    .find({
-      file: req.params.file,
-      group: req.params.group,
-      folder: req.params.folder,
-    })
-    .toArray(function (err, files) {
-      if (!files || files.length === 0) {
-        return res.status(404).json({
-          responseCode: 1,
-          responseMessage: "error",
+    gfs.collection('uploads'); //set collection name to lookup into
+    /** First check if file exists */
+    gfs.files.find({filename:req.body.filename,"metadata.group":req.body.group,"metadata.folder":req.body.folder}).toArray(function(err, files){
+        if(!files || files.length === 0){
+            console.log(req.body)
+            return res.status(404).json({
+                responseCode: 1,
+                responseMessage: "error"
+            });
+        }
+        /** create read stream */
+        var readstream = gfs.createReadStream({
+            filename: files[0].filename,
+            root: "uploads"
         });
       }
       /** create read stream */
@@ -69,48 +97,52 @@ module.exports.getFileAction = (req, res) => {
       /** return response */
       return readstream.pipe(res);
     });
-};
-module.exports.getFileAction = (req, res) => {
-  gfs.collection("uploads");
-  writeStream = gfs.createWriteStream({
-    filename: req.body.filename,
-  });
-  fs.createReadStream(filename).pipe(writeStream);
-
-  // after the write is finished
-  writeStream.on("close", function () {
+}
+module.exports.readFileAction = (req, res) => {
+    var buffer='';
+    gfs.collection('uploads');
+    
+    
     // read file, buffering data as we go
-    readStream = gfs.createReadStream({
-      filename: req.body.filename,
-    });
+    var readStream = gfs.createReadStream({ 
+        filename:req.body.filename  });
 
     readStream.on("data", function (chunk) {
-      buffer += chunk;
+        buffer += chunk;
     });
-
+    readStream.on('error', function (err) {
+        console.log('An error occurred!', err);
+        return res.status(400).send(err);
+      });
     // dump contents to console when complete
     readStream.on("end", function () {
-      console.log("contents of file:\n\n", buffer);
+        return res.status(200).json({ success: true, buffer })
     });
-  });
-};
+   
+}
 module.exports.uploadFilesAction = (req, res) => {
-  console.log(req.body);
-  if (req.file) {
-    return res.json({
-      success: true,
-      file: req.file,
-    });
-  }
-  res.send({ success: false });
-};
-
+    console.log('awa')
+    gfs.collection('uploads');
+    //,group:req.body.group,sensitivity:req.body.sensitivity,folder:req.body.folder
+    if (req.file) {
+        gfs.files.update(
+            { filename:  req.file.filename },
+            { $set: { 'metadata.sensitivity': 'private','metadata.group': req.body.group, 'metadata.folder':req.body.folder} }, (err) => {
+                if (err) return res.status(500).json({ success: false })
+                return res.json({ success: true });
+            })
+        
+      }
+      
+}
 module.exports.deleteFilesAction = (req, res) => {
-  gfs.remove({ _id: req.params.id }, (err) => {
-    if (err) return res.status(500).json({ success: false });
-    return res.json({ success: true });
-  });
-};
+    gfs.collection('uploads');
+    console.log(req.body.id)
+    gfs.remove({ _id: req.body.id,root:'uploads' }, (err) => {
+        if (err) return res.status(500).json({ success: false })
+        return res.json({ success: true });
+    })
+}
 //////////////////////////////////////folder actions
 module.exports.createFolderAction = (req, res) => {
   let folder = new Folder({
