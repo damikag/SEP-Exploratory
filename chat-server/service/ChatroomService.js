@@ -79,6 +79,25 @@ class ChatroomServices {
       db.query(sql, cb);
     });
   }
+
+  static getParticipants(chat_id) {
+
+    return new Promise((resolve, reject) => {
+      const cb = function (error, results, fields) {
+        if (error) {
+          reject(error);
+        } else {
+          var result_array=[]
+          results.forEach(res=>{
+            result_array.push(Object.assign({},res))
+          })
+          resolve(result_array)
+        }
+      }
+      var sql = mysql.format('SELECT researcher.id AS user_id, first_name, last_name,profile_picture, researcher.email, institution.name as institution,isAdmin FROM researcher,institution,participant WHERE participant.deleted_at IS NULL AND researcher.deleted_at IS NULL AND researcher.institution=institution.id AND researcher.id=participant.user_id AND participant.chat_id=?',[chat_id])
+      db.query(sql, cb);
+    });
+  }
 }
 
 module.exports = ChatroomServices

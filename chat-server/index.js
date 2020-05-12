@@ -38,6 +38,7 @@ io.on('connection', function (client) {
       // handleLeave,
       // handleMessage,
       handleGetChatrooms,
+      handlegetChatroomParticipants,
       handleMessage,
       handleCreateChatroom,
       handleSearchResearcher,
@@ -54,6 +55,7 @@ io.on('connection', function (client) {
 
     // client.emit('chats',"Test chat list")
     client.on('chatrooms', handleGetChatrooms)
+    client.on('getChatroomParticipants',handlegetChatroomParticipants)
 
     client.on('message', handleMessage)
     client.on('createChatroom',handleCreateChatroom)

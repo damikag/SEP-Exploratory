@@ -46,6 +46,11 @@ module.exports = function (user_id, client, clientManager) {
       .then(res=>{callback(res)}).catch(err=>callback(err))
   }
 
+  function handlegetChatroomParticipants(chat_id,callback){
+      ChatroomService.getParticipants(chat_id)
+      .then(res=>{callback(res)}).catch(err=>{callback([])})
+  }
+
   function handleSearchResearcher(searchString,callback){
     ChatroomService.searchResearchers(searchString)
     .then(res=>{callback(res)}).catch(err=>{console.log(err);callback(null)})
@@ -59,6 +64,7 @@ module.exports = function (user_id, client, clientManager) {
   return {
     // handleRegister,
     handleGetChatrooms,
+    handlegetChatroomParticipants,
     handleMessage,
     handleCreateChatroom,
     handleSearchResearcher,
