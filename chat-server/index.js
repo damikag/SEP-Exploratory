@@ -1,6 +1,8 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
+const jwt = require('jsonwebtoken');
+
 const server = require('http').createServer()
 const io = require('socket.io')(server)
 
@@ -18,11 +20,13 @@ io.use((socket, next) => {
   let id = socket.handshake.query.id;
   let token = socket.handshake.query.token
 
-  // console.log(id,token)
-  if(true || token)
+  try {
+    const verified = jwt.verify(token, process.env.TOKEN_SECRET);
     return next();
-  
-  return next(new Error('authentication error'));
+  }
+  catch(err){
+    return next(new Error('authentication error'));
+  }
 });
 
 io.on('connection', function (client) {
