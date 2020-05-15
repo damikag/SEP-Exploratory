@@ -5,6 +5,7 @@ const attrs = [
   "id",
   "title",
   "description",
+  "abstract",
   "creator",
   "visibility_public",
   "poster_image",
