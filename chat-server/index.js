@@ -41,6 +41,8 @@ io.on('connection', function (client) {
       handlegetChatroomParticipants,
       handleMessage,
       handleCreateChatroom,
+      handleUpdateChatInfo,
+      handleChangeAdmin,
       handleSearchResearcher,
       handleAllResearcher,
       // handleGetAvailableUsers,
@@ -56,11 +58,16 @@ io.on('connection', function (client) {
     // client.emit('chats',"Test chat list")
     client.on('chatrooms', handleGetChatrooms)
     client.on('getChatroomParticipants',handlegetChatroomParticipants)
+    client.on('updateChatInfo',handleUpdateChatInfo)
+    client.on('changeAdmin',handleChangeAdmin)
+    client.on('createChatroom',handleCreateChatroom)
 
     client.on('message', handleMessage)
-    client.on('createChatroom',handleCreateChatroom)
+
+
     client.on('searchReseacher',handleSearchResearcher)
     client.on('allResearcher',handleAllResearcher)
+
     client.on('disconnect', function () {
       // console.log('client disconnect...', client.id)
       clientManager.removeClient(user_id,client.id)

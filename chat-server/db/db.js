@@ -72,7 +72,7 @@ module.exports.update = function update(table, params, data, cb) {
         conditions = conditions.slice(0, -4);
     }
     sql = sql.concat(conditions);
-    console.log(sql);
+    // console.log(sql);
     con.query(sql, cb);
 }
 
