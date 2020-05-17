@@ -68,9 +68,9 @@ class ChatroomServices {
         if (error) {
           reject(error);
         } else {
-          var result_array=[]
-          results.forEach(res=>{
-            result_array.push(Object.assign({},res))
+          var result_array = []
+          results.forEach(res => {
+            result_array.push(Object.assign({}, res))
           })
           resolve(result_array)
         }
@@ -87,45 +87,71 @@ class ChatroomServices {
         if (error) {
           reject(error);
         } else {
-          var result_array=[]
-          results.forEach(res=>{
-            result_array.push(Object.assign({},res))
+          var result_array = []
+          results.forEach(res => {
+            result_array.push(Object.assign({}, res))
           })
           // console.log(result_array)
           resolve(result_array)
         }
       }
-      var sql = mysql.format('SELECT researcher.id AS user_id, first_name, last_name,profile_picture, researcher.email, institution.name as institution,isAdmin FROM researcher,institution,participant WHERE participant.deleted_at IS NULL AND researcher.deleted_at IS NULL AND researcher.institution=institution.id AND researcher.id=participant.user_id AND participant.chat_id=?',[chat_id])
+      var sql = mysql.format('SELECT researcher.id AS user_id, first_name, last_name,profile_picture, researcher.email, institution.name as institution,isAdmin FROM researcher,institution,participant WHERE participant.deleted_at IS NULL AND researcher.deleted_at IS NULL AND researcher.institution=institution.id AND researcher.id=participant.user_id AND participant.chat_id=?', [chat_id])
       db.query(sql, cb);
     });
   }
 
-  static updateChatInfo(chatInfo){
+  static updateChatInfo(chatInfo) {
 
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       var newChat = new Chat(chatInfo)
       newChat.update(chatInfo)
-      .then(res=>{
-        resolve({success:true,message:"Successfully Updated!"})
-      }).catch(err=>{
-        resolve({success:false,message:"Update Failed!"})
-      })
+        .then(res => {
+          resolve({ success: true, message: "Successfully Updated!" })
+        }).catch(err => {
+          resolve({ success: false, message: "Update Failed!" })
+        })
     })
-    
+
   }
 
-  static changeAdmin(userInfo){
+  static changeAdmin(userInfo) {
 
-    return new Promise((resolve,reject) => {
+    return new Promise((resolve, reject) => {
       var participant = new Participant(userInfo)
       participant.update(userInfo)
-      .then(res=>{
-        resolve({success:true,message:"Successfully Updated!"})
-      }).catch(err=>{
-        resolve({success:false,message:"Update Failed!"})
-      })
+        .then(res => {
+          resolve({ success: true, message: "Successfully Updated!" })
+        }).catch(err => {
+          resolve({ success: false, message: "Update Failed!" })
+        })
     })
-    
+
+  }
+
+  static addMoreParticipants(usersInfo) {
+
+    return new Promise((resolve, reject) => {
+      var participantList = []
+
+      usersInfo.participants.forEach(eachParticipant => {
+        if (true) {
+          participantList.push(new Participant(
+            {
+              chat_id: usersInfo.chat_id,
+              user_id: eachParticipant,
+              isAdmin: 0,
+            }
+          ))
+        }
+
+      })
+      var tempParticipant = new Participant()
+      tempParticipant.bulk_insert(participantList)
+        .then(res2 => {
+          resolve({ success: true, message: "Successfully added the participants" })
+        })
+        .catch(err => { reject({ success: false, message: "Participant addition Failed!" }) })
+    })
   }
 }
 

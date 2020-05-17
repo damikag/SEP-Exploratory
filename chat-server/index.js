@@ -43,6 +43,7 @@ io.on('connection', function (client) {
       handleCreateChatroom,
       handleUpdateChatInfo,
       handleChangeAdmin,
+      handleAddMoreParticipants,
       handleSearchResearcher,
       handleAllResearcher,
       // handleGetAvailableUsers,
@@ -60,6 +61,7 @@ io.on('connection', function (client) {
     client.on('getChatroomParticipants',handlegetChatroomParticipants)
     client.on('updateChatInfo',handleUpdateChatInfo)
     client.on('changeAdmin',handleChangeAdmin)
+    client.on('addMoreParticipants',handleAddMoreParticipants)
     client.on('createChatroom',handleCreateChatroom)
 
     client.on('message', handleMessage)

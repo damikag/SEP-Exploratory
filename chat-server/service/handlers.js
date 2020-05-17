@@ -61,6 +61,11 @@ module.exports = function (user_id, client, clientManager) {
     .then(res=>{callback(res)}).catch(err=>{callback({success:false,message:"Update Failed!"})})
   }
 
+  function handleAddMoreParticipants(usersInfo,callback){
+    ChatroomService.addMoreParticipants(usersInfo)
+    .then(res=>{callback(res)}).catch(err=>{callback({success:false,message:"Participant addition Failed!"})})
+  }
+
   function handleSearchResearcher(searchString,callback){
     ChatroomService.searchResearchers(searchString)
     .then(res=>{callback(res)}).catch(err=>{console.log(err);callback(null)})
@@ -79,6 +84,7 @@ module.exports = function (user_id, client, clientManager) {
     handleCreateChatroom,
     handleUpdateChatInfo,
     handleChangeAdmin,
+    handleAddMoreParticipants,
     handleSearchResearcher,
     handleAllResearcher,
   }
