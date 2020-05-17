@@ -131,24 +131,35 @@ class ChatroomServices {
   static addMoreParticipants(usersInfo) {
 
     return new Promise((resolve, reject) => {
-      var participantList = []
-
-      usersInfo.participants.forEach(eachParticipant => {
-        if (true) {
-          participantList.push(new Participant(
-            {
-              chat_id: usersInfo.chat_id,
-              user_id: eachParticipant,
-              isAdmin: 0,
-            }
-          ))
-        }
-
-      })
-      var tempParticipant = new Participant()
-      tempParticipant.bulk_insert(participantList)
+      this.getParticipants(usersInfo.chat_id)
         .then(res2 => {
-          resolve({ success: true, message: "Successfully added the participants" })
+
+          var currentParticipantSet = new Set()
+          res2.forEach(p => {
+            currentParticipantSet.add(p.user_id)
+          })
+          
+          var participantList = []
+
+          usersInfo.participants.forEach(eachParticipant => {
+            if (!currentParticipantSet.has(eachParticipant)) {
+              participantList.push(new Participant(
+                {
+                  chat_id: usersInfo.chat_id,
+                  user_id: eachParticipant,
+                  isAdmin: 0,
+                }
+              ))
+            }
+
+          })
+          var tempParticipant = new Participant()
+          tempParticipant.bulk_insert(participantList)
+            .then(res2 => {
+              resolve({ success: true, message: "Successfully added the participants" })
+            })
+            .catch(err => { reject({ success: false, message: "Participant addition Failed!" }) })
+
         })
         .catch(err => { reject({ success: false, message: "Participant addition Failed!" }) })
     })
