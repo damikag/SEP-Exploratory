@@ -16,7 +16,7 @@ module.exports = {
 
   getQuestions: (callBack) => {
     db.query(
-      "SELECT first_name,last_name,researcher_id,Q_created_at,category_name,forum_question.id AS question_id,title,description,profile_picture FROM forum_question,researcher,question_category WHERE forum_question.category_id=question_category.id AND forum_question.researcher_id=researcher.id AND is_visible=1 ORDER BY question_id DESC;",
+      "SELECT first_name,last_name,researcher_id,Q_created_at,category_name,forum_question.id AS question_id,title,forum_question.description,profile_picture FROM forum_question,researcher,question_category WHERE forum_question.category_id=question_category.id AND forum_question.researcher_id=researcher.id AND is_visible=1 ORDER BY question_id DESC;",
       [],
       (error, results, fields) => {
         if (error) {
