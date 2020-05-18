@@ -138,7 +138,7 @@ class ChatroomServices {
           res2.forEach(p => {
             currentParticipantSet.add(p.user_id)
           })
-          
+
           var participantList = []
 
           usersInfo.participants.forEach(eachParticipant => {
@@ -163,6 +163,49 @@ class ChatroomServices {
         })
         .catch(err => { reject({ success: false, message: "Participant addition Failed!" }) })
     })
+  }
+
+  static removeParticipant(chat_id, user_id) {
+
+    return new Promise((resolve, reject) => {
+
+      const cb = function (error, results, fields) {
+        if (results[0].adminCount > 1) {
+          var participant = new Participant()
+          participant.delete([mysql.format('chat_id=?', [chat_id]), mysql.format('user_id=?', [user_id])])
+            .then(res => {
+              console.log(res)
+              resolve({ success: true, message: "Participant Removed" })
+            }).catch(err => {
+              console.log(err)
+              resolve({ success: false, message: "Participant removal Failed!" })
+            })
+        }
+        else {
+          var participant = new Participant()
+          participant.find_by_user_id_and_chat_id(user_id, chat_id)
+            .then(res => {
+              if (res.isAdmin == 0) {
+                participant.delete([mysql.format('chat_id=?', [chat_id]), mysql.format('user_id=?', [user_id])])
+                  .then(res => {
+                    resolve({ success: true, message: "Participant Removed" })
+                  }).catch(err => {
+                    resolve({ success: false, message: "Participant removal Failed!" })
+                  })
+              }
+              else{
+                resolve({ success: false, message: "Participant removal Failed!\n You are the Only Admin Remaining" })
+              }
+            })
+            .catch(err=>{resolve({ success: false, message: "Participant removal Failed!" })})
+         
+        }
+
+      }
+      var sql = mysql.format('SELECT count(*) AS adminCount FROM participant WHERE chat_id=? AND isAdmin AND deleted_at IS NULL', [chat_id])
+      db.query(sql, cb);
+    })
+
   }
 }
 
