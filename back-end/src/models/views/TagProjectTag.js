@@ -17,6 +17,7 @@ TagProjectTag.prototype.find_by_project_id = function () {
       .concat(" = ")
       .concat(mysql.escape(this.project_id))
   );
+
   return this.find_all(params);
 };
 
