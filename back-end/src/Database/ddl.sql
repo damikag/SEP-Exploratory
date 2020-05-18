@@ -293,21 +293,20 @@ CREATE TABLE collaborate(
     FOREIGN KEY(project_id) REFERENCES project(id)
 );
 
-                                    CREATE TABLE task_responsibility
-                                    (
-                                        researcher_id int(10) NOT NULL,
-                                        project_id int(10) NOT NULL,
-                                        task_id int(10) NOT NULL,
+CREATE TABLE task_responsibility
+(
+	researcher_id int(10) NOT NULL,
+        project_id int(10) NOT NULL,
+        task_id int(10) NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        deleted_at TIMESTAMP NULL DEFAULT NULL,
 
-                                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                        deleted_at TIMESTAMP NULL DEFAULT NULL,
-
-                                        PRIMARY KEY(researcher_id,project_id,task_id),
-                                        FOREIGN KEY(researcher_id) REFERENCES researcher(id),
-                                        FOREIGN KEY(project_id) REFERENCES project(id),
-                                        FOREIGN KEY(task_id) REFERENCES task(id)
-                                    );
+        PRIMARY KEY(researcher_id,project_id,task_id),
+        FOREIGN KEY(researcher_id) REFERENCES researcher(id),
+        FOREIGN KEY(project_id) REFERENCES project(id),
+        FOREIGN KEY(task_id) REFERENCES task(id)
+);
 
 
 CREATE TABLE tag
@@ -332,4 +331,11 @@ CREATE TABLE tag_project
     FOREIGN KEY(project_id) REFERENCES project(id)
 );
 
+CREATE TABLE image(
+	id int(10) PRIMARY KEY,
+	project_id int(10) REFERENCES project(id),
+	url varchar(255)	
+);
+
+ALTER TABLE `image` ADD `caption` VARCHAR(255) NOT NULL DEFAULT '' AFTER `url`, ADD `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `caption`, ADD `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `created_at`, ADD `deleted_at` TIMESTAMP NULL DEFAULT NULL AFTER `updated_at`;
 
