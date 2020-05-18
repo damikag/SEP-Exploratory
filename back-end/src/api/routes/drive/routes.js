@@ -17,7 +17,10 @@ router.post('/readtxtfile',valid_jwt_needed,driveController.readFileAction);
 router.post('/sharefile',valid_jwt_needed,driveController.shareFileAction);
 router.post('/notsharefile',valid_jwt_needed,driveController.notshareFileAction);
 router.post('/deletefile',valid_jwt_needed,driveController.deleteFilesAction);
+router.post('/softdeletefile',valid_jwt_needed,driveController.softDeleteFilesAction);
 router.post('/downloadfile',valid_jwt_needed,driveController.getFileAction);
+router.post('/searchfile',valid_jwt_needed,driveController.searchFilesAction);
+router.post('/turntopdf',valid_jwt_needed,driveController.ToPdfAction);
 module.exports = router;
   //  body-parser multer multer-gridfs-storage gridfs-stream method-override
   

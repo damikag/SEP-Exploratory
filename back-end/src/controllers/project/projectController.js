@@ -1,6 +1,8 @@
 const { create_project_validation } = require("./validation");
 
 var ProjectService = require("../../service/project/ProjectService");
+var ProjectModel = require("../../models/models/Collaborate");
+var CollaborateResearcherInstitute = require("../../models/views/CollaborateResearcherInstitute");
 var moment = require("moment");
 
 module.exports.indexAction = (req, res) => {
@@ -31,3 +33,18 @@ module.exports.renderProjectAction = async (req, res) => {
       return res.status(500).json({ error: error.message });
     });
 };
+module.exports.getProjectCollabAction = (req, res) => {
+  var collaborator_view = new CollaborateResearcherInstitute({
+    project_id: req.body.group,
+  });
+  collaborator_view
+    .find_by_project_id()
+    .then(async (result) => {
+      return res.status(200).json(result);
+    })
+    .catch((error) => {
+      return res.status(500).json({ error: error.message });
+    });
+};
+
+

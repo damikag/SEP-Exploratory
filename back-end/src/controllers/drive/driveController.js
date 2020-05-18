@@ -1,8 +1,10 @@
+const { EditorBlog } = require("../../mongo/models/EditorBlog");
 const { Folder } = require("../../mongo/models/Folder");
 const mongoose = require("mongoose");
 const config = require("../../mongo/config/key");
 const Grid = require('gridfs-stream');
 const fs = require("fs")
+const path = require('path');
 const db = mongoose.connection;
 
 let gfs=new Grid(mongoose.connection,mongoose);
@@ -24,6 +26,14 @@ module.exports.getAllFilesAction = (req, res) => {
         return res.json(files);
     });
 } 
+module.exports.searchFilesAction = (req, res) => {
+    gfs.collection('uploads');
+    gfs.files.find({"metadata.group" : req.body.group,"metadata.folder" : req.body.folder,"metadata.originalname" : req.body.name}).toArray((err, files) => {
+        if (err) return res.status(400).send(err);
+        console.log(files)
+        res.status(200).json({ success: true, files })
+    });
+} 
 module.exports.shareFileAction = (req, res) => {
     gfs.collection('uploads');
     
@@ -33,8 +43,6 @@ module.exports.shareFileAction = (req, res) => {
             if (err) return res.status(500).json({ success: false })
             return res.json({ success: true });
         })
-      
-    
 } 
 module.exports.notshareFileAction = (req, res) => {
     gfs.collection('uploads');
@@ -44,8 +52,6 @@ module.exports.notshareFileAction = (req, res) => {
             if (err) return res.status(500).json({ success: false })
             return res.json({ success: true });
         })
-      
-    
 } 
 
 
@@ -112,7 +118,7 @@ module.exports.readFileAction = (req, res) => {
    
 }
 module.exports.uploadFilesAction = (req, res) => {
-    console.log('awa')
+    //console.log('awa')
     gfs.collection('uploads');
     //,group:req.body.group,sensitivity:req.body.sensitivity,folder:req.body.folder
     if (req.file) {
@@ -126,6 +132,16 @@ module.exports.uploadFilesAction = (req, res) => {
       }
       
 }
+module.exports.softDeleteFilesAction = (req, res) => {
+    gfs.collection('uploads');
+    
+    gfs.files.update(
+        { filename:  req.body.name },
+        { $set: { 'metadata.folder': 'deleted'  } }, (err) => {
+            if (err) return res.status(500).json({ success: false })
+            return res.json({ success: true });
+        })
+} 
 module.exports.deleteFilesAction = (req, res) => {
     gfs.collection('uploads');
     console.log(req.body.id)
@@ -166,4 +182,48 @@ module.exports.searchFoldersAction= (req, res) => {
         });
 };
 
-
+//////////////////////// pdf turn
+var pdf = require('html-pdf');
+const crypto = require('crypto');
+module.exports.ToPdfAction= (req, res) => {
+    gfs.collection('uploads');
+    EditorBlog.findOne({ "_id": req.body.postId })
+        .exec((err1, post) => {
+            if (err1){
+                return res.status(400).send(err);
+            }
+            crypto.randomBytes(16, (err2, buf) => {
+                if (err2) {
+                  return reject(err);
+                }
+                const filename = buf.toString('hex') + path.extname('foo.pdf');
+                const originalname=post.name+'.pdf'
+                var writestream = gfs.createWriteStream({
+                    filename: filename,
+                    "root": "uploads",
+                    mode: 'w',
+                    content_type: 'application/pdf',
+                    metadata: { originalname: originalname,group:req.body.group,folder:'root',sensitivity:'private' }//change this later
+                });
+                
+                pdf.create(post.content).toStream(function(err3, stream){
+                    if (err3){
+                        return res.status(400).send(err);
+                    }
+                    stream.pipe(fs.createWriteStream('./foo.pdf')).on('finish', function() {
+                        fs.createReadStream('./foo.pdf').pipe(writestream)
+                        //var stat = fs.statSync('./foo.pdf');
+                        //console.log(stat.size)
+                    })
+                    writestream.on('close', function (file) {
+                        // do something with `file`
+                        fs.unlinkSync('./foo.pdf')
+                        return res.status(200).json({ success: true });
+                      });
+                    return res.status(400);
+                    
+                });
+              
+            })
+        })
+    }

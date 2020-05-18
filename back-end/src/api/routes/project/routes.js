@@ -9,4 +9,6 @@ router.post("/create-project", projectController.createProjectAction);
 
 router.post("/view-project", projectController.renderProjectAction);
 
+router.post("/get-collaborators", projectController.getProjectCollabAction);
+
 module.exports = router;
