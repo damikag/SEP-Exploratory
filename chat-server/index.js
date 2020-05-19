@@ -47,6 +47,7 @@ io.on('connection', function (client) {
       handleRemoveParticipant,
       handleSearchResearcher,
       handleAllResearcher,
+      handleMarkSeen,
       // handleGetAvailableUsers,
       // handleDisconnect
     } = makeHandlers(user_id,client, clientManager)
@@ -72,6 +73,8 @@ io.on('connection', function (client) {
     client.on('searchReseacher',handleSearchResearcher)
     client.on('allResearcher',handleAllResearcher)
 
+    client.on('markSeen',handleMarkSeen)
+
     client.on('disconnect', function () {
       // console.log('client disconnect...', client.id)
       clientManager.removeClient(user_id,client.id)
@@ -86,6 +89,9 @@ io.on('connection', function (client) {
 
   var ChatServices = require('./service/ChatService')
   // ChatServices.getMessages(10001).then((res)=>{
+  //   console.log(res)
+  // }).catch(err=>console.log(err))
+  // ChatServices.getLastSeenACK(10002,10005).then((res)=>{
   //   console.log(res)
   // }).catch(err=>console.log(err))
   // ChatServices.getChats(10005).then((res)=>{

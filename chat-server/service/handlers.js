@@ -81,6 +81,11 @@ module.exports = function (user_id, client, clientManager) {
     .then(res=>{callback(res)}).catch(err=>{console.log(err);callback(null)})
   }
  
+  function handleMarkSeen(MsgInfo,callback){
+    MessageServices.markSeen(MsgInfo.chat_id,MsgInfo.user_id,MsgInfo.message_id)
+    .then(res=>{callback(res)}).catch(err=>{callback(null)})
+  }
+
   return {
     // handleRegister,
     handleGetChatrooms,
@@ -93,5 +98,6 @@ module.exports = function (user_id, client, clientManager) {
     handleRemoveParticipant,
     handleSearchResearcher,
     handleAllResearcher,
+    handleMarkSeen,
   }
 }

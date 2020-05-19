@@ -52,6 +52,20 @@ class MessageServices {
     });
 
   }
+
+  static markSeen(chat_id, user_id,message_id) {
+
+    return new Promise((resolve, reject) => {
+      const cb = function (error, results, fields) {
+        if(error){resolve(false)}
+        resolve(true)
+      };
+      var sql = "INSERT INTO seen(chat_id,user_id,message_id) VALUES(?,?,?);"
+      sql = mysql.format(sql, [chat_id, user_id,message_id])
+      db.query(sql, cb);
+    });
+
+  }
 }
 
 module.exports = MessageServices
