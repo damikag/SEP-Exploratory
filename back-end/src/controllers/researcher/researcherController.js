@@ -1,4 +1,5 @@
 var Researcher = require("../../models/models/Researcher");
+var ResearcherInstitute = require("../../models/views/ResearcherInstitute");
 // var Feed = require("../../models/models/Feed");
 
 module.exports.indexAction = (req, res) => {
@@ -13,6 +14,14 @@ module.exports.searchRelatedResearchersAction = (req, res) => {
     .then((result) => res.status(200).json({ result: result }))
     .catch((err) => res.status(500).json({ error: err.message }))
     .catch((error) => res.status(500).send("server error"));
+};
+
+module.exports.getAllUsersAction = (req, res) => {
+  var researcher = new ResearcherInstitute();
+  researcher
+    .get_all_researchers()
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(500).json(err.message));
 };
 
 // module.exports.feedAction = (req, res) => {

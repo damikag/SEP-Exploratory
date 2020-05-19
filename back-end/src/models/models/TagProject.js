@@ -24,4 +24,20 @@ TagProject.prototype.find_by_id = function (project_id) {
   return this.find_all(params);
 };
 
+TagProject.prototype.delete_tags = function (project_id) {
+  var params = [];
+  params.push(
+    mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
+  );
+  return this.delete(params);
+};
+
+TagProject.prototype.soft_delete_tags = function (project_id) {
+  var params = [];
+  params.push(
+    mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
+  );
+  return this.update(params);
+};
+
 module.exports = TagProject;
