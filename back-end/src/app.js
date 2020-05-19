@@ -28,6 +28,6 @@ app.use("/project", projectRoute);
 app.use("/project/comments", commentRoute);
 app.use("/editor", editorRoute);
 app.use("/drive", driveRoute);
-app.use("/screenshare",screeShareRoute)
+app.use("/screenshare", screeShareRoute);
 
-module.exports = { app };
+module.exports = app;

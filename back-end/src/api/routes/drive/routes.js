@@ -17,7 +17,9 @@ router.post(
   valid_jwt_needed,
   driveController.deleteFolderAction
 );
-router.post("/getfolders", valid_jwt_needed, driveController.getFoldersAction);
+// router.post("/getfolders", valid_jwt_needed, driveController.getFoldersAction);
+router.post("/getfolders", driveController.getFoldersAction);
+
 router.post(
   "/searchfolder",
   valid_jwt_needed,

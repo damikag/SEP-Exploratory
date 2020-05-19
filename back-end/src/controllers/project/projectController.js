@@ -1,6 +1,7 @@
 const { create_project_validation } = require("./validation");
 
 var ProjectService = require("../../service/project/ProjectService");
+var Project = require("../../models/models/Project");
 var moment = require("moment");
 
 module.exports.indexAction = (req, res) => {
@@ -30,4 +31,10 @@ module.exports.renderProjectAction = async (req, res) => {
     .catch((error) => {
       return res.status(500).json({ error: error.message });
     });
+};
+
+module.exports.updateProjectAction = async (req, res) => {
+  ProjectService.updateProject(req.body)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(500).json(err));
 };

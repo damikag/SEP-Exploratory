@@ -60,12 +60,17 @@ Researcher.prototype._update = function () {
 
 Researcher.prototype.find_by_name = function (search_string) {
   var params = [];
-  console.log(search_string);
   var param = mysql
     .escapeId("first_name")
     .concat(" LIKE ")
     .concat(mysql.escape(search_string.concat("%")));
   params.push(param);
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
+  return this.find_all(params);
+};
+
+Researcher.prototype.get_all_researchers = function () {
+  var params = [];
   params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
   return this.find_all(params);
 };
