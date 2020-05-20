@@ -86,6 +86,11 @@ module.exports = function (user_id, client, clientManager) {
     .then(res=>{callback(res)}).catch(err=>{callback(null)})
   }
 
+  function handleGetSeen(chat_id,message_id,callback){
+    MessageServices.getSeen(chat_id,message_id)
+    .then(res=>{callback(res)}).catch(err=>{callback([])})
+  }
+
   return {
     // handleRegister,
     handleGetChatrooms,
@@ -99,5 +104,6 @@ module.exports = function (user_id, client, clientManager) {
     handleSearchResearcher,
     handleAllResearcher,
     handleMarkSeen,
+    handleGetSeen,
   }
 }
