@@ -1,4 +1,4 @@
-const { getAnswers } = require("../../models/models/Forum/ForumAnswers");
+const { getAnswers, addAnswer, deleteAnswer } = require("../../models/models/Forum/ForumAnswers");
 
 module.exports = {
   getAnswers: (req, res) => {
@@ -12,6 +12,39 @@ module.exports = {
       return res.status(200).json({
         success: 1,
         data: results,
+      });
+    });
+  },
+
+  addAnswer: (req, res) => {
+    const body = req.body;
+    addAnswer(body, (err, results) => {
+      if (err) {
+        return res.status(500).json({
+          success: 0,
+          message: "Database connection error",
+        });
+      }
+      return res.status(200).json({
+        success: 1,
+        data: results,
+      });
+    });
+  },
+
+  deleteAnswer: (req, res) => {
+    const body = req.body;
+    deleteAnswer(body, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: 0,
+          message: "Failed to delete answer",
+        });
+      }
+      return res.status(200).json({
+        success: 1,
+        message: "Answer deleted successfully",
       });
     });
   },

@@ -29,15 +29,28 @@ module.exports = {
 
   addQuestion: (data, callBack) => {
     db.query(
-      "insert into forum_question(title, description, category_id, researcher_id, Q_created_at, Q_updated_at) values (?,?,?,?,?,?)",
+      "INSERT INTO forum_question(title, description, category_id, researcher_id, Q_created_at, Q_updated_at) VALUES (?,?,?,?,?,?)",
       [
-          data.title,
-          data.description,
-          data.category_id,
-          data.researcher_id,
-          data.created_at,
-          data.created_at
+        data.title,
+        data.description,
+        data.category_id,
+        data.researcher_id,
+        data.created_at,
+        data.created_at,
       ],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
+  deleteQuestion: (data, callBack) => {
+    db.query(
+      "UPDATE forum_question SET is_visible = 0, Q_deleted_at = ? WHERE id=?",
+      [data.deleted_at, data.question_id],
       (error, results, fields) => {
         if (error) {
           return callBack(error);
