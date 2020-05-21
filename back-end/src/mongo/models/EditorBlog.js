@@ -8,9 +8,11 @@ const blogSchema = mongoose.Schema({
     name: {
         type:String,
     },
-    writer: {
+    group: {
         type: String,
-        ref: 'Group'
+    },
+    folder: {
+        type: String,
     }
 }, { timestamps: true })
 

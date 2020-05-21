@@ -182,7 +182,7 @@ module.exports.searchFoldersAction= (req, res) => {
         });
 };
 
-//////////////////////// pdf turn
+//////////////////////// turn to pdf 
 var pdf = require('html-pdf');
 const crypto = require('crypto');
 module.exports.ToPdfAction= (req, res) => {
