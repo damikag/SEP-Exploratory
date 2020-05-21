@@ -59,4 +59,22 @@ module.exports = {
       }
     );
   },
+
+  editQuestion: (data, callBack) => {
+    db.query(
+      "UPDATE forum_question SET title = ?, description = ?, Q_updated_at = ? WHERE id = ?",
+      [
+        data.title, 
+        data.description,
+        data.updated_at,
+        data.question_id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
 };

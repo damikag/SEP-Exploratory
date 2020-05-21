@@ -2,7 +2,8 @@ const {
   getQuestionCategory,
   getQuestions,
   addQuestion,
-  deleteQuestion
+  deleteQuestion,
+  editQuestion
 } = require("../../models/models/Forum/ForumQuestion");
 
 module.exports = {
@@ -66,6 +67,23 @@ module.exports = {
       return res.status(200).json({
         success: 1,
         message: "Question deleted successfully",
+      });
+    });
+  },
+
+  editQuestion: (req, res) => {
+    const body = req.body;
+    editQuestion(body, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: 0,
+          message: "Failed to edit question",
+        });
+      }
+      return res.status(200).json({
+        success: 1,
+        message: "Question updated successfully",
       });
     });
   },

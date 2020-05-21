@@ -43,4 +43,21 @@ module.exports = {
       }
     );
   },
+
+  editAnswer: (data, callBack) => {
+    db.query(
+      "UPDATE forum_answer SET answer = ?, updated_at = ? WHERE id=?",
+      [
+        data.answer, 
+        data.updated_at,
+        data.answer_id
+      ],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
 };

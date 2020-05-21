@@ -53,7 +53,6 @@ module.exports.notshareFileAction = (req, res) => {
             if (err) return res.status(500).json({ success: false })
             return res.json({ success: true });
         })
-} 
 
   gfs.files.update(
     { filename: req.body.name },
@@ -113,10 +112,10 @@ module.exports.getFileAction = (req, res) => {
           responseMessage: "error",
         });
         /** set the proper content type */
-        res.set('Content-Type', files[0].contentType)
+      res.set('Content-Type', files[0].contentType)
         /** return response */
-        return readstream.pipe(res);
-    });
+      return readstream.pipe(res)
+    }});
 };
 module.exports.readFileAction = (req, res) => {
   var buffer = "";

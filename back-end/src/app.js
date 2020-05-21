@@ -32,6 +32,6 @@ app.use("/editor", editorRoute);
 app.use("/forum", forumRoute);
 app.use("/aboutus", aboutusRoute);
 app.use("/drive", driveRoute);
-app.use("/screenshare", screeShareRoute);
+// app.use("/screenshare", screeShareRoute);
 
 module.exports = app;

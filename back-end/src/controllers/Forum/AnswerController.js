@@ -1,4 +1,4 @@
-const { getAnswers, addAnswer, deleteAnswer } = require("../../models/models/Forum/ForumAnswers");
+const { getAnswers, addAnswer, deleteAnswer, editAnswer } = require("../../models/models/Forum/ForumAnswers");
 
 module.exports = {
   getAnswers: (req, res) => {
@@ -45,6 +45,23 @@ module.exports = {
       return res.status(200).json({
         success: 1,
         message: "Answer deleted successfully",
+      });
+    });
+  },
+
+  editAnswer: (req, res) => {
+    const body = req.body;
+    editAnswer(body, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          success: 0,
+          message: "Failed to edit answer",
+        });
+      }
+      return res.status(200).json({
+        success: 1,
+        message: "Answer updated successfully",
       });
     });
   },
