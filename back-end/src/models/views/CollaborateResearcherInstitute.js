@@ -12,21 +12,24 @@ const attrs = [
   "institution",
   "institution_name",
   "address",
+  "deleted_at",
+  "created_at",
+  "updated_at",
 ];
 
-function ProjectTagCollaborateImage(data = {}) {
+function CollaborateResearcherInstitute(data = {}) {
   model.call(
     this,
     "collaborate_researcher_institute",
-    ProjectTagCollaborateImage,
+    CollaborateResearcherInstitute,
     data,
     attrs
   );
 }
 
-ProjectTagCollaborateImage.prototype = Object.create(model.prototype);
+CollaborateResearcherInstitute.prototype = Object.create(model.prototype);
 
-ProjectTagCollaborateImage.prototype.find_by_project_id = function () {
+CollaborateResearcherInstitute.prototype.find_by_project_id = function () {
   var params = [];
   params.push(
     mysql
@@ -34,7 +37,8 @@ ProjectTagCollaborateImage.prototype.find_by_project_id = function () {
       .concat(" = ")
       .concat(mysql.escape(this.project_id))
   );
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
   return this.find_all(params);
 };
 
-module.exports = ProjectTagCollaborateImage;
+module.exports = CollaborateResearcherInstitute;

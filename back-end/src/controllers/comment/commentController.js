@@ -11,6 +11,7 @@ module.exports.indexAction = (req, res) => {
 };
 
 module.exports.getCommentsAction = async (req, res) => {
+  console.log(res);
   var projectCommentReply = new ProjectCommentReply({
     project_id: req.body.id,
   });
@@ -18,9 +19,11 @@ module.exports.getCommentsAction = async (req, res) => {
   projectCommentReply
     .find_by_project_id()
     .then(async (result) => {
+      console.log(result);
       return res.status(200).json(result);
     })
     .catch((error) => {
+      console.log(error);
       return res.status(500).json({ error: error.message });
     });
 };

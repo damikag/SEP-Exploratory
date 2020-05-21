@@ -8,5 +8,6 @@ router.post(
   "/suggestions",
   researcherController.searchRelatedResearchersAction
 );
+router.post("/get-all-users", researcherController.getAllUsersAction);
 
 module.exports = router;

@@ -30,6 +30,39 @@ Collaborate.prototype.find_by_id = function (researcher_id, project_id) {
   return this.find_first(params);
 };
 
+//remove one collaborator
+Collaborate.prototype.delete_by_id = function (researcher_id, project_id) {
+  var params = [];
+  params.push(
+    mysql
+      .escapeId("researcher_id")
+      .concat(" = ")
+      .concat(mysql.escape(researcher_id))
+  );
+  params.push(
+    mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
+  );
+  return this.update(params);
+};
+
+//remove all collaborators
+Collaborate.prototype.delete_collaborators = function (project_id) {
+  var params = [];
+  params.push(
+    mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
+  );
+  params.push(mysql.escapeId("isAdmin").concat(" = ").concat(" 0 "));
+  return this.delete(params);
+};
+
+Collaborate.prototype.soft_delete_collaborators = function (project_id) {
+  var params = [];
+  params.push(
+    mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
+  );
+  return this.update(params);
+};
+
 Collaborate.prototype.findAll = async function () {
   var params = [];
   params.push(
