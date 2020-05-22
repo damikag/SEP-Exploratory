@@ -51,7 +51,7 @@ class ChatServices {
           // await resolve(chats)
         }
       };
-      var sql = "SELECT chat.id AS chat_id,chat.name as name, chat.logo, description FROM chat,participant WHERE chat.id=participant.chat_id AND participant.user_id= ? AND chat.deleted_at IS NULL"
+      var sql = "SELECT chat.id AS chat_id,chat.name as name, chat.logo, description, participant.created_at AS joined_at FROM chat,participant WHERE chat.id=participant.chat_id AND participant.user_id= ? AND chat.deleted_at IS NULL"
       sql = mysql.format(sql, [user_id])
       db.query(sql, cb);
     });
