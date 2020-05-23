@@ -41,6 +41,11 @@ module.exports = function (user_id, client, clientManager) {
   
   }
 
+  function handleGetMoreMessages(chat_id,lastMsg_id,callback){
+    ChatServices.getMoreMessages(chat_id,lastMsg_id)
+    .then(res=>callback(res)).catch(err=>callback([]))
+  }
+
   function handleCreateChatroom(chatDetails,callback){
       ChatroomService.createChatRoom(chatDetails)
       .then(res=>{callback(res)}).catch(err=>callback(err))
@@ -96,6 +101,7 @@ module.exports = function (user_id, client, clientManager) {
     handleGetChatrooms,
     handlegetChatroomParticipants,
     handleMessage,
+    handleGetMoreMessages,
     handleCreateChatroom,
     handleUpdateChatInfo,
     handleChangeAdmin,

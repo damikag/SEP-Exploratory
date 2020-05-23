@@ -69,7 +69,7 @@ class ChatServices {
           resolve(results)
         }
       };
-      var sql = "SELECT message.id as id,message,chat_id,message_time,sender_id,first_name,last_name,email,profile_picture FROM message,researcher WHERE researcher.id=message.sender_id AND chat_id=? AND message.deleted_at IS NULL"
+      var sql = "SELECT * FROM (SELECT message.id as id,message,chat_id,message_time,sender_id,first_name,last_name,email,profile_picture FROM message,researcher WHERE researcher.id=message.sender_id AND chat_id=? AND message.deleted_at IS NULL ORDER BY message.id DESC LIMIT 20)sub ORDER BY id ASC"
       sql = mysql.format(sql, [chat_id])
       // console.log(sql)
       db.query(sql, cb);
@@ -77,6 +77,29 @@ class ChatServices {
 
   }
 
+  static getMoreMessages(chat_id,lastMsg_id) {
+    // return("hi")
+    return new Promise((resolve, reject) => {
+      const cb = function (error, results, fields) {
+        if (error) {
+          reject(error);
+        } else {
+          // console.log(results)
+          var msgList=[]
+          results.forEach(msg => {
+            msgList.push(Object.assign({}, msg))
+
+          })
+          resolve(msgList)
+        }
+      };
+      var sql = "SELECT * FROM (SELECT message.id as id,message,chat_id,message_time,sender_id,first_name,last_name,email,profile_picture FROM message,researcher WHERE researcher.id=message.sender_id AND chat_id=? AND message.deleted_at IS NULL AND message.id<? ORDER BY message.id DESC LIMIT 10)sub ORDER BY id ASC"
+      sql = mysql.format(sql, [chat_id,lastMsg_id])
+      // console.log(sql)
+      db.query(sql, cb);
+    });
+
+  }
   static getParticipants(chat_id) {
 
     return new Promise((resolve, reject) => {
