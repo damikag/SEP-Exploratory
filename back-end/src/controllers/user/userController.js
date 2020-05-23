@@ -1,34 +1,61 @@
 var Researcher = require("../../models/models/Researcher");
-
-const { login_validation, register_validation } = require("./validation");
+var TemporaryUser = require("../../models/models/TemporaryUser");
+var UserService = require("../../service/user/UserService");
+const {
+  login_validation,
+  register_validation,
+  temporary_register_validation,
+} = require("./validation");
 const { clean_object } = require("../../api/helpers/helper");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-module.exports.registerAction = (req, res) => {
-  const { error } = register_validation(req.body);
+module.exports.temporaryUserRegisterAction = async (req, res) => {
+  const { error } = temporary_register_validation(req.body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-
-  var researcher = new Researcher();
-
-  researcher
-    .find_by_email_or_id(req.body.email, req.body.id)
+  const salt = await bcrypt.genSalt(10);
+  const hashed_password = await bcrypt.hash(req.body.password, salt);
+  req.body.password = hashed_password;
+  var temporaryUser = new TemporaryUser(req.body);
+  temporaryUser
+    .find_by_email()
     .then(async (result) => {
       if (result) {
-        return res.status(400).json({ error: "duplicate entry" });
+        var today = new Date();
+        var date = new Date(result.created_at);
+        date.setDate(date.getDate() + 1);
+        if (today < date) {
+          return res.status(400).json({ error: "duplicate entry" });
+        }
+
+        console.log(req.body);
+        await temporaryUser
+          .delete_by_email()
+          .then(async (delete_result) => {
+            await temporaryUser
+              .insert()
+              .then((insert_result) => {
+                res.status(200).json({ inserted_id: insert_result.insertId });
+              })
+              .catch((err) => {
+                return res.status(500).json({ error: err.message });
+              });
+          })
+          .catch((err) => {
+            return res.status(500).json({ error: err.message });
+          });
       } else {
         const salt = await bcrypt.genSalt(10);
         const hashed_password = await bcrypt.hash(req.body.password, salt);
         req.body.password = hashed_password;
-        var researcher = new Researcher(req.body);
 
-        researcher
+        temporaryUser
           .insert()
           .then((result) => {
             if (result) {
-              res.status(200).json({ email: researcher.email });
+              res.status(200).json({ inserted_id: result.insertId });
             }
           })
           .catch((err) => {
@@ -36,13 +63,54 @@ module.exports.registerAction = (req, res) => {
           });
       }
     })
-
     .catch((error) => {
       return res.status(500).json({ error: error.message });
+    });
+};
+
+module.exports.registerAction = (req, res) => {
+  var temporaryUser = new TemporaryUser({ id: req.body.id });
+
+  temporaryUser
+    .find_by_id()
+    .then(async (result) => {
+      const body = await getBody(result);
+      var researcher = new Researcher(body);
+      var newTemporaryUser = new TemporaryUser({
+        confirmed_at: new Date(),
+      });
+
+      UserService.register_new_user(newTemporaryUser, researcher)
+        .then((result) => {
+          res.status(200).json({ inserted_id: result.insertId });
+        })
+        .catch((error) => {
+          return res.status(500).json({ error: error.message });
+        });
+
+      // await temporaryUser
+      //   .confirm_email()
+      //   .then(async () => {
+      //     await researcher
+      //       .insert()
+      //       .then((researcher_result) => {
+      //         if (researcher_result) {
+      //           res
+      //             .status(200)
+      //             .json({ inserted_id: researcher_result.insertId });
+      //         }
+      //       })
+      //       .catch((err) => {
+      //         return res.status(500).json({ error: err.message });
+      //       });
+      //   })
+      //   .catch((error) => {
+      //     return res.status(500).json({ error: error.message });
+      //   });
     })
 
     .catch((error) => {
-      return res.status(500).send("server error");
+      return res.status(500).json({ error: error.message });
     });
 };
 
@@ -121,3 +189,12 @@ module.exports.logoutAction = (req, res) => {
       return res.status(500).json({ error: err.message });
     });
 };
+
+function getBody(result) {
+  return {
+    first_name: result.first_name,
+    last_name: result.last_name,
+    email: result.email,
+    password: result.password,
+  };
+}
