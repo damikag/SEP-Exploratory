@@ -19,7 +19,7 @@ Search.prototype.getProjects = function getProjects(){
               resolve(results)
             }
         };
-        var sql= mysql.format('SELECT id,title,description,poster_image FROM project WHERE  MATCH(title,description) AGAINST(? IN NATURAL LANGUAGE MODE) AND project.deleted_at IS NULL AND project.visibility_public=TRUE',[this.searchString])
+        var sql= mysql.format('SELECT project.id as id,title,project.description,poster_image,first_name,last_name,profile_picture,institution.name AS institution, published_at FROM project,researcher,institution WHERE  MATCH(project.title,project.description) AGAINST(? IN NATURAL LANGUAGE MODE) AND researcher.id=project.creator AND researcher.institution=institution.id AND project.deleted_at IS NULL AND project.visibility_public=TRUE LIMIT 25',[this.searchString])
         db.query(sql, cb);
     });
 }
@@ -34,7 +34,7 @@ Search.prototype.getResearchers = function getResearchers(){
               resolve(results)
               }
         }
-        var sql= mysql.format('SELECT researcher.id AS id, first_name AS first_name, last_name,profile_picture, institution.name as institution FROM researcher,institution WHERE  MATCH(first_name,last_name) AGAINST(? IN NATURAL LANGUAGE MODE) AND researcher.deleted_at IS NULL AND researcher.institution=institution.id',[this.searchString])
+        var sql= mysql.format('SELECT researcher.id AS id, first_name AS first_name, last_name,profile_picture, institution.name as institution FROM researcher,institution WHERE  MATCH(first_name,last_name) AGAINST(? IN NATURAL LANGUAGE MODE) AND researcher.deleted_at IS NULL AND researcher.institution=institution.id LIMIT 25',[this.searchString])
         db.query(sql, cb);
     });
 }
@@ -49,7 +49,7 @@ Search.prototype.getInstitutions = function getInstitutions(){
               resolve(results)
             }
           };
-        var sql= mysql.format('SELECT id,name,display_image FROM institution WHERE  MATCH(name) AGAINST(? IN NATURAL LANGUAGE MODE) AND deleted_at IS NULL',[this.searchString])
+        var sql= mysql.format('SELECT id,name,display_image FROM institution WHERE  MATCH(name) AGAINST(? IN NATURAL LANGUAGE MODE) AND deleted_at IS NULL LIMIT 25',[this.searchString])
         db.query(sql, cb);
     });
 }
