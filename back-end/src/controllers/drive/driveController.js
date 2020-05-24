@@ -53,7 +53,7 @@ module.exports.notshareFileAction = (req, res) => {
             if (err) return res.status(500).json({ success: false })
             return res.json({ success: true });
         })
-
+}
 module.exports.notshareFileAction = (req, res) => {
   gfs.collection("uploads");
   gfs.files.update(
@@ -113,8 +113,7 @@ module.exports.getFileAction = (req, res) => {
       res.set('Content-Type', files[0].contentType)
         /** return response */
       return readstream.pipe(res)
-    }});
-};
+    })};
 module.exports.readFileAction = (req, res) => {
   var buffer = "";
   gfs.collection("uploads");
