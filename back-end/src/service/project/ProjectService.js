@@ -27,7 +27,7 @@ class ProjectService {
             var collaborators_modal = new Collaborate({
               project_id: result.insertId,
               researcher_id: collaborator,
-              isAdmin: collaborator == body.creator ? 1 : 0,
+              isAdmin: collaborator === body.creator ? 1 : 0,
             });
             modals.push(collaborators_modal);
           });
