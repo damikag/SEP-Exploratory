@@ -26,14 +26,19 @@ transporter.verify((error, success) => {
   }
 });
 
-module.exports.indexAction = (req, res, next) => {
+module.exports.newUserAction = (req, res, next) => {
   var name = req.body.name;
   var email = req.body.email;
   var id = req.body.message;
 
   ejs.renderFile(
     __dirname + "/emails/user/email.ejs",
-    { name: name, url: `${process.env.FRONT_END}/join-exploratory/${id}` },
+    {
+      name: name,
+      url: `${process.env.FRONT_END}/user/join-exploratory/${id}`,
+      react_end: `${process.env.FRONT_END}`,
+    },
+
     function (err, data) {
       if (err) {
         console.log(err);
@@ -41,6 +46,49 @@ module.exports.indexAction = (req, res, next) => {
         var mainOptions = {
           from: process.env.EMAIL_USERNAME,
           to: email,
+          subject: "Account Activated",
+          html: data,
+        };
+        // console.log("html data ======================>", mainOptions.html);
+
+        transporter.sendMail(mainOptions, function (err, info) {
+          if (err) {
+            res.json({
+              msg: err.message,
+            });
+          } else {
+            res.json({
+              msg: "success",
+            });
+          }
+        });
+      }
+    }
+  );
+};
+
+module.exports.newProjectAction = (req, res, next) => {
+  var project_id = req.body.id;
+  var collaborators = req.body.receivers;
+
+  var emails = [];
+  collaborators.map((user) => {
+    emails.push(user.email);
+  });
+  ejs.renderFile(
+    __dirname + "/emails/project/email.ejs",
+    {
+      name: "Dear Researcher",
+      url: `${process.env.FRONT_END}/project/viewproject/${project_id}`,
+      react_end: `${process.env.FRONT_END}`,
+    },
+    function (err, data) {
+      if (err) {
+        console.log(err);
+      } else {
+        var mainOptions = {
+          from: process.env.EMAIL_USERNAME,
+          to: emails,
           subject: "Account Activated",
           html: data,
         };
