@@ -6,6 +6,7 @@ const projectRoute = require("./api/routes/project/routes");
 const editorRoute = require("./api/routes/editor/routes");
 const forumRoute = require("./api/routes/Forum/routes");
 const aboutusRoute = require("./api/routes/AboutUs/routes");
+const taskTrackerRoute = require("./api/routes/TaskTracker/routes");
 
 const driveRoute = require("./api/routes/drive/routes");
 const commentRoute = require("./api/routes/comment/routes");
@@ -33,5 +34,6 @@ app.use("/forum", forumRoute);
 app.use("/aboutus", aboutusRoute);
 app.use("/drive", driveRoute);
 // app.use("/screenshare", screeShareRoute);
+app.use("/project/tasktracker", taskTrackerRoute);
 
 module.exports = app;
