@@ -41,6 +41,11 @@ module.exports = function (user_id, client, clientManager) {
   
   }
 
+  function handleGetMoreMessages(chat_id,lastMsg_id,callback){
+    ChatServices.getMoreMessages(chat_id,lastMsg_id)
+    .then(res=>callback(res)).catch(err=>callback([]))
+  }
+
   function handleCreateChatroom(chatDetails,callback){
       ChatroomService.createChatRoom(chatDetails)
       .then(res=>{callback(res)}).catch(err=>callback(err))
@@ -81,11 +86,22 @@ module.exports = function (user_id, client, clientManager) {
     .then(res=>{callback(res)}).catch(err=>{console.log(err);callback(null)})
   }
  
+  function handleMarkSeen(MsgInfo,callback){
+    MessageServices.markSeen(MsgInfo.chat_id,MsgInfo.user_id,MsgInfo.message_id)
+    .then(res=>{callback(res)}).catch(err=>{callback(null)})
+  }
+
+  function handleGetSeen(chat_id,message_id,callback){
+    MessageServices.getSeen(chat_id,message_id)
+    .then(res=>{callback(res)}).catch(err=>{callback([])})
+  }
+
   return {
     // handleRegister,
     handleGetChatrooms,
     handlegetChatroomParticipants,
     handleMessage,
+    handleGetMoreMessages,
     handleCreateChatroom,
     handleUpdateChatInfo,
     handleChangeAdmin,
@@ -93,5 +109,7 @@ module.exports = function (user_id, client, clientManager) {
     handleRemoveParticipant,
     handleSearchResearcher,
     handleAllResearcher,
+    handleMarkSeen,
+    handleGetSeen,
   }
 }

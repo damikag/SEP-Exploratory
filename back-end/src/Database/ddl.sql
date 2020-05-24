@@ -31,7 +31,7 @@ CREATE TABLE institution
     password varchar
         (255) NOT NULL,
     contact_no varchar
-        (20) NOT NULL,
+        (20) DEFAULT NULL,
     first_name varchar
         (20) NOT NULL,
     last_name varchar
@@ -380,3 +380,21 @@ CREATE TABLE institution
                                             ADD `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `created_at`,
                                             ADD `deleted_at` TIMESTAMP NULL DEFAULT NULL AFTER `updated_at`;
 
+
+                                            CREATE TABLE temporary_user
+                                            (
+                                                id int(10)
+                                                AUTO_INCREMENT,
+    email varchar
+                                                (50) UNIQUE NOT NULL,
+    password varchar
+                                                (255) NOT NULL,
+    first_name varchar
+                                                (20) NOT NULL,
+    last_name varchar
+                                                (20) NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    confirmed_at TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY
+                                                (id)
+)AUTO_INCREMENT=10001;

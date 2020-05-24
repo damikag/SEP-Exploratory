@@ -40,6 +40,7 @@ io.on('connection', function (client) {
       handleGetChatrooms,
       handlegetChatroomParticipants,
       handleMessage,
+      handleGetMoreMessages,
       handleCreateChatroom,
       handleUpdateChatInfo,
       handleChangeAdmin,
@@ -47,6 +48,8 @@ io.on('connection', function (client) {
       handleRemoveParticipant,
       handleSearchResearcher,
       handleAllResearcher,
+      handleMarkSeen,
+      handleGetSeen,
       // handleGetAvailableUsers,
       // handleDisconnect
     } = makeHandlers(user_id,client, clientManager)
@@ -67,11 +70,14 @@ io.on('connection', function (client) {
     client.on('createChatroom',handleCreateChatroom)
 
     client.on('message', handleMessage)
-
+    client.on('getMoreMsg',handleGetMoreMessages)
 
     client.on('searchReseacher',handleSearchResearcher)
     client.on('allResearcher',handleAllResearcher)
 
+    client.on('markSeen',handleMarkSeen)
+    client.on('getSeen',handleGetSeen)
+    
     client.on('disconnect', function () {
       // console.log('client disconnect...', client.id)
       clientManager.removeClient(user_id,client.id)
@@ -86,6 +92,9 @@ io.on('connection', function (client) {
 
   var ChatServices = require('./service/ChatService')
   // ChatServices.getMessages(10001).then((res)=>{
+  //   console.log(res)
+  // }).catch(err=>console.log(err))
+  // ChatServices.getLastSeenACK(10002,10005).then((res)=>{
   //   console.log(res)
   // }).catch(err=>console.log(err))
   // ChatServices.getChats(10005).then((res)=>{
