@@ -112,14 +112,17 @@ module.exports.loginAction = (req, res) => {
       );
       if (password_match) {
         const token = jwt.sign({ email: user.email }, process.env.TOKEN_SECRET);
+
+        var updateUser = new Researcher({ token: token });
         user.token = token;
 
-        user
+        updateUser
           .update([`email = '${user.email}'`])
           .then((result) => {
             user = Object.assign({}, user);
             user = clean_object(user);
             delete user.password;
+
             return res.status(200).header("exp-auth-token", token).json(user);
           })
           .catch((err) => {
