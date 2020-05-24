@@ -113,7 +113,7 @@ module.exports.getFileAction = (req, res) => {
       res.set('Content-Type', files[0].contentType)
         /** return response */
       return readstream.pipe(res)
-    }});
+    })};
 };
 module.exports.readFileAction = (req, res) => {
   var buffer = "";
