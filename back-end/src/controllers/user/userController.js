@@ -87,26 +87,6 @@ module.exports.registerAction = (req, res) => {
         .catch((error) => {
           return res.status(500).json({ error: error.message });
         });
-
-      // await temporaryUser
-      //   .confirm_email()
-      //   .then(async () => {
-      //     await researcher
-      //       .insert()
-      //       .then((researcher_result) => {
-      //         if (researcher_result) {
-      //           res
-      //             .status(200)
-      //             .json({ inserted_id: researcher_result.insertId });
-      //         }
-      //       })
-      //       .catch((err) => {
-      //         return res.status(500).json({ error: err.message });
-      //       });
-      //   })
-      //   .catch((error) => {
-      //     return res.status(500).json({ error: error.message });
-      //   });
     })
 
     .catch((error) => {
@@ -133,6 +113,7 @@ module.exports.loginAction = (req, res) => {
       if (password_match) {
         const token = jwt.sign({ email: user.email }, process.env.TOKEN_SECRET);
         user.token = token;
+
         user
           .update([`email = '${user.email}'`])
           .then((result) => {
