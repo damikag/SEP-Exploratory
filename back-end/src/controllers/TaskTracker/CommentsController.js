@@ -1,12 +1,24 @@
-const { getAnswers, addAnswer, deleteAnswer, editAnswer } = require("../../models/models/Forum/ForumAnswers");
+const {
+  getCommentsByProjectId,
+  addComment,
+  deleteComment,
+  editComment,
+} = require("../../models/models/TaskTracker/Comments");
 
 module.exports = {
-  getAnswers: (req, res) => {
-    getAnswers((err, results) => {
+  getCommentsByProjectId: (req, res) => {
+    const id = req.params.id;
+    getCommentsByProjectId(id, (err, results) => {
       if (err) {
         return res.status(500).json({
           success: 0,
-          message: "Loading Answers error",
+          message: "Get comments by project id error",
+        });
+      }
+      if (!results) {
+        return res.status(200).json({
+          success: 0,
+          message: "Record not found",
         });
       }
       return res.status(200).json({
@@ -16,10 +28,12 @@ module.exports = {
     });
   },
 
-  addAnswer: (req, res) => {
+  addComment: (req, res) => {
     const body = req.body;
-    addAnswer(body, (err, results) => {
+    console.log(body);
+    addComment(body, (err, results) => {
       if (err) {
+        console.log(err);
         return res.status(500).json({
           success: 0,
           message: "Database connection error",
@@ -32,36 +46,35 @@ module.exports = {
     });
   },
 
-  deleteAnswer: (req, res) => {
+  deleteComment: (req, res) => {
     const body = req.body;
-    deleteAnswer(body, (err, results) => {
+    deleteComment(body, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
           success: 0,
-          message: "Failed to delete answer",
+          message: "Failed to delete comment",
         });
       }
       return res.status(200).json({
         success: 1,
-        message: "Answer deleted successfully",
+        message: "Comment deleted successfully",
       });
     });
   },
 
-  editAnswer: (req, res) => {
+  editComment: (req, res) => {
     const body = req.body;
-    editAnswer(body, (err, results) => {
+    editComment(body, (err, results) => {
       if (err) {
-        console.log(err);
         return res.status(500).json({
           success: 0,
-          message: "Failed to edit answer",
+          message: "Failed to edit comment",
         });
       }
       return res.status(200).json({
         success: 1,
-        message: "Answer updated successfully",
+        message: "Comment updated successfully",
       });
     });
   },

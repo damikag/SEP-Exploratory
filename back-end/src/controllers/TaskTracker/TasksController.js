@@ -1,12 +1,20 @@
-const { getAnswers, addAnswer, deleteAnswer, editAnswer } = require("../../models/models/Forum/ForumAnswers");
+const {getTasksByProjectId, addTask, deleteTask, editTask} = require("../../models/models/TaskTracker/Tasks");
 
 module.exports = {
-  getAnswers: (req, res) => {
-    getAnswers((err, results) => {
+  getTasksByProjectId: (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+    getTasksByProjectId(id, (err, results) => {
       if (err) {
         return res.status(500).json({
           success: 0,
-          message: "Loading Answers error",
+          message: "Get tasks by project id error",
+        });
+      }
+      if (!results) {
+        return res.status(200).json({
+          success: 0,
+          message: "Record not found",
         });
       }
       return res.status(200).json({
@@ -16,10 +24,11 @@ module.exports = {
     });
   },
 
-  addAnswer: (req, res) => {
+  addTask: (req, res) => {
     const body = req.body;
-    addAnswer(body, (err, results) => {
+    addTask(body, (err, results) => {
       if (err) {
+        console.log(err);
         return res.status(500).json({
           success: 0,
           message: "Database connection error",
@@ -32,36 +41,36 @@ module.exports = {
     });
   },
 
-  deleteAnswer: (req, res) => {
+  deleteTask: (req, res) => {
     const body = req.body;
-    deleteAnswer(body, (err, results) => {
+    deleteTask(body, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
           success: 0,
-          message: "Failed to delete answer",
+          message: "Failed to delete task",
         });
       }
       return res.status(200).json({
         success: 1,
-        message: "Answer deleted successfully",
+        message: "task deleted successfully",
       });
     });
   },
 
-  editAnswer: (req, res) => {
+  editTask: (req, res) => {
     const body = req.body;
-    editAnswer(body, (err, results) => {
+    editTask(body, (err, results) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
           success: 0,
-          message: "Failed to edit answer",
+          message: "Failed to edit task",
         });
       }
       return res.status(200).json({
         success: 1,
-        message: "Answer updated successfully",
+        message: "Task updated successfully",
       });
     });
   },
