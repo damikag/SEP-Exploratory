@@ -150,6 +150,10 @@ module.exports.authAction = (req, res) => {
       last_name: user.last_name,
       institution: user.institution,
       profile_picture: user.profile_picture,
+      profession: user.profession,
+      description: user.description,
+      linkedIn: user.linkedIn,
+      twitter: user.twitter,
     });
   });
 };

@@ -15,4 +15,7 @@ router.post("/update-project", projectController.updateProjectAction);
 
 router.post("/get-all-tags", tagController.indexAction);
 
+router.post("/get-collaborators", projectController.getProjectCollabAction);
+
+
 module.exports = router;
