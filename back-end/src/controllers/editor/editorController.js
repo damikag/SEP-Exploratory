@@ -2,7 +2,7 @@ const { EditorBlog } = require("../../mongo/models/EditorBlog");
 
 
 module.exports.createAction= (req, res) => {
-    let blog = new EditorBlog({ content: req.body.content, writer: req.body.group, name:req.body.name });
+    let blog = new EditorBlog({ content: req.body.content, group: req.body.group, name:req.body.name ,folder:"root"});
 
     blog.save((err, postInfo) => {
         if (err) return res.json({ success: false, err });
@@ -27,7 +27,7 @@ module.exports.editAction= (req, res) => {
 };   
     
 module.exports.searchBlogAction= (req, res) => {
-    EditorBlog.find({ "name": req.body.name,"writer": req.body.group })
+    EditorBlog.find({ "name": req.body.name,"group": req.body.group, folder:"root" })
         .exec((err, blogs) => {
             if (err) return res.status(400).send(err);
             res.status(200).json({ success: true, blogs });
@@ -35,7 +35,8 @@ module.exports.searchBlogAction= (req, res) => {
 };
 
 module.exports.getBlogAction= (req, res) => {
-    EditorBlog.find({ "writer": req.body.group })
+    console.log(req.body.group)
+    EditorBlog.find({ "group": req.body.group,folder:"root" })
         .exec((err, blogs) => {
             if (err) return res.status(400).send(err);
             res.status(200).json({ success: true, blogs });
@@ -66,10 +67,10 @@ module.exports.softDeleteAction= (req, res) => {
     
     EditorBlog.findOne({ "_id": req.body.postId }, function (err, foundText) {
         if (err) return console.log(err, 'this is the not found error');
-        foundText.folder = req.body.folder;
+        foundText.folder = "deleted";
         foundText.name = foundText.name;
         foundText.content = foundText.content;
-        //foundText.group = foundText.group;
+        foundText.group = foundText.group;
         foundText.save(function (err, deletedVersion) {
           if (err) return console.log(err, 'this is the not saved error');
           res.status(200).json({ success: true })
