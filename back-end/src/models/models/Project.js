@@ -21,9 +21,9 @@ function Project(data = {}) {
 
 Project.prototype = Object.create(model.prototype);
 
-Project.prototype.find_by_id = function () {
+Project.prototype.find_by_id = function (project_id) {
   var params = [];
-  params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(this.id)));
+  params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(project_id)));
   params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
 
   return this.find_first(params);
