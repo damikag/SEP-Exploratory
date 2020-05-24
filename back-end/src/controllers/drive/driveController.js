@@ -63,7 +63,14 @@ module.exports.getGroupFilesAction = (req, res) => {
         res.status(200).json({ success: true, files })
     });
 }
-
+module.exports.getPublicFilesAction = (req, res) => {
+    gfs.collection('uploads'); //set collection name to lookup into
+    /** First check if file exists */
+    gfs.files.find({"metadata.group" : req.body.group,"metadata.sensitivity" : "public"}).toArray(function(err, files){
+        if (err) return res.status(400).send(err);
+        res.status(200).json({ success: true, files })
+    });
+}
 module.exports.getGroupTxtFilesAction = (req, res) => {
     gfs.collection('uploads'); //set collection name to lookup into
     /** First check if file exists */
@@ -76,7 +83,7 @@ module.exports.getGroupTxtFilesAction = (req, res) => {
 module.exports.getFileAction = (req, res) => {
     gfs.collection('uploads'); //set collection name to lookup into
     /** First check if file exists */
-    gfs.files.find({filename:req.body.filename,"metadata.group":req.body.group,"metadata.folder":req.body.folder}).toArray(function(err, files){
+    gfs.files.find({filename:req.body.filename}).toArray(function(err, files){
         if(!files || files.length === 0){
             console.log(req.body)
             return res.status(404).json({
@@ -134,9 +141,9 @@ module.exports.uploadFilesAction = (req, res) => {
 }
 module.exports.softDeleteFilesAction = (req, res) => {
     gfs.collection('uploads');
-    
+    console.log(req.body.filename)
     gfs.files.update(
-        { filename:  req.body.name },
+        { filename:  req.body.filename },
         { $set: { 'metadata.folder': 'deleted'  } }, (err) => {
             if (err) return res.status(500).json({ success: false })
             return res.json({ success: true });
