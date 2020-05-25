@@ -53,3 +53,16 @@ CREATE TABLE seen(
     FOREIGN KEY(message_id) REFERENCES message(id)
 )AUTO_INCREMENT=10001;
 
+CREATE TABLE deliver(
+    user_id int(10),
+    chat_id int(10),
+    message_id int(10),
+    deliver_time TIMESTAMP,
+    
+    PRIMARY KEY (user_id,chat_id,message_id),
+    FOREIGN KEY(chat_id) REFERENCES chat(id),
+    FOREIGN KEY(user_id) REFERENCES researcher(id),
+    FOREIGN KEY(message_id) REFERENCES message(id)
+)AUTO_INCREMENT=10001;
+
+

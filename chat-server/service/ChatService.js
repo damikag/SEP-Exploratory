@@ -19,7 +19,7 @@ class ChatServices {
           var promiseList = []
 
           await results.forEach((chat, ind) => {
-            var chatObject = Object.assign({ chatMesseges: [], lastSeenACK: 0 }, chat);
+            var chatObject = Object.assign({ chatMesseges: [], lastSeenACK: 0, lastDeliverACK:0 }, chat);
             // chatObject.ne="new field"
             // await ChatServices.getMessages(chatObject.chat_id)
             // .then((res)=>{
@@ -40,6 +40,12 @@ class ChatServices {
               .then((res) => {
                 chatObject.lastSeenACK = res
               }).catch(err => { console.log(err) }))
+
+
+            promiseList.push(ChatServices.getLastDeliverACK(chatObject.chat_id, user_id)
+            .then((res) => {
+              chatObject.lastDeliverACK = res
+            }).catch(err => { console.log(err) }))
 
             chats.push(chatObject)
           })
@@ -129,6 +135,24 @@ class ChatServices {
         }
       };
       var sql = "SELECT MAX(message_id) AS message_id FROM seen WHERE chat_id=? AND user_id=?;"
+      sql = mysql.format(sql, [chat_id, user_id])
+      db.query(sql, cb);
+    });
+
+  }
+
+  static getLastDeliverACK(chat_id, user_id) {
+
+    return new Promise((resolve, reject) => {
+      const cb = function (error, results, fields) {
+        if (error) {
+          reject(error);
+        } else {
+          if (results[0].message_id) { resolve(results[0].message_id) }
+          resolve(0)
+        }
+      };
+      var sql = "SELECT MAX(message_id) AS message_id FROM deliver WHERE chat_id=? AND user_id=?;"
       sql = mysql.format(sql, [chat_id, user_id])
       db.query(sql, cb);
     });

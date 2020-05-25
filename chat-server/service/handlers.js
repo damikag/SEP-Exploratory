@@ -96,6 +96,17 @@ module.exports = function (user_id, client, clientManager) {
     .then(res=>{callback(res)}).catch(err=>{callback([])})
   }
 
+  function handleMarkDeliver(MsgInfo,callback){
+    MessageServices.markDeliver(MsgInfo.chat_id,MsgInfo.user_id,MsgInfo.message_id)
+    .then(res=>{callback(res)}).catch(err=>{callback(null)})
+  }
+
+  function handleGetDeliver(chat_id,message_id,callback){
+    MessageServices.getDeliver(chat_id,message_id)
+    .then(res=>{callback(res)}).catch(err=>{callback([])})
+  }
+
+
   return {
     // handleRegister,
     handleGetChatrooms,
@@ -111,5 +122,7 @@ module.exports = function (user_id, client, clientManager) {
     handleAllResearcher,
     handleMarkSeen,
     handleGetSeen,
+    handleMarkDeliver,
+    handleGetDeliver,
   }
 }

@@ -50,6 +50,8 @@ io.on('connection', function (client) {
       handleAllResearcher,
       handleMarkSeen,
       handleGetSeen,
+      handleMarkDeliver,
+      handleGetDeliver,
       // handleGetAvailableUsers,
       // handleDisconnect
     } = makeHandlers(user_id,client, clientManager)
@@ -77,7 +79,9 @@ io.on('connection', function (client) {
 
     client.on('markSeen',handleMarkSeen)
     client.on('getSeen',handleGetSeen)
-    
+    client.on('markDeliver',handleMarkDeliver)
+    client.on('getDeliver',handleGetDeliver)
+
     client.on('disconnect', function () {
       // console.log('client disconnect...', client.id)
       clientManager.removeClient(user_id,client.id)
