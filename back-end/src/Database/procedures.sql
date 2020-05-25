@@ -56,7 +56,7 @@ DELIMITER //
 
 CREATE PROCEDURE get_projects_from_followers (_researcher_id int, _limit int)
 	BEGIN
-    	(SELECT project.id FROM project,follow_researcher,colloborate WHERE project.id=colloborate.project_id AND colloborate.researcher_id = follow_researcher.followee_id AND follow_researcher.follower_id=_researcher_id AND project.deleted_at IS NULL AND visibility_public=TRUE ORDER BY project.published_at DESC LIMIT _limit);
+    	(SELECT project.id FROM project,follow_researcher,collaborate WHERE project.id=collaborate.project_id AND collaborate.researcher_id = follow_researcher.followee_id AND follow_researcher.follower_id=_researcher_id AND project.deleted_at IS NULL AND visibility_public=TRUE ORDER BY project.published_at DESC LIMIT _limit);
     END
 //
 
