@@ -123,3 +123,29 @@ module.exports.getReplyAction = async (req, res) => {
       return res.status(500).json(error.message);
     });
 };
+
+module.exports.likeCommentAction = async (req, res) => {
+  var commentReply = new CommentReply({ no_of_likes: req.body.count });
+
+  commentReply
+    .like_comment(req.body.reply_id)
+    .then((result) => {
+      return res.status(200).json({ result });
+    })
+    .catch((error) => {
+      return res.status(500).json({ error: error.message });
+    });
+};
+
+module.exports.dislikeCommentAction = async (req, res) => {
+  var commentReply = new CommentReply({ no_of_dislikes: req.body.count });
+
+  commentReply
+    .dislike_comment(req.body.reply_id)
+    .then((result) => {
+      return res.status(200).json({ result });
+    })
+    .catch((error) => {
+      return res.status(500).json({ error: error.message });
+    });
+};

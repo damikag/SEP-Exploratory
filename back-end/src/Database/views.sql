@@ -77,6 +77,7 @@ AS
         comment_reply.author_id,
         comment_reply.message,
         comment_reply.no_of_likes,
+        comment_reply.no_of_dislikes,
         comment_reply.initial_comment,
         researcher.first_name,
         researcher.last_name,
