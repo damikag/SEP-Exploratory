@@ -11,15 +11,17 @@ const driveRoute = require("./api/routes/drive/routes");
 const commentRoute = require("./api/routes/comment/routes");
 const emailRoute = require("./api/routes/email/routes");
 var express = require("express");
+var bodyParser = require("body-parser");
+
 const config = require("./mongo/connect");
 var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Expose-Headers", "exp-auth-token");
   next();
 });
-
-app.use(express.json());
 
 app.use("/", homeRoute);
 app.use("/researcher", researcherRoute);

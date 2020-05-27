@@ -100,12 +100,12 @@ class ProjectService {
       var promise_4 = await collaborate.delete_collaborators(body.id);
 
       var promise_5 = body.collaborators.map(async (collaborator) => {
-        var collaborate = new Collaborate({
+        var new_collaborate = new Collaborate({
           researcher_id: collaborator.id,
           project_id: body.id,
           isAdmin: 0,
         });
-        return await collaborate.insert();
+        return await new_collaborate.insert();
       });
 
       var promises = [

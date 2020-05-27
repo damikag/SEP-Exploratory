@@ -73,6 +73,7 @@ CREATE TABLE institution
     creator int
             (10),
     visibility_public boolean DEFAULT TRUE,
+    final_paper text DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
@@ -117,6 +118,8 @@ CREATE TABLE institution
     comment_id int
                     (10) NOT NULL,
     no_of_likes int
+                    (10) DEFAULT 0 NOT NULL,
+    no_of_dislikes int
                     (10) DEFAULT 0 NOT NULL,
     initial_comment boolean DEFAULT false NOT NULL,
 
@@ -332,35 +335,36 @@ CREATE TABLE institution
 
                                             CREATE TABLE image
                                             (
-                                                id int(10) PRIMARY KEY,
-                                                project_id int(10) REFERENCES project(id),
-                                                url varchar(255)
-                                            );
-
-                                            ALTER TABLE `image`
-                                            ADD `caption` VARCHAR
-                                            (255) NOT NULL DEFAULT '' AFTER `url`,
-                                            ADD `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `caption`,
-                                            ADD `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `created_at`,
-                                            ADD `deleted_at` TIMESTAMP NULL DEFAULT NULL AFTER `updated_at`;
-
-
-                                            CREATE TABLE temporary_user
-                                            (
                                                 id int(10)
-                                                AUTO_INCREMENT,
-    email varchar
-                                                (50) UNIQUE NOT NULL,
-    password varchar
+                                                AUTO_INCREMENT PRIMARY KEY,
+                                                project_id int
+                                                (10) NOT NULL REFERENCES project
+                                                (id) ,
+                                                url varchar
                                                 (255) NOT NULL,
+                                                caption varchar
+                                                (255) NULL DEFAULT NULL,
+                                                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                                updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                                deleted_at TIMESTAMP NULL DEFAULT NULL
+                                            )AUTO_INCREMENT=10001;
+
+                                                CREATE TABLE temporary_user
+                                                (
+                                                    id int(10)
+                                                    AUTO_INCREMENT,
+    email varchar
+                                                    (50) UNIQUE NOT NULL,
+    password varchar
+                                                    (255) NOT NULL,
     first_name varchar
-                                                (20) NOT NULL,
+                                                    (20) NOT NULL,
     last_name varchar
-                                                (20) NOT NULL,
+                                                    (20) NOT NULL,
     created_at TIMESTAMP NOT NULL,
     confirmed_at TIMESTAMP NULL DEFAULT NULL,
     PRIMARY KEY
-                                                (id)
+                                                    (id)
 )AUTO_INCREMENT=10001;
 
 

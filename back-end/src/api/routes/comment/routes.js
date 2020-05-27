@@ -20,4 +20,8 @@ router.post("/new-comment", commentController.newCommentAction);
 //
 router.post("/delete-comment", commentController.deleteCommentAction);
 
+router.post("/like-comment", commentController.likeCommentAction);
+
+router.post("/dislike-comment", commentController.dislikeCommentAction);
+
 module.exports = router;

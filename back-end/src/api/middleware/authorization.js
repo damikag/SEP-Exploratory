@@ -35,3 +35,7 @@ module.exports.valid_jwt_needed = function (req, res, next) {
     return res.status(401).json({ error: "Invalid Token" });
   }
 };
+
+module.exports.valid_header = function (req, res, next) {
+  const type = req.header("Content-Type");
+};

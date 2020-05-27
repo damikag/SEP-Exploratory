@@ -19,11 +19,12 @@ var transporter = nodemailer.createTransport(transport);
 
 //Verifying the Nodemailer Transport instance
 transporter.verify((error, success) => {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log("Server is ready to take messages...");
-  }
+  // if (error) {
+  //   console.log(error);
+  // } else {
+  //   console.log("Server is ready to take messages...");
+  // }
+  return;
 });
 
 module.exports.newUserAction = (req, res, next) => {
