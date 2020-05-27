@@ -34,7 +34,7 @@ module.exports.find = function find(tables, params, cb) {
         conditions = conditions.endsWith('AND ') ? conditions.slice(0, -4) : conditions
     }
     sql = sql.concat(conditions);
-    console.log(sql);
+    // console.log(sql);
     con.query(sql, cb);
 }
 
@@ -43,7 +43,7 @@ module.exports.insert = function insert(table, data, cb) {
     sql = sql.concat(mysql.escapeId(table));
     sql = sql.concat(' SET ? ');
     sql = mysql.format(sql, data);
-    console.log(sql);
+    // console.log(sql);
     con.query(sql, cb);
 }
 
@@ -54,7 +54,7 @@ module.exports.bulk_insert = function insert(table, columns, data, cb) {
     sql = mysql.format(sql, [columns]);
     sql = sql.concat(' VALUES ?');
     sql = mysql.format(sql, [data]);
-    console.log(sql);
+    // console.log(sql);
     con.query(sql, cb);
 }
 
@@ -72,7 +72,7 @@ module.exports.update = function update(table, params, data, cb) {
         conditions = conditions.slice(0, -4);
     }
     sql = sql.concat(conditions);
-    console.log(sql);
+    // console.log(sql);
     con.query(sql, cb);
 }
 
@@ -117,7 +117,7 @@ module.exports.delete = function del(table, params, cb) {
         return Promise.reject({message : "no condition given for delete"})
     }
     sql = sql.concat(conditions);
-    console.log(sql);
+    // console.log(sql);
     con.query(sql, cb);
 }
 
@@ -134,7 +134,7 @@ module.exports.call_proc = function call(procedure, params, cb) {
     }
     params_string = params_string.concat(')');
     sql = sql.concat(params_string);
-    console.log(sql);
+    // console.log(sql);
     con.query(sql, cb);
 }
 

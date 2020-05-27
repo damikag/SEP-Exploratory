@@ -1,6 +1,8 @@
 var Researcher = require("../../models/models/Researcher");
 var ResearcherInstitute = require("../../models/views/ResearcherInstitute");
 // var Feed = require("../../models/models/Feed");
+var Feed = require("../../models/models/Feed");
+const { feed_validation } = require("./validation");
 
 module.exports.indexAction = (req, res) => {
   return res.status(200).json({ message: "Welcome home researcher" });
@@ -24,14 +26,21 @@ module.exports.getAllUsersAction = (req, res) => {
     .catch((err) => res.status(500).json(err.message));
 };
 
-// module.exports.feedAction = (req, res) => {
-//   var feed = new Feed();
-//   feed
-//     .feed()
-//     .then((feedArr) => {
-//       return res.status(200).json(feedArr);
-//     })
-//     .catch((err) => {
-//       return res.status(500).json({ error: err.message });
-//     });
-// };
+module.exports.feedAction = (req, res) => {
+
+  const { error } = feed_validation(req.body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+
+  var feed = new Feed(req.body.email);
+  feed
+    .getFeed()
+    .then((feedArr) => {
+      return res.status(200).json(feedArr);
+    })
+    .catch((err) => {
+      return res.status(500).json({ error: err.message });
+    });
+
+};
