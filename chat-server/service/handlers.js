@@ -56,6 +56,11 @@ module.exports = function (user_id, client, clientManager) {
       .then(res=>{callback(res)}).catch(err=>{callback([])})
   }
 
+  function handleGetDirrectChat(user1_id,user2_id,callback){
+      ChatroomService.getDirrectChat(user1_id,user2_id)
+      .then((res)=>{callback(res)}).catch(err=>{callback(null)})
+  }
+
   function handleUpdateChatInfo(chatInfo,callback){
     ChatroomService.updateChatInfo(chatInfo)
     .then(res=>{callback(res)}).catch( err=> {callback({success:false,message:"Update Failed!"})})
@@ -96,10 +101,22 @@ module.exports = function (user_id, client, clientManager) {
     .then(res=>{callback(res)}).catch(err=>{callback([])})
   }
 
+  function handleMarkDeliver(MsgInfo,callback){
+    MessageServices.markDeliver(MsgInfo.chat_id,MsgInfo.user_id,MsgInfo.message_id)
+    .then(res=>{callback(res)}).catch(err=>{callback(null)})
+  }
+
+  function handleGetDeliver(chat_id,message_id,callback){
+    MessageServices.getDeliver(chat_id,message_id)
+    .then(res=>{callback(res)}).catch(err=>{callback([])})
+  }
+
+
   return {
     // handleRegister,
     handleGetChatrooms,
     handlegetChatroomParticipants,
+    handleGetDirrectChat,
     handleMessage,
     handleGetMoreMessages,
     handleCreateChatroom,
@@ -111,5 +128,7 @@ module.exports = function (user_id, client, clientManager) {
     handleAllResearcher,
     handleMarkSeen,
     handleGetSeen,
+    handleMarkDeliver,
+    handleGetDeliver,
   }
 }

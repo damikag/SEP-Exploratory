@@ -39,6 +39,7 @@ io.on('connection', function (client) {
       // handleMessage,
       handleGetChatrooms,
       handlegetChatroomParticipants,
+      handleGetDirrectChat,
       handleMessage,
       handleGetMoreMessages,
       handleCreateChatroom,
@@ -50,6 +51,8 @@ io.on('connection', function (client) {
       handleAllResearcher,
       handleMarkSeen,
       handleGetSeen,
+      handleMarkDeliver,
+      handleGetDeliver,
       // handleGetAvailableUsers,
       // handleDisconnect
     } = makeHandlers(user_id,client, clientManager)
@@ -63,6 +66,7 @@ io.on('connection', function (client) {
     // client.emit('chats',"Test chat list")
     client.on('chatrooms', handleGetChatrooms)
     client.on('getChatroomParticipants',handlegetChatroomParticipants)
+    client.on('getDirrectChat',handleGetDirrectChat)
     client.on('updateChatInfo',handleUpdateChatInfo)
     client.on('changeAdmin',handleChangeAdmin)
     client.on('addMoreParticipants',handleAddMoreParticipants)
@@ -77,7 +81,9 @@ io.on('connection', function (client) {
 
     client.on('markSeen',handleMarkSeen)
     client.on('getSeen',handleGetSeen)
-    
+    client.on('markDeliver',handleMarkDeliver)
+    client.on('getDeliver',handleGetDeliver)
+
     client.on('disconnect', function () {
       // console.log('client disconnect...', client.id)
       clientManager.removeClient(user_id,client.id)

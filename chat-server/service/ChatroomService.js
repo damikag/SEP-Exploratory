@@ -9,7 +9,7 @@ class ChatroomServices {
   static createChatRoom(chatDetails) {
 
     return new Promise((resolve, reject) => {
-
+      console.log(chatDetails)
       var chat = new Chat(chatDetails)
       chat.insert()
         .then((res) => {
@@ -206,6 +206,20 @@ class ChatroomServices {
       db.query(sql, cb);
     })
 
+  }
+
+  static getDirrectChat(user1_id,user2_id){
+    return new Promise((resolve, reject) => {
+
+      const cb = function (error, results, fields) {
+        if(results.length>0){
+          resolve(Object.assign({},results[0]))
+        }
+        resolve(null)
+      }
+      var sql = mysql.format('SELECT chat.id AS chat_id FROM chat,participant WHERE chat.id=participant.chat_id AND chat.isDirrect=TRUE AND ((chat.creator_id=? AND participant.user_id=?) OR (participant.user_id=? AND chat.creator_id=?)) AND chat.deleted_at IS NULL', [user1_id,user2_id,user1_id,user2_id])
+      db.query(sql, cb);
+    })
   }
 }
 
