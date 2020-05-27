@@ -7,6 +7,7 @@ const attrs = [
   "name",
   "description",
   "logo",
+  "isDirrect",
   "creator_id",
   "created_at",
   "updated_at",

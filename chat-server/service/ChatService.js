@@ -6,6 +6,7 @@
 var Chat = require('../models/models/Chat')
 var db = require('../db/db')
 var mysql = require('mysql')
+var ChatroomService =require('./ChatroomService')
 
 class ChatServices {
   static getChats(user_id) {
@@ -47,6 +48,20 @@ class ChatServices {
               chatObject.lastDeliverACK = res
             }).catch(err => { console.log(err) }))
 
+            if(chatObject.isDirrect){
+              console.log(chatObject)
+              promiseList.push(ChatroomService.getParticipants(chatObject.chat_id)
+              .then((res)=>{
+                res.forEach(participant=>{
+                  if(participant.user_id!=user_id){
+                    console.log(participant)
+                    chatObject.name=participant.first_name.concat(" ").concat(participant.last_name)
+                    chatObject.description="Dirrect Chat"
+                    chatObject.logo=participant.profile_picture
+                  }
+                })
+              }).catch(err=>{console.log(err)}))
+            }
             chats.push(chatObject)
           })
           Promise.all(promiseList).then(() => {
@@ -57,7 +72,7 @@ class ChatServices {
           // await resolve(chats)
         }
       };
-      var sql = "SELECT chat.id AS chat_id,chat.name as name, chat.logo, description, participant.created_at AS joined_at FROM chat,participant WHERE chat.id=participant.chat_id AND participant.user_id= ? AND chat.deleted_at IS NULL"
+      var sql = "SELECT chat.id AS chat_id,chat.name as name, chat.logo, description, participant.created_at AS joined_at,isDirrect FROM chat,participant WHERE chat.id=participant.chat_id AND participant.user_id= ? AND chat.deleted_at IS NULL"
       sql = mysql.format(sql, [user_id])
       db.query(sql, cb);
     });
@@ -65,7 +80,7 @@ class ChatServices {
   }
 
   static getMessages(chat_id) {
-    // return("hi")
+
     return new Promise((resolve, reject) => {
       const cb = function (error, results, fields) {
         if (error) {
@@ -84,7 +99,7 @@ class ChatServices {
   }
 
   static getMoreMessages(chat_id,lastMsg_id) {
-    // return("hi")
+
     return new Promise((resolve, reject) => {
       const cb = function (error, results, fields) {
         if (error) {
@@ -106,6 +121,8 @@ class ChatServices {
     });
 
   }
+
+  // Auxillary 
   static getParticipants(chat_id) {
 
     return new Promise((resolve, reject) => {
@@ -158,9 +175,6 @@ class ChatServices {
     });
 
   }
-
-
 }
-
 
 module.exports = ChatServices

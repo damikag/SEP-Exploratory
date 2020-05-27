@@ -4,6 +4,7 @@ CREATE TABLE chat(
     description text,
     logo text,
     creator_id int(10) NOT NULL,
+    isDirrect Boolean DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,

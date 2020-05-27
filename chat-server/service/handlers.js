@@ -56,6 +56,11 @@ module.exports = function (user_id, client, clientManager) {
       .then(res=>{callback(res)}).catch(err=>{callback([])})
   }
 
+  function handleGetDirrectChat(user1_id,user2_id,callback){
+      ChatroomService.getDirrectChat(user1_id,user2_id)
+      .then((res)=>{callback(res)}).catch(err=>{callback(null)})
+  }
+
   function handleUpdateChatInfo(chatInfo,callback){
     ChatroomService.updateChatInfo(chatInfo)
     .then(res=>{callback(res)}).catch( err=> {callback({success:false,message:"Update Failed!"})})
@@ -111,6 +116,7 @@ module.exports = function (user_id, client, clientManager) {
     // handleRegister,
     handleGetChatrooms,
     handlegetChatroomParticipants,
+    handleGetDirrectChat,
     handleMessage,
     handleGetMoreMessages,
     handleCreateChatroom,
