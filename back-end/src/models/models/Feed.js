@@ -1,68 +1,52 @@
 const db = require('../../db/db')
 var Researcher = require('./Researcher')
 var Project = require('./Project')
+var mysql = require('mysql');
 
-function Feed(email){
+function Feed(email) {
 
-    this.email=email
-    this.projects={}
+    this.email = email
+    this.projects = {}
     var tmpResearcher = new Researcher()
     tmpResearcher.find_by_email(email)
-    .then((user) => {
-        this.researcher=user
-    })
-    this.scores={
-        newProject:2,
-        updateProject:1,
-        updateFollow:6,
-        institution:3,
-        follower:4,
+        .then((user) => {
+            this.researcher = user
+        })
+    this.scores = {
+        newProject: 2,
+        updateProject: 1,
+        updateFollow: 6,
+        institution: 3,
+        follower: 4,
     }
-    // console.log(this.email)
+
 }
 
 
-Feed.prototype.automate = function automate(procedure,params,scoreAddition){
+Feed.prototype.automate = function automate(procedure, params, scoreAddition) {
     return new Promise((resolve, reject) => {
-        var projects=this.projects
+        var projects = this.projects
 
-        const cb = async function(error, results, fields){
-            
-            if (error){
+        const cb = async function (error, results, fields) {
+
+            if (error) {
                 reject(error);
             }
-            else{
-                if(results[0].length > 0){
+            else {
+                if (results[0].length > 0) {
 
-                    var tmpProject= new Project()
-                    // var promiseArr=[]
+                    var tmpProject = new Project()
 
-                    // results[0].forEach((result,index)=>{
-                    //     var id=result.id
-                    //     if( !projects.hasOwnProperty(id)){
-                    //         promiseArr.push(tmpProject.find_by_id(id)
-                    //         .then(res=>{
-                    //             projects[id]=Object.assign({score:0},res)
-                    //         })
-                    //         .catch(err=>{console.log(err)}))
-                    //     }
-                    // })
-
-                    // Promise.all(promiseArr).then((res)=>{
-
-                        results[0].forEach(function(result, index){
-                            var id=result.id
-                            if( projects.hasOwnProperty(id)){
-                                projects[id]+= scoreAddition
-                            }
-                            else{
-                                projects[id]= scoreAddition
-                            }
-                        })
-                        // console.log(projects)
-                        resolve()
-                    // }).catch(err=>{console.log(err);resolve()})
-
+                    results[0].forEach(function (result, index) {
+                        var id = result.id
+                        if (projects.hasOwnProperty(id)) {
+                            projects[id] += scoreAddition
+                        }
+                        else {
+                            projects[id] = scoreAddition
+                        }
+                    })
+                    resolve()
                 } else {
                     resolve();
                 }
@@ -72,18 +56,18 @@ Feed.prototype.automate = function automate(procedure,params,scoreAddition){
     });
 }
 
-Feed.prototype.get_new_projects = function get_new_projects(params){  
-    return this.automate('get_new_projects',params,this.scores.newProject)
+Feed.prototype.get_new_projects = function get_new_projects(params) {
+    return this.automate('get_new_projects', params, this.scores.newProject)
 }
 
 
-Feed.prototype.get_newlyupdated_projects = function get_newlyupdated_projects(params){
-    return this.automate('get_newlyupdated_projects',params,this.scores.updateProject)
+Feed.prototype.get_newlyupdated_projects = function get_newlyupdated_projects(params) {
+    return this.automate('get_newlyupdated_projects', params, this.scores.updateProject)
 }
 
 
-Feed.prototype.get_followed_projects = function get_followed_projects(params){
-    return this.automate('get_followed_projects',params,this.scores.updateFollow)
+Feed.prototype.get_followed_projects = function get_followed_projects(params) {
+    return this.automate('get_followed_projects', params, this.scores.updateFollow)
 }
 
 // Bug in the procedure
@@ -92,56 +76,74 @@ Feed.prototype.get_followed_projects = function get_followed_projects(params){
 // }
 
 
-Feed.prototype.get_projects_from_followers = function get_projects_from_followers(params){
-    return this.automate('get_projects_from_followers',params,this.scores.follower)
+Feed.prototype.get_projects_from_followers = function get_projects_from_followers(params) {
+    return this.automate('get_projects_from_followers', params, this.scores.follower)
 }
 
-const refineFeed=(projects)=>{
-    
-    return new Promise((resolve,reject)=>{
-        var projectArr=[]
+const refineFeed = (projects) => {
+
+    return new Promise(async (resolve, reject) => {
+        var projectArr = []
         for (let [id, score] of Object.entries(projects)) {
             projectArr.push({
-                id:id,
-                score:score,
+                id: id,
+                score: score,
             })
         }
-        projectArr.sort((a,b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
-           
-        resolve(projectArr)
-    
+        await projectArr.sort((a, b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
+
+        projectArr = projectArr.slice(0, 10)
+
+        var resultArr = []
+        var promiseArr = []
+
+        await projectArr.forEach(({ id, score }) => {
+
+            promiseArr.push(new Promise((resolve2, reject2) => {
+                var sql = mysql.format("SELECT project.id, project.title, project.description,poster_image, first_name,last_name,institution.name as institution, profile_picture,project.published_at FROM project,institution,researcher WHERE project.id=? AND project.creator=researcher.id AND researcher.institution=institution.id", [id])
+                db.query(sql, (error, results, fields) => {
+                    if (error) {
+                        resolve2()
+                    }
+                    else {
+                        resultArr.push(Object.assign({ score: score }, results[0]))
+                        resolve2()
+                    }
+                })
+            }))
+        })
+
+        Promise.all(promiseArr).then(async () => {
+            await resultArr.sort((a, b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
+            resolve(resultArr)
+        })
+            .catch(err => { console.log(err); resolve([]) })
     })
-    
 }
-Feed.prototype.getFeed = function getFeed(){
-    
+
+Feed.prototype.getFeed = function getFeed() {
+
     return new Promise((resolve, reject) => {
 
-      
-        this.get_new_projects([1000]).then(()=>{
-            this.get_newlyupdated_projects([1000]).then(()=>{
-                this.get_followed_projects([this.researcher.id,1000]).then(()=>{
-                    this.get_projects_from_followers([this.researcher.id,1000]).then(()=>{
-                        
-                        refineFeed(this.projects).then((resArr)=>{
-                            resolve(resArr)
-                        }).catch(err=>{resolve([])})
-                        // resolve(this.projects)
+        this.get_new_projects([1000]).then(() => {
+            this.get_newlyupdated_projects([1000]).then(() => {
+                this.get_followed_projects([this.researcher.id, 1000]).then(() => {
+                    this.get_projects_from_followers([this.researcher.id, 1000]).then(() => {
 
-                    }).catch(err=>{console.log(err);resolve([])})
-                }).catch(err=>{console.log(err);resolve([])})
-            }).catch(err=>{console.log(err);resolve([])})
-            // console.log("done gene")
-            // console.log(this.researcher.id)
-            // resolve()
-        }).catch(err=>{console.log(err);resolve([])})
-          
-        
+                        refineFeed(this.projects).then((resArr) => {
+                            resolve(resArr)
+                        }).catch(err => { resolve([]) })
+                       
+                    }).catch(err => { console.log(err); resolve([]) })
+                }).catch(err => { console.log(err); resolve([]) })
+            }).catch(err => { console.log(err); resolve([]) })
+        }).catch(err => { console.log(err); resolve([]) })
+
     });
 }
 
 // Feed.prototype.getFeed = function getFeed(){
-    
+
 //     return new Promise((resolve, reject) => {
 
 //         Promise.all([
@@ -153,13 +155,13 @@ Feed.prototype.getFeed = function getFeed(){
 //         ])
 //         .then( (res) =>{
 //             var project_arr=[]
-    
+
 //             for (let [id, project] of Object.entries(this.projects)) {
 //                 project_arr.push(project)
 //             }
-    
+
 //             project_arr.sort((a,b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
-            
+
 //             resolve(project_arr.slice(0,50))
 //         })
 //         .catch((err)=>{
