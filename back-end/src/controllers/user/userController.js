@@ -1,6 +1,7 @@
 var Researcher = require("../../models/models/Researcher");
 var TemporaryUser = require("../../models/models/TemporaryUser");
 var UserService = require("../../service/user/UserService");
+const { get_default_image } = require("./defaultPicture");
 const {
   login_validation,
   register_validation,
@@ -79,7 +80,7 @@ module.exports.registerAction = (req, res) => {
       var newTemporaryUser = new TemporaryUser({
         confirmed_at: new Date(),
       });
-
+      console.log(body);
       UserService.register_new_user(newTemporaryUser, researcher)
         .then((result) => {
           res.status(200).json({ inserted_id: result.insertId });
@@ -193,5 +194,6 @@ function getBody(result) {
     last_name: result.last_name,
     email: result.email,
     password: result.password,
+    profile_picture: get_default_image(),
   };
 }

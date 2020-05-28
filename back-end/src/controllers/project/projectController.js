@@ -11,27 +11,6 @@ module.exports.indexAction = (req, res) => {
   return res.status(200).send("You are at project index");
 };
 
-module.exports.saveFileAction = (req, res) => {
-  console.log(req.body.name);
-  if (req.body.type === "final_paper") {
-    console.log(req.body);
-    var project = new Project({ final_paper: req.body.name });
-    project
-      .upload_final_paper(req.body.project_id)
-      .then((result) => {
-        return res.status(200).json({ message: "Saved!" });
-      })
-      .catch((err) => {
-        return res.status(500).json({ message: "Error!" });
-      });
-  }
-  res.status(200).json({ message: "Image Saved!" });
-};
-
-module.exports.retreiveImageFileAction = (req, res) => {
-  res.sendFile(`${process.cwd()}/public/related_images/${req.body.file}`);
-};
-
 module.exports.createProjectAction = (req, res) => {
   const { error } = create_project_validation(req.body);
   if (error) {
@@ -90,4 +69,25 @@ module.exports.getProjectCollabAction = (req, res) => {
     .catch((error) => {
       return res.status(500).json({ error: error.message });
     });
+};
+
+module.exports.saveFileAction = (req, res) => {
+  console.log(req.body.name);
+  if (req.body.type === "final_paper") {
+    console.log(req.body);
+    var project = new Project({ final_paper: req.body.name });
+    project
+      .upload_final_paper(req.body.project_id)
+      .then((result) => {
+        return res.status(200).json({ message: "Saved!" });
+      })
+      .catch((err) => {
+        return res.status(500).json({ message: "Error!" });
+      });
+  }
+  res.status(200).json({ message: "Image Saved!" });
+};
+
+module.exports.retreiveImageFileAction = (req, res) => {
+  res.sendFile(`${process.cwd()}/public/related_images/${req.body.file}`);
 };
