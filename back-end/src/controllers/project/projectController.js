@@ -1,5 +1,5 @@
 const { create_project_validation } = require("./validation");
-
+var mysql = require("mysql");
 var ProjectService = require("../../service/project/ProjectService");
 var Project = require("../../models/models/Project");
 var ProjectModel = require("../../models/models/Collaborate");
@@ -57,6 +57,13 @@ module.exports.updateProjectAction = async (req, res) => {
     .then((result) => res.status(200).json(result))
     .catch((err) => res.status(500).json(err));
 };
+
+module.exports.deleteProjectAction = async (req, res) => {
+  ProjectService.softDeleteProject(req.body)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(500).json(err));
+};
+
 module.exports.getProjectCollabAction = (req, res) => {
   var collaborator_view = new CollaborateResearcherInstitute({
     project_id: req.body.group,
@@ -72,9 +79,7 @@ module.exports.getProjectCollabAction = (req, res) => {
 };
 
 module.exports.saveFileAction = (req, res) => {
-  console.log(req.body.name);
   if (req.body.type === "final_paper") {
-    console.log(req.body);
     var project = new Project({ final_paper: req.body.name });
     project
       .upload_final_paper(req.body.project_id)
@@ -86,6 +91,18 @@ module.exports.saveFileAction = (req, res) => {
       });
   }
   res.status(200).json({ message: "Image Saved!" });
+};
+
+module.exports.removeFinalPaperAction = (req, res) => {
+  var project = new Project({ final_paper: "NULL" });
+  project
+    .remove_final_paper(req.body.project_id)
+    .then((result) => {
+      return res.status(200).json({ message: result });
+    })
+    .catch((err) => {
+      return res.status(500).json({ message: err.message });
+    });
 };
 
 module.exports.retreiveImageFileAction = (req, res) => {

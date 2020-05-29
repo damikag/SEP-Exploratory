@@ -41,13 +41,16 @@ CREATE TABLE institution
         (10) DEFAULT NULL,
     description text DEFAULT NULL,
     profession text DEFAULT NULL,
-    linkedIn varchar(255) DEFAULT NULL,
-    twitter varchar(255) DEFAULT NULL,
+    linkedIn varchar
+        (255) DEFAULT NULL,
+    twitter varchar
+        (255) DEFAULT NULL,
     last_login TIMESTAMP NULL DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
-    _deleted tinyint(1) DEFAULT 0,
+    _deleted tinyint
+        (1) DEFAULT 0,
     token varchar
         (255) DEFAULT NULL,
 
@@ -92,9 +95,7 @@ CREATE TABLE institution
                 id int(10)
                 AUTO_INCREMENT,  
     project_id int
-                (10),    
-    comment text,
-    commentor_id int(10),
+                (10),   
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
@@ -103,8 +104,7 @@ CREATE TABLE institution
                 (id,project_id),
     FOREIGN KEY
                 (project_id) REFERENCES project
-                (id),
-    FOREIGN KEY(commentor_id) REFERENCES researcher(id)
+                (id)
 
 )AUTO_INCREMENT=10001;
 
@@ -145,7 +145,8 @@ CREATE TABLE institution
     title varchar
                         (255) NOT NULL,
     description text NOT NULL,
-    assigned_to int(10),
+    assigned_to int
+                        (10),
     start_date TIMESTAMP NULL,   
     end_date TIMESTAMP NULL,
     progress VARCHAR
@@ -159,7 +160,8 @@ CREATE TABLE institution
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
-    is_visible tinyint(1) DEFAULT 1,
+    is_visible tinyint
+                        (1) DEFAULT 1,
 
 
     PRIMARY KEY
@@ -176,42 +178,43 @@ CREATE TABLE institution
 )AUTO_INCREMENT=10001;
 
 
-                            CREATE TABLE task_comment
-                            (
-                                id int(10)
-                                AUTO_INCREMENT,
+                        CREATE TABLE task_comment
+                        (
+                            id int(10)
+                            AUTO_INCREMENT,
     project_id int
-                                (10),
+                            (10),
 
     comment text NOT NULL,
     commentor_id int
-                                (10),
+                            (10),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
-    is_visible tinyint(1) DEFAULT 1,
+    is_visible tinyint
+                            (1) DEFAULT 1,
 
     PRIMARY KEY
-                                (id,project_id),
+                            (id,project_id),
     FOREIGN KEY
-                                (project_id) REFERENCES project
-                                (id),
+                            (project_id) REFERENCES project
+                            (id),
     FOREIGN KEY
-                                (commentor_id) REFERENCES researcher
-                                (id)
+                            (commentor_id) REFERENCES researcher
+                            (id)
 )AUTO_INCREMENT=10001;
 
 
-                                CREATE TABLE notification_type
-                                (
-                                    id int(2)
-                                    AUTO_INCREMENT PRIMARY KEY,   
+                            CREATE TABLE notification_type
+                            (
+                                id int(2)
+                                AUTO_INCREMENT PRIMARY KEY,   
     title varchar
-                                    (20),
+                                (20),
     description text NOT NULL,
     image text NOT NULL,
     icon varchar
-                                    (20) NOT NULL,
+                                (20) NOT NULL,
                                 link text NOT NULL,
     
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -219,204 +222,229 @@ CREATE TABLE institution
     deleted_at TIMESTAMP NULL DEFAULT NULL)
     AUTO_INCREMENT=10001;
 
-                                    CREATE TABLE notification
+                                CREATE TABLE notification
+                                (
+                                    id int(10)
+                                    AUTO_INCREMENT,
+    not_type int
+                                    (2),
+    _read boolean DEFAULT FALSE,
+    researcher_id int
+                                    (10),
+    direct_to int
+                                    (10),  
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+
+
+    PRIMARY KEY
+                                    (id),
+    FOREIGN KEY
+                                    (researcher_id) REFERENCES researcher
+                                    (id),
+    FOREIGN KEY
+                                    (not_type) REFERENCES notification_type
+                                    (id)
+)AUTO_INCREMENT=10001;
+
+
+
+
+
+                                    CREATE TABLE follow_researcher
+                                    (
+                                        follower_id int(10) NOT NULL,
+                                        followee_id int(10) NOT NULL,
+
+                                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        deleted_at TIMESTAMP NULL DEFAULT NULL,
+
+
+                                        PRIMARY KEY(follower_id,followee_id),
+                                        FOREIGN KEY(follower_id) REFERENCES researcher(id),
+                                        FOREIGN KEY(followee_id) REFERENCES researcher(id)
+                                    );
+
+                                    CREATE TABLE follow_institution
+                                    (
+                                        follower_id int(10) NOT NULL,
+                                        institution_id int(10) NOT NULL,
+
+                                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        deleted_at TIMESTAMP NULL DEFAULT NULL,
+
+                                        PRIMARY KEY(follower_id,institution_id),
+                                        FOREIGN KEY(follower_id) REFERENCES researcher(id),
+                                        FOREIGN KEY(institution_id) REFERENCES institution(id)
+                                    );
+
+                                    CREATE TABLE follow_project
+                                    (
+                                        follower_id int(10) NOT NULL,
+                                        project_id int(10) NOT NULL,
+
+                                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        deleted_at TIMESTAMP NULL DEFAULT NULL,
+
+                                        PRIMARY KEY(follower_id,project_id),
+                                        FOREIGN KEY(follower_id) REFERENCES researcher(id),
+                                        FOREIGN KEY(project_id) REFERENCES project(id)
+                                    );
+
+                                    CREATE TABLE collaborate
+                                    (
+                                        researcher_id int(10) NOT NULL,
+                                        project_id int(10) NOT NULL,
+                                        isAdmin Boolean DEFAULT 0,
+
+                                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        deleted_at TIMESTAMP NULL DEFAULT NULL,
+
+                                        PRIMARY KEY(researcher_id,project_id),
+                                        FOREIGN KEY(researcher_id) REFERENCES researcher(id),
+                                        FOREIGN KEY(project_id) REFERENCES project(id)
+                                    );
+
+                                    CREATE TABLE tag
                                     (
                                         id int(10)
                                         AUTO_INCREMENT,
-    not_type int
-                                        (2),
-    _read boolean DEFAULT FALSE,
-    researcher_id int
-                                        (10),
-    direct_to int
-                                        (10),  
-
+    title varchar
+                                        (255) NOT NULL, 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
-
-
     PRIMARY KEY
-                                        (id),
-    FOREIGN KEY
-                                        (researcher_id) REFERENCES researcher
-                                        (id),
-    FOREIGN KEY
-                                        (not_type) REFERENCES notification_type
                                         (id)
 )AUTO_INCREMENT=10001;
 
-
-
-
-
-                                        CREATE TABLE follow_researcher
+                                        CREATE TABLE tag_project
                                         (
-                                            follower_id int(10) NOT NULL,
-                                            followee_id int(10) NOT NULL,
-
-                                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            deleted_at TIMESTAMP NULL DEFAULT NULL,
-
-
-                                            PRIMARY KEY(follower_id,followee_id),
-                                            FOREIGN KEY(follower_id) REFERENCES researcher(id),
-                                            FOREIGN KEY(followee_id) REFERENCES researcher(id)
-                                        );
-
-                                        CREATE TABLE follow_institution
-                                        (
-                                            follower_id int(10) NOT NULL,
-                                            institution_id int(10) NOT NULL,
-
-                                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            deleted_at TIMESTAMP NULL DEFAULT NULL,
-
-                                            PRIMARY KEY(follower_id,institution_id),
-                                            FOREIGN KEY(follower_id) REFERENCES researcher(id),
-                                            FOREIGN KEY(institution_id) REFERENCES institution(id)
-                                        );
-
-                                        CREATE TABLE follow_project
-                                        (
-                                            follower_id int(10) NOT NULL,
+                                            tag_id int(10) NOT NULL,
                                             project_id int(10) NOT NULL,
-
                                             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                             deleted_at TIMESTAMP NULL DEFAULT NULL,
-
-                                            PRIMARY KEY(follower_id,project_id),
-                                            FOREIGN KEY(follower_id) REFERENCES researcher(id),
+                                            PRIMARY KEY (tag_id,project_id),
+                                            FOREIGN KEY(tag_id) REFERENCES tag(id),
                                             FOREIGN KEY(project_id) REFERENCES project(id)
                                         );
 
-                                        CREATE TABLE collaborate
-                                        (
-                                            researcher_id int(10) NOT NULL,
-                                            project_id int(10) NOT NULL,
-                                            isAdmin Boolean DEFAULT 0,
-
-                                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                            deleted_at TIMESTAMP NULL DEFAULT NULL,
-
-                                            PRIMARY KEY(researcher_id,project_id),
-                                            FOREIGN KEY(researcher_id) REFERENCES researcher(id),
-                                            FOREIGN KEY(project_id) REFERENCES project(id)
-                                        );
-
-                                        CREATE TABLE tag
+                                        CREATE TABLE image
                                         (
                                             id int(10)
-                                            AUTO_INCREMENT,
-    title varchar
-                                            (255) NOT NULL, 
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP NULL DEFAULT NULL,
-    PRIMARY KEY
-                                            (id)
-)AUTO_INCREMENT=10001;
-
-                                            CREATE TABLE tag_project
-                                            (
-                                                tag_id int(10) NOT NULL,
-                                                project_id int(10) NOT NULL,
-                                                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                                                deleted_at TIMESTAMP NULL DEFAULT NULL,
-                                                PRIMARY KEY (tag_id,project_id),
-                                                FOREIGN KEY(tag_id) REFERENCES tag(id),
-                                                FOREIGN KEY(project_id) REFERENCES project(id)
-                                            );
-
-                                            CREATE TABLE image
-                                            (
-                                                id int(10)
-                                                AUTO_INCREMENT PRIMARY KEY,
+                                            AUTO_INCREMENT PRIMARY KEY,
                                                 project_id int
-                                                (10) NOT NULL REFERENCES project
-                                                (id) ,
+                                            (10) NOT NULL REFERENCES project
+                                            (id) ,
                                                 url varchar
-                                                (255) NOT NULL,
+                                            (255) NOT NULL,
                                                 caption varchar
-                                                (255) NULL DEFAULT NULL,
+                                            (255) NULL DEFAULT NULL,
                                                 created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                                 updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                                 deleted_at TIMESTAMP NULL DEFAULT NULL
                                             )AUTO_INCREMENT=10001;
 
-                                                CREATE TABLE temporary_user
+                                            CREATE TABLE temporary_user
+                                            (
+                                                id int(10)
+                                                AUTO_INCREMENT,
+    email varchar
+                                                (50) UNIQUE NOT NULL,
+    password varchar
+                                                (255) NOT NULL,
+    first_name varchar
+                                                (20) NOT NULL,
+    last_name varchar
+                                                (20) NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    confirmed_at TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY
+                                                (id)
+)AUTO_INCREMENT=10001;
+
+
+                                                CREATE TABLE user_message
                                                 (
                                                     id int(10)
                                                     AUTO_INCREMENT,
+    name varchar
+                                                    (255),
     email varchar
-                                                    (50) UNIQUE NOT NULL,
-    password varchar
-                                                    (255) NOT NULL,
-    first_name varchar
-                                                    (20) NOT NULL,
-    last_name varchar
-                                                    (20) NOT NULL,
-    created_at TIMESTAMP NOT NULL,
-    confirmed_at TIMESTAMP NULL DEFAULT NULL,
+                                                    (255),
+    message text,
+    
     PRIMARY KEY
                                                     (id)
 )AUTO_INCREMENT=10001;
 
 
-CREATE TABLE user_message
-(
-    id int(10) AUTO_INCREMENT,
-    name varchar(255),
-    email varchar(255),
-    message text,
+                                                    CREATE TABLE question_category
+                                                    (
+                                                        id int(10)
+                                                        AUTO_INCREMENT,
+    category varchar
+                                                        (255),
     
-    PRIMARY KEY(id)
+    PRIMARY KEY
+                                                        (id)
 )AUTO_INCREMENT=10001;
 
 
-CREATE TABLE question_category
-(
-    id int(10) AUTO_INCREMENT,
-    category varchar(255),
-    
-    PRIMARY KEY(id)
-)AUTO_INCREMENT=10001;
-
-
-CREATE TABLE forum_question
-(
-    id int(10) AUTO_INCREMENT,
+                                                        CREATE TABLE forum_question
+                                                        (
+                                                            id int(10)
+                                                            AUTO_INCREMENT,
     title text NOT NULL,
     description text NULL DEFAULT NULL,  
-    category_id int(10),
-    researcher_id int(10),
+    category_id int
+                                                            (10),
+    researcher_id int
+                                                            (10),
     Q_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Q_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Q_deleted_at TIMESTAMP NULL DEFAULT NULL,
-    is_visible tinyint(1) DEFAULT 1,
+    is_visible tinyint
+                                                            (1) DEFAULT 1,
     
-    PRIMARY KEY(id),
-    FOREIGN KEY(category_id) REFERENCES question_category(id),
-    FOREIGN KEY(researcher_id) REFERENCES researcher(id)
+    PRIMARY KEY
+                                                            (id),
+    FOREIGN KEY
+                                                            (category_id) REFERENCES question_category
+                                                            (id),
+    FOREIGN KEY
+                                                            (researcher_id) REFERENCES researcher
+                                                            (id)
 )AUTO_INCREMENT=10001;
 
-CREATE TABLE forum_answer
-(
-    id int(10) AUTO_INCREMENT,
+                                                            CREATE TABLE forum_answer
+                                                            (
+                                                                id int(10)
+                                                                AUTO_INCREMENT,
     answer text NOT NULL,  
-    question_id int(10),
-    researcher_id int(10),
+    question_id int
+                                                                (10),
+    researcher_id int
+                                                                (10),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
-    is_visible tinyint(1) DEFAULT 1,
+    is_visible tinyint
+                                                                (1) DEFAULT 1,
     
-    PRIMARY KEY(id),
-    FOREIGN KEY(question_id) REFERENCES forum_question(id),
-    FOREIGN KEY(researcher_id) REFERENCES researcher(id)
+    PRIMARY KEY
+                                                                (id),
+    FOREIGN KEY
+                                                                (question_id) REFERENCES forum_question
+                                                                (id),
+    FOREIGN KEY
+                                                                (researcher_id) REFERENCES researcher
+                                                                (id)
 )AUTO_INCREMENT=10001;

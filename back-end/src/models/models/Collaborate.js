@@ -27,6 +27,7 @@ Collaborate.prototype.find_by_id = function (researcher_id, project_id) {
   params.push(
     mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
   );
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
   return this.find_first(params);
 };
 
@@ -39,9 +40,11 @@ Collaborate.prototype.delete_by_id = function (researcher_id, project_id) {
       .concat(" = ")
       .concat(mysql.escape(researcher_id))
   );
+
   params.push(
     mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
   );
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
   return this.update(params);
 };
 
@@ -52,6 +55,7 @@ Collaborate.prototype.delete_collaborators = function (project_id) {
     mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
   );
   params.push(mysql.escapeId("isAdmin").concat(" = ").concat(" 0 "));
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
   return this.delete(params);
 };
 
@@ -60,6 +64,7 @@ Collaborate.prototype.soft_delete_collaborators = function (project_id) {
   params.push(
     mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
   );
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
   return this.update(params);
 };
 
@@ -71,6 +76,7 @@ Collaborate.prototype.findAll = async function () {
       .concat(" = ")
       .concat(mysql.escape(data.project_id))
   );
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
   return this.find_all(params);
 };
 
