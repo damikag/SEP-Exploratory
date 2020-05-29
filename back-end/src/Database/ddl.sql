@@ -401,6 +401,8 @@ CREATE TABLE forum_question
     FOREIGN KEY(researcher_id) REFERENCES researcher(id)
 )AUTO_INCREMENT=10001;
 
+ALTER TABLE `forum_question`ADD `like_count` int(10) NOT NULL DEFAULT 0 AFTER `Q_deleted_at`;
+
 CREATE TABLE forum_answer
 (
     id int(10) AUTO_INCREMENT,
@@ -416,3 +418,5 @@ CREATE TABLE forum_answer
     FOREIGN KEY(question_id) REFERENCES forum_question(id),
     FOREIGN KEY(researcher_id) REFERENCES researcher(id)
 )AUTO_INCREMENT=10001;
+
+ALTER TABLE `forum_answer`ADD `like_count` int(10) NOT NULL DEFAULT 0 AFTER `deleted_at`;
