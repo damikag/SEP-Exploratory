@@ -49,7 +49,7 @@ class ChatServices {
             }).catch(err => { console.log(err) }))
 
             if(chatObject.isDirrect){
-              console.log(chatObject)
+              // console.log(chatObject)
               promiseList.push(ChatroomService.getParticipants(chatObject.chat_id)
               .then((res)=>{
                 res.forEach(participant=>{
