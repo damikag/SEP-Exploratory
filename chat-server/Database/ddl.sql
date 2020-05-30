@@ -31,7 +31,7 @@ CREATE TABLE message(
     chat_id int(10),
     message text,
     message_time TIMESTAMP,
-    sender_id int(10),
+    sender_id int(10) NOT NULL,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
