@@ -14,6 +14,7 @@ class CommentService {
             message: body.message,
             author_id: body.author_id,
             no_of_likes: body.no_of_likes,
+            no_of_dislikes: body.no_of_dislikes,
             initial_comment: body.initial_comment,
           });
 

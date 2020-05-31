@@ -15,6 +15,8 @@ router.post("/view-project", projectController.renderProjectAction);
 
 router.post("/update-project", projectController.updateProjectAction);
 
+router.post("/delete-project", projectController.deleteProjectAction);
+
 router.post("/get-all-tags", tagController.indexAction);
 
 router.post("/get-collaborators", projectController.getProjectCollabAction);
@@ -24,5 +26,7 @@ router.post("/save-file", save_file.upload, projectController.saveFileAction);
 router.post("/retrieve-file", imageController.retreiveImageFileAction);
 
 router.post("/insert-image-files", imageController.insertImageFilesAction);
+
+router.post("/remove-final-paper", projectController.removeFinalPaperAction);
 
 module.exports = router;
