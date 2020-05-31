@@ -53,17 +53,6 @@ module.exports.notshareFileAction = (req, res) => {
             if (err) return res.status(500).json({ success: false })
             return res.json({ success: true });
         })
-}
-module.exports.notshareFileAction = (req, res) => {
-  gfs.collection("uploads");
-  gfs.files.update(
-    { filename: req.body.name },
-    { $set: { "metadata.sensitivity": "private" } },
-    (err) => {
-      if (err) return res.status(500).json({ success: false });
-      return res.json({ success: true });
-    }
-  );
 };
 
 module.exports.getGroupFilesAction = (req, res) => {
