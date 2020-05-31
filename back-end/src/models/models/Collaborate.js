@@ -55,7 +55,7 @@ Collaborate.prototype.delete_collaborators = function (project_id) {
     mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
   );
   params.push(mysql.escapeId("isAdmin").concat(" = ").concat(" 0 "));
-  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
+  // params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
   return this.delete(params);
 };
 
