@@ -107,7 +107,7 @@ module.exports.delete = function del(table, params, cb) {
     sql = 'DELETE FROM ';
     sql = sql.concat(mysql.escapeId(table));
     if (params.conditions && params.conditions.length > 0) {
-        conditions = ' WHERE ';
+        var conditions = ' WHERE ';
         params.conditions.forEach(condition => {
             conditions = conditions.concat(condition, ' AND ');
         });
@@ -117,7 +117,7 @@ module.exports.delete = function del(table, params, cb) {
         return Promise.reject({message : "no condition given for delete"})
     }
     sql = sql.concat(conditions);
-    console.log(sql);
+    // console.log(sql);
     con.query(sql, cb);
 }
 
