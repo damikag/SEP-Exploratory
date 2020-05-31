@@ -15,7 +15,7 @@ class MessageServices {
       .then((savedMessage)=>{
         resolve(savedMessage)
       })
-      .catch((err)=>{console.log(err)})
+      .catch((err)=>{console.log(err);reject(err)})
       
     });
 
