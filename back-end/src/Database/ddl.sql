@@ -401,7 +401,6 @@ CREATE TABLE forum_question
     FOREIGN KEY(researcher_id) REFERENCES researcher(id)
 )AUTO_INCREMENT=10001;
 
-ALTER TABLE `forum_question`ADD `like_count` int(10) NOT NULL DEFAULT 0 AFTER `Q_deleted_at`;
 
 CREATE TABLE forum_answer
 (
@@ -419,4 +418,7 @@ CREATE TABLE forum_answer
     FOREIGN KEY(researcher_id) REFERENCES researcher(id)
 )AUTO_INCREMENT=10001;
 
+
+ALTER TABLE `forum_question`ADD `like_count` int(10) NOT NULL DEFAULT 0 AFTER `Q_deleted_at`;
 ALTER TABLE `forum_answer`ADD `like_count` int(10) NOT NULL DEFAULT 0 AFTER `deleted_at`;
+ALTER TABLE `researcher` CHANGE `contact_no` `contact_no` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
