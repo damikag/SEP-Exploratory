@@ -3,7 +3,9 @@ const {
   getQuestions,
   addQuestion,
   deleteQuestion,
-  editQuestion
+  editQuestion,
+  likeQuestion,
+  getPopularQuestions,
 } = require("../../models/models/Forum/ForumQuestion");
 
 module.exports = {
@@ -21,13 +23,28 @@ module.exports = {
       });
     });
   },
-  
+
   getQuestions: (req, res) => {
     getQuestions((err, results) => {
       if (err) {
         return res.status(500).json({
           success: 0,
           message: "Loading Questions error",
+        });
+      }
+      return res.status(200).json({
+        success: 1,
+        data: results,
+      });
+    });
+  },
+
+  getPopularQuestions: (req, res) => {
+    getPopularQuestions((err, results) => {
+      if (err) {
+        return res.status(500).json({
+          success: 0,
+          message: "Loading Popular Questions error",
         });
       }
       return res.status(200).json({
@@ -87,4 +104,37 @@ module.exports = {
       });
     });
   },
+
+  likeQuestion: (req, res) => {
+    const body = req.body;
+    likeQuestion(body, (err, results) => {
+      if (err) {
+        return res.status(500).json({
+          success: 0,
+          message: "Database connection error",
+        });
+      }
+      return res.status(200).json({
+        success: 1,
+        data: results,
+      });
+    });
+  },
+
+  // unlikeQuestion: (req, res) => {
+  //   const body = req.body;
+  //   unlikeQuestion(body, (err, results) => {
+  //     if (err) {
+  //       console.log(err);
+  //       return res.status(500).json({
+  //         success: 0,
+  //         message: "Failed to unlike question",
+  //       });
+  //     }
+  //     return res.status(200).json({
+  //       success: 1,
+  //       message: "Question unliked successfully",
+  //     });
+  //   });
+  // },
 };

@@ -5,6 +5,7 @@ const editorRoute = require("./api/routes/editor/routes");
 const forumRoute = require("./api/routes/Forum/routes");
 const aboutusRoute = require("./api/routes/AboutUs/routes");
 const taskTrackerRoute = require("./api/routes/TaskTracker/routes");
+const userProfileRoute = require("./api/routes/UserProfile/routes");
 
 const driveRoute = require("./api/routes/drive/routes");
 
@@ -33,5 +34,6 @@ app.use("/aboutus", aboutusRoute);
 app.use("/drive", driveRoute);
 app.use("/email", emailRoute);
 app.use("/project/tasktracker", taskTrackerRoute);
+app.use("/userprofile", userProfileRoute);
 
 module.exports = { app };
