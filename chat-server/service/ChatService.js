@@ -49,12 +49,12 @@ class ChatServices {
             }).catch(err => { console.log(err) }))
 
             if(chatObject.isDirrect){
-              console.log(chatObject)
+              // console.log(chatObject)
               promiseList.push(ChatroomService.getParticipants(chatObject.chat_id)
               .then((res)=>{
                 res.forEach(participant=>{
                   if(participant.user_id!=user_id){
-                    console.log(participant)
+                    // console.log(participant)
                     chatObject.name=participant.first_name.concat(" ").concat(participant.last_name)
                     chatObject.description="Dirrect Chat"
                     chatObject.logo=participant.profile_picture

@@ -106,7 +106,12 @@ class ChatroomServices {
       var newChat = new Chat(chatInfo)
       newChat.update(chatInfo)
         .then(res => {
-          resolve({ success: true, message: "Successfully Updated!" })
+          if (res.affectedRows) {
+            resolve({ success: true, message: "Successfully Updated!" })
+          }
+          else {
+            resolve({ success: false, message: "Update Failed!" })
+          }
         }).catch(err => {
           resolve({ success: false, message: "Update Failed!" })
         })
@@ -120,7 +125,13 @@ class ChatroomServices {
       var participant = new Participant(userInfo)
       participant.update(userInfo)
         .then(res => {
-          resolve({ success: true, message: "Successfully Updated!" })
+          if (res.affectedRows) {
+            resolve({ success: true, message: "Successfully Updated!" })
+          }
+          else {
+            resolve({ success: false, message: "Update Failed!" })
+          }
+
         }).catch(err => {
           resolve({ success: false, message: "Update Failed!" })
         })
@@ -193,12 +204,12 @@ class ChatroomServices {
                     resolve({ success: false, message: "Participant removal Failed!" })
                   })
               }
-              else{
+              else {
                 resolve({ success: false, message: "Participant removal Failed!\n You are the Only Admin Remaining" })
               }
             })
-            .catch(err=>{resolve({ success: false, message: "Participant removal Failed!" })})
-         
+            .catch(err => { resolve({ success: false, message: "Participant removal Failed!" }) })
+
         }
 
       }
@@ -208,16 +219,16 @@ class ChatroomServices {
 
   }
 
-  static getDirrectChat(user1_id,user2_id){
+  static getDirrectChat(user1_id, user2_id) {
     return new Promise((resolve, reject) => {
 
       const cb = function (error, results, fields) {
-        if(results.length>0){
-          resolve(Object.assign({},results[0]))
+        if (results.length > 0) {
+          resolve(Object.assign({}, results[0]))
         }
         resolve(null)
       }
-      var sql = mysql.format('SELECT chat.id AS chat_id FROM chat,participant WHERE chat.id=participant.chat_id AND chat.isDirrect=TRUE AND ((chat.creator_id=? AND participant.user_id=?) OR (participant.user_id=? AND chat.creator_id=?)) AND chat.deleted_at IS NULL', [user1_id,user2_id,user1_id,user2_id])
+      var sql = mysql.format('SELECT chat.id AS chat_id FROM chat,participant WHERE chat.id=participant.chat_id AND chat.isDirrect=TRUE AND ((chat.creator_id=? AND participant.user_id=?) OR (participant.user_id=? AND chat.creator_id=?)) AND chat.deleted_at IS NULL', [user1_id, user2_id, user1_id, user2_id])
       db.query(sql, cb);
     })
   }
