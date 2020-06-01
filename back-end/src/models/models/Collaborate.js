@@ -68,13 +68,10 @@ Collaborate.prototype.soft_delete_collaborators = function (project_id) {
   return this.update(params);
 };
 
-Collaborate.prototype.findAll = async function () {
+Collaborate.prototype.find_all_collaborators = async function (project_id) {
   var params = [];
   params.push(
-    mysql
-      .escapeId("project_id")
-      .concat(" = ")
-      .concat(mysql.escape(data.project_id))
+    mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
   );
   params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
   return this.find_all(params);
