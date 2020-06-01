@@ -2,6 +2,7 @@ const { create_project_validation } = require("./validation");
 var mysql = require("mysql");
 var ProjectService = require("../../service/project/ProjectService");
 var Project = require("../../models/models/Project");
+var Collaborate = require("../../models/models/Collaborate");
 var ProjectModel = require("../../models/models/Collaborate");
 var Image = require("../../models/models/Image");
 var CollaborateResearcherInstitute = require("../../models/views/CollaborateResearcherInstitute");
@@ -52,6 +53,24 @@ module.exports.renderProjectAction = async (req, res) => {
       return res.status(500).json({ error: error.message });
     });
 };
+
+module.exports.isExistProjectAction = async (req, res) => {
+  var project = new Project();
+
+  project
+    .find_by_id(req.body.project_id)
+    .then(async (result) => {
+      if (result === false) {
+        return res.status(200).json(false);
+      } else {
+        return res.status(200).json(true);
+      }
+    })
+    .catch((error) => {
+      return res.status(500).json({ error: error.message });
+    });
+};
+
 module.exports.updateProjectAction = async (req, res) => {
   ProjectService.updateProject(req.body)
     .then((result) => res.status(200).json(result))
@@ -107,4 +126,16 @@ module.exports.removeFinalPaperAction = (req, res) => {
 
 module.exports.retreiveImageFileAction = (req, res) => {
   res.sendFile(`${process.cwd()}/public/related_images/${req.body.file}`);
+};
+
+module.exports.getCollaboratorIdsAction = (req, res) => {
+  var collaborate = new Collaborate({ project_id: req.body.project_id });
+  collaborate
+    .find_all_collaborators(req.body.project_id)
+    .then((result) => {
+      return res.status(200).json(result);
+    })
+    .catch((err) => {
+      return res.status(500).json(err.message);
+    });
 };
