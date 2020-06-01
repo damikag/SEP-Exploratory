@@ -4,6 +4,7 @@ CREATE TABLE chat(
     description text,
     logo text,
     creator_id int(10) NOT NULL,
+    isDirrect Boolean DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL DEFAULT NULL,
@@ -30,7 +31,7 @@ CREATE TABLE message(
     chat_id int(10),
     message text,
     message_time TIMESTAMP,
-    sender_id int(10),
+    sender_id int(10) NOT NULL,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -52,4 +53,17 @@ CREATE TABLE seen(
     FOREIGN KEY(user_id) REFERENCES researcher(id),
     FOREIGN KEY(message_id) REFERENCES message(id)
 )AUTO_INCREMENT=10001;
+
+CREATE TABLE deliver(
+    user_id int(10),
+    chat_id int(10),
+    message_id int(10),
+    deliver_time TIMESTAMP,
+    
+    PRIMARY KEY (user_id,chat_id,message_id),
+    FOREIGN KEY(chat_id) REFERENCES chat(id),
+    FOREIGN KEY(user_id) REFERENCES researcher(id),
+    FOREIGN KEY(message_id) REFERENCES message(id)
+)AUTO_INCREMENT=10001;
+
 

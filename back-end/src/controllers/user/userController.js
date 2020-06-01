@@ -1,6 +1,7 @@
 var Researcher = require("../../models/models/Researcher");
 var TemporaryUser = require("../../models/models/TemporaryUser");
 var UserService = require("../../service/user/UserService");
+const { get_default_image } = require("./defaultPicture");
 const {
   login_validation,
   register_validation,
@@ -79,7 +80,7 @@ module.exports.registerAction = (req, res) => {
       var newTemporaryUser = new TemporaryUser({
         confirmed_at: new Date(),
       });
-
+      console.log(body);
       UserService.register_new_user(newTemporaryUser, researcher)
         .then((result) => {
           res.status(200).json({ inserted_id: result.insertId });
@@ -98,7 +99,7 @@ module.exports.loginAction = (req, res) => {
   const { error } = login_validation(req.body);
 
   if (error) {
-    return res.status(400).json({ error: error.details[0].message });
+    return res.status(406).json({ error: error.details[0].message });
   }
 
   var researcher = new Researcher();
@@ -106,30 +107,38 @@ module.exports.loginAction = (req, res) => {
   researcher
     .find_by_email(req.body.email)
     .then(async (user) => {
-      const password_match = await bcrypt.compare(
-        req.body.password,
-        user.password
-      );
-      if (password_match) {
-        const token = jwt.sign({ email: user.email }, process.env.TOKEN_SECRET);
+      if (user) {
+        const password_match = await bcrypt.compare(
+          req.body.password,
+          user.password
+        );
+        if (password_match) {
+          const token = jwt.sign(
+            { email: user.email },
+            process.env.TOKEN_SECRET
+          );
 
-        var updateUser = new Researcher({ token: token });
-        user.token = token;
+          var updateUser = new Researcher({ token: token });
+          user.token = token;
 
-        updateUser
-          .update([`email = '${user.email}'`])
-          .then((result) => {
-            user = Object.assign({}, user);
-            user = clean_object(user);
-            delete user.password;
+          updateUser
+            .update([`email = '${user.email}'`])
+            .then(async (result) => {
+              user = await Object.assign({}, user);
+              user = await clean_object(user);
+              delete user.password;
+              delete user.profile_picture;
 
-            return res.status(200).header("exp-auth-token", token).json(user);
-          })
-          .catch((err) => {
-            return res.status(500).json({ error: err.message });
-          });
+              return res.status(200).header("exp-auth-token", token).json(user);
+            })
+            .catch((err) => {
+              return res.status(500).json({ error: err.message });
+            });
+        } else {
+          return res.status(401).json({ error: "Invalid Password" });
+        }
       } else {
-        return res.status(400).json({ error: "Invalid Password" });
+        return res.status(404).json({ error: "Invalid Email" });
       }
     })
     .catch((err) => {
@@ -163,8 +172,9 @@ module.exports.logoutAction = (req, res) => {
   researcher
     .find_by_email(req.user.email)
     .then(async (user) => {
-      user = Object.assign(user, { token: "" });
-      user
+      // user = Object.assign(user, { token: "" });
+      var logout_user = new Researcher({ token: "" });
+      logout_user
         .update([`email = '${user.email}'`])
         .then((result) => {
           return res.status(200).json({ message: "Logged out successfully" });
@@ -184,5 +194,6 @@ function getBody(result) {
     last_name: result.last_name,
     email: result.email,
     password: result.password,
+    profile_picture: get_default_image(),
   };
 }

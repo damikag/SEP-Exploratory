@@ -15,7 +15,7 @@ class MessageServices {
       .then((savedMessage)=>{
         resolve(savedMessage)
       })
-      .catch((err)=>{console.log(err)})
+      .catch((err)=>{console.log(err);reject(err)})
       
     });
 
@@ -88,6 +88,43 @@ class MessageServices {
     });
 
   }
+
+  static markDeliver(chat_id, user_id,message_id) {
+
+    return new Promise((resolve, reject) => {
+      const cb = function (error, results, fields) {
+        if(error){resolve(false)}
+        resolve(true)
+      };
+      var sql = "INSERT INTO deliver(chat_id,user_id,message_id) VALUES(?,?,?);"
+      sql = mysql.format(sql, [chat_id, user_id,message_id])
+      db.query(sql, cb);
+    });
+
+  }
+
+  static getDeliver(chat_id, message_id) {
+
+    return new Promise((resolve, reject) => {
+      const cb = function (error, results, fields) {
+       
+        if (error) {
+          reject(error);
+        } else {
+          var result_array = []
+          results.forEach(res => {
+            result_array.push(Object.assign({}, res))
+          })
+          resolve(result_array)
+        }
+      };
+      var sql = "SELECT researcher.id AS user_id, first_name, last_name,profile_picture, researcher.email, institution.name as institution,deliver_time FROM deliver,researcher,institution WHERE deliver.user_id=researcher.id AND researcher.institution=institution.id AND deliver.chat_id=? AND deliver.message_id=? AND researcher.deleted_at IS NULL ORDER BY researcher.first_name, researcher.last_name;"
+      sql = mysql.format(sql, [chat_id,message_id])
+      db.query(sql, cb);
+    });
+
+  }
+
 }
 
 module.exports = MessageServices

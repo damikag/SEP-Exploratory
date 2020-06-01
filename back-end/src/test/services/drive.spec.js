@@ -87,17 +87,17 @@ it("public files folders exist ?", async () => {
   expect(response.status).toBe(200);
 });
 
-it("Related Images folders exist ?", async () => {
-  const response = await supertest(app)
-    .post("/drive/getfiles")
+// it("Related Images folders exist ?", async () => {
+//   const response = await supertest(app)
+//     .post("/drive/getfiles")
 
-    // .set("Authorization", "Bearer " + process.env.TOKEN_SECRET)
-    .send({
-      id: 10024,
-      folder: "Related Images",
-    });
-  expect(response.status).toBe(200);
-});
+//     // .set("Authorization", "Bearer " + process.env.TOKEN_SECRET)
+//     .send({
+//       id: 10024,
+//       folder: "Related Images",
+//     });
+//   expect(response.status).toBe(200);
+// });
 
 it("Final Paper folders exist ?", async () => {
   const response = await supertest(app).post("/drive/getfiles").send({

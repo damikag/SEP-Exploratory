@@ -100,12 +100,12 @@ class ProjectService {
       var promise_4 = await collaborate.delete_collaborators(body.id);
 
       var promise_5 = body.collaborators.map(async (collaborator) => {
-        var collaborate = new Collaborate({
+        var new_collaborate = new Collaborate({
           researcher_id: collaborator.id,
           project_id: body.id,
           isAdmin: 0,
         });
-        return await collaborate.insert();
+        return await new_collaborate.insert();
       });
 
       var promises = [
@@ -125,14 +125,28 @@ class ProjectService {
     });
   }
 
-  static deleteProject(body) {
-    this.getProject(body).then((res) => {});
+  static softDeleteProject(body) {
+    return new Promise(async (resolve, reject) => {
+      var project = new Project({ deleted_at: Date.now() });
+      var collaborate = new Collaborate({ deleted_at: Date.now() });
+      var tag_project = new TagProject({ deleted_at: Date.now() });
+      console.log(body.project_id);
+      var promise1 = project.soft_delete_project(body.project_id);
+      var promise2 = collaborate.soft_delete_collaborators(body.project_id);
+      var promise3 = tag_project.soft_delete_tags(body.project_id);
+
+      await Promise.all([promise1, promise2, promise3])
+        .then((result) => {
+          resolve(true);
+        })
+        .catch((err) => reject(false));
+    });
   }
 
   static getProject(body) {
     return new Promise(async (resolve, reject) => {
       var project = new Project(body);
-      var promise1 = project.find_by_id();
+      var promise1 = project.find_by_id(body.id);
 
       var collaborator_view = new CollaborateResearcherInstitute({
         project_id: body.id,
@@ -163,7 +177,7 @@ class ProjectService {
           };
           resolve({ project_details });
         })
-        .catch((err) => reject(err));
+        .catch((err) => reject(err.message));
     });
   }
 }

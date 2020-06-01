@@ -9,6 +9,7 @@ const attrs = [
   "author_id",
   "message",
   "no_of_likes",
+  "no_of_dislikes",
   "initial_comment",
   "first_name",
   "last_name",

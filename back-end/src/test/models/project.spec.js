@@ -1,31 +1,24 @@
 const Project = require("../../models/models/Project");
 
 describe("...test project services...", () => {
+  let project_id = 2;
+
   beforeAll((done) => {
-    // let project = new Project({ id: 10024 });
     done();
   });
-  test("01. create project testing", () => {
-    let project = new Project({ id: 10024 });
+
+  test("01. Upload final paper ", () => {
+    var project = new Project({ final_paper: `${project_id}.pdf` });
+
     project
-      .find_by_id()
-      .then((result) => {
-        expect(result).not.toBe(false);
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
+      .upload_final_paper(project_id)
+      .then((res) => expect(res.changedRows).toBe(1))
+      .catch((err) => expect(err.response).toBe(err.response));
   });
 
-  test("01. create project testing", () => {
-    let project = new Project({ id: 10024 });
-    project
-      .find_by_id()
-      .then((result) => {
-        expect(result).not.toBe(false);
-      })
-      .catch((e) => {
-        console.log(e.message);
-      });
+  afterAll((done) => {
+    mongoose.connection.close(() => {
+      done();
+    });
   });
 });

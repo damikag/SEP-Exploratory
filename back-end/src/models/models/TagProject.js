@@ -37,6 +37,7 @@ TagProject.prototype.soft_delete_tags = function (project_id) {
   params.push(
     mysql.escapeId("project_id").concat(" = ").concat(mysql.escape(project_id))
   );
+  params.push(mysql.escapeId("deleted_at").concat(" IS NULL "));
   return this.update(params);
 };
 
