@@ -39,3 +39,22 @@ module.exports.searchObject_validation = (data) => {
 
   return schema.validate(data);
 };
+
+
+
+module.exports.feedObject_validation = (data) => {
+  const schema = joi.array().items(joi.object({
+
+    score: joi.number(),
+    id: joi.number().integer().min(0).required(),
+    title: joi.string().required(),
+    description: joi.string().required(),
+    poster_image: [joi.string(), joi.any().optional()],
+    first_name: joi.string(),
+    last_name: joi.string(),
+    institution: joi.string().required(),
+    profile_picture: [joi.string(), joi.any().optional()],
+    published_at: joi.date()
+  }))
+  return schema.validate(data);
+};
