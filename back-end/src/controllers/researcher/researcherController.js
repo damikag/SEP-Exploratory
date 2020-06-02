@@ -27,16 +27,16 @@ module.exports.getAllUsersAction = (req, res) => {
 };
 
 module.exports.feedAction = (req, res) => {
-console.log(req.body)
+
   const { error } = feed_validation(req.body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-  var researcher = new Researcher
-  researcher.find_by_email(req.body.email)
-  .then(researcherResult=>{
+  // var researcher = new Researcher
+  // researcher.find_by_email(req.body.email)
+  // .then(researcherResult=>{
 
-    if(researcherResult){
+  //   if(researcherResult){
       var feed = new Feed(req.body.email);
       feed
         .getFeed(req.body.index)
@@ -46,14 +46,14 @@ console.log(req.body)
         .catch((err) => {
           return res.status(500).json({ error: err.message });
         });
-    }
-    else{
-      return res.status(400).json({ error: "Invalid email" });
-    }
-  })
-  .catch(err=>{
-    console.log(err)
-    return res.status(500).json({ error: err.message });
-  })
+  //   }
+  //   else{
+  //     return res.status(400).json({ error: "Invalid email" });
+  //   }
+  // })
+  // .catch(err=>{
+  //   console.log(err)
+  //   return res.status(500).json({ error: err.message });
+  // })
 
 };
