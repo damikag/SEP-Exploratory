@@ -27,7 +27,7 @@ module.exports.getAllUsersAction = (req, res) => {
 };
 
 module.exports.feedAction = (req, res) => {
-
+console.log(req.body)
   const { error } = feed_validation(req.body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
@@ -39,7 +39,7 @@ module.exports.feedAction = (req, res) => {
     if(researcherResult){
       var feed = new Feed(req.body.email);
       feed
-        .getFeed()
+        .getFeed(req.body.index)
         .then((feedArr) => {
           return res.status(200).json(feedArr);
         })
