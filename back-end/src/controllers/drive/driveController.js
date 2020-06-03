@@ -188,7 +188,19 @@ module.exports.searchFoldersAction= (req, res) => {
             res.status(200).json({ success: true, folders });
         });
 };
-
+module.exports.FindAction= (req, res) => {
+    
+    Folder.findOne({ "_id": req.body.folder,"group": req.body.group }, function (err, foundFolder) {
+        if (err) return res.status(200).json({ success: false });
+        if(!foundFolder || foundFolder.length === 0){
+            return res.status(200).json({
+                success: false
+            });
+          }
+        res.status(200).json({ success: true })
+        
+    });
+}
 //////////////////////// turn to pdf 
 var pdf = require('html-pdf');
 const crypto = require('crypto');
