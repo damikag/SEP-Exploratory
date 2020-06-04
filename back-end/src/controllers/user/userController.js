@@ -30,8 +30,6 @@ module.exports.temporaryUserRegisterAction = async (req, res) => {
         if (today < date) {
           return res.status(400).json({ error: "duplicate entry" });
         }
-
-        console.log(req.body);
         await temporaryUser
           .delete_by_email()
           .then(async (delete_result) => {
@@ -80,7 +78,6 @@ module.exports.registerAction = (req, res) => {
       var newTemporaryUser = new TemporaryUser({
         confirmed_at: new Date(),
       });
-      console.log(body);
       UserService.register_new_user(newTemporaryUser, researcher)
         .then((result) => {
           res.status(200).json({ inserted_id: result.insertId });

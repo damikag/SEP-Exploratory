@@ -45,7 +45,6 @@ module.exports.transaction_insert_update = function transaction_insert_update(
       }
     }
     sub_sql = mysql.format(sub_sql, obj);
-    console.log(obj);
 
     var conditions = "";
     if (params.conditions && params.conditions.length > 0) {

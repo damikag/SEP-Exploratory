@@ -39,8 +39,6 @@ CommentReply.prototype._delete = function () {
   var params = [];
   params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(this.id)));
 
-  this.find_by_id;
-
   return this.update(params);
 };
 

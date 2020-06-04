@@ -30,10 +30,8 @@ module.exports = {
 
   addComment: (req, res) => {
     const body = req.body;
-    console.log(body);
     addComment(body, (err, results) => {
       if (err) {
-        console.log(err);
         return res.status(500).json({
           success: 0,
           message: "Database connection error",
@@ -50,7 +48,6 @@ module.exports = {
     const body = req.body;
     deleteComment(body, (err, results) => {
       if (err) {
-        console.log(err);
         return res.status(500).json({
           success: 0,
           message: "Failed to delete comment",

@@ -20,7 +20,7 @@ class CommentService {
 
           commentReply
             .insert()
-            .then((result_new) => resolve(result_new))
+            .then((result_new) => resolve(result))
             .catch((err) => reject(err));
         })
         .catch((err) => reject(err));

@@ -18,7 +18,7 @@ module.exports.createProjectAction = (req, res) => {
     return res.status(400).json({ error: error.details[0].message });
   }
 
-  ProjectService.createProject(req.body)
+  ProjectService.createProject({ ...req.body, visibility_public: "0" })
     .then(async (result) => {
       return res.status(200).json(result);
     })
@@ -32,11 +32,9 @@ module.exports.finalPaperAction = (req, res) => {
     final_paper: req.body.files[0],
     updated_at: new Date.now(),
   });
-  console.log(req.body.files[0]);
   project
     .upload_final_paper(req.body.project_id)
     .then(async (result) => {
-      console.log(result);
       return res.status(200).json(result);
     })
     .catch((error) => {

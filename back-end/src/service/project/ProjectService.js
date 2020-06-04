@@ -66,8 +66,6 @@ class ProjectService {
   // delete ALL tags and insert ALL tags
   static updateProject(body) {
     return new Promise(async (resolve, reject) => {
-      // update projects
-      console.log(body);
       var req_body = {
         id: body.id,
         title: body.title,
@@ -82,10 +80,11 @@ class ProjectService {
       var tagProject = new TagProject({
         deleted_at: "NULL",
       });
+
       var promise_2 = await tagProject.delete_tags(body.id);
 
       var promise_3 = body.tags.map(async (tag) => {
-        console.log();
+        // console.log();
         var tagProject = new TagProject({
           tag_id: tag.tag_id,
           project_id: body.id,
@@ -119,7 +118,7 @@ class ProjectService {
       await Promise.all(promises)
         .then((res) => resolve(true))
         .catch((err) => {
-          console.log(err.message);
+          console.log(err);
           reject(false);
         });
     });
@@ -130,7 +129,6 @@ class ProjectService {
       var project = new Project({ deleted_at: Date.now() });
       var collaborate = new Collaborate({ deleted_at: Date.now() });
       var tag_project = new TagProject({ deleted_at: Date.now() });
-      console.log(body.project_id);
       var promise1 = project.soft_delete_project(body.project_id);
       var promise2 = collaborate.soft_delete_collaborators(body.project_id);
       var promise3 = tag_project.soft_delete_tags(body.project_id);
