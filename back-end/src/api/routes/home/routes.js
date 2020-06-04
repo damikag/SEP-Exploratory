@@ -14,6 +14,6 @@ router.post("/login", userController.loginAction);
 
 router.get('/auth',valid_jwt_needed,userController.authAction);
 router.post('/search',homeController.SearchAction)
-router.get("/feed",researcherController.feedAction);
+router.post("/feed",researcherController.feedAction);
 
 module.exports = router;

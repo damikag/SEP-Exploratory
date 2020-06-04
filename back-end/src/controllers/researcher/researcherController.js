@@ -32,28 +32,28 @@ module.exports.feedAction = (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
-  var researcher = new Researcher
-  researcher.find_by_email(req.body.email)
-  .then(researcherResult=>{
+  // var researcher = new Researcher
+  // researcher.find_by_email(req.body.email)
+  // .then(researcherResult=>{
 
-    if(researcherResult){
+  //   if(researcherResult){
       var feed = new Feed(req.body.email);
       feed
-        .getFeed()
+        .getFeed(req.body.index)
         .then((feedArr) => {
           return res.status(200).json(feedArr);
         })
         .catch((err) => {
           return res.status(500).json({ error: err.message });
         });
-    }
-    else{
-      return res.status(400).json({ error: "Invalid email" });
-    }
-  })
-  .catch(err=>{
-    console.log(err)
-    return res.status(500).json({ error: err.message });
-  })
+  //   }
+  //   else{
+  //     return res.status(400).json({ error: "Invalid email" });
+  //   }
+  // })
+  // .catch(err=>{
+  //   console.log(err)
+  //   return res.status(500).json({ error: err.message });
+  // })
 
 };
