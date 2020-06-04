@@ -27,20 +27,32 @@ module.exports.getAllUsersAction = (req, res) => {
 };
 
 module.exports.feedAction = (req, res) => {
-
   const { error } = feed_validation(req.body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
+  // var researcher = new Researcher
+  // researcher.find_by_email(req.body.email)
+  // .then(researcherResult=>{
 
-  var feed = new Feed(req.body.email);
-  feed
-    .getFeed()
-    .then((feedArr) => {
-      return res.status(200).json(feedArr);
-    })
-    .catch((err) => {
-      return res.status(500).json({ error: err.message });
-    });
+  //   if(researcherResult){
+      var feed = new Feed(req.body.email);
+      feed
+        .getFeed(req.body.index)
+        .then((feedArr) => {
+          return res.status(200).json(feedArr);
+        })
+        .catch((err) => {
+          return res.status(500).json({ error: err.message });
+        });
+  //   }
+  //   else{
+  //     return res.status(400).json({ error: "Invalid email" });
+  //   }
+  // })
+  // .catch(err=>{
+  //   console.log(err)
+  //   return res.status(500).json({ error: err.message });
+  // })
 
 };

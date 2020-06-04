@@ -1,7 +1,9 @@
 var Image = require("../../models/models/Image");
 
 module.exports.retreiveImageFileAction = (req, res) => {
-  res.sendFile(`${process.cwd()}/public/related_images/${req.body.file}`);
+  res
+    .status(200)
+    .sendFile(`${process.cwd()}/public/related_images/${req.body.file}`);
 };
 
 module.exports.insertImageFilesAction = (req, res) => {
@@ -12,23 +14,32 @@ module.exports.insertImageFilesAction = (req, res) => {
     .soft_delete_images(req.body.project_id)
     .then((result) => {
       let not_uploaded = [];
+      let promises = [];
       req.body.images.map(async (image) => {
         var new_image = new Image({
           project_id: req.body.project_id,
           url: image,
         });
 
-        await new_image
-          .insert()
-          .then((result) => {
-            console.log("saved");
-          })
-          .catch((err) => {
-            not_uploaded.push(image);
-            console.log(err.message);
-          });
+        var inserted_image = await new_image.insert();
+        promises.push(inserted_image);
+        // .then((result) => {
+        //   console.log("saved");
+        // })
+        // .catch((err) => {
+        //   not_uploaded.push(image);
+        // });
       });
-      res.status(200).json({ message: "Saved!", not_inserted: not_uploaded });
+
+      Promise.all(promises)
+        .then((result) => {
+          return res
+            .status(200)
+            .json({ message: "Saved!", not_inserted: not_uploaded });
+        })
+        .catch((err) => {
+          return res.status(500).json({ message: err.message });
+        });
     })
     .catch((error) => {
       res.status(500).json({ message: "Error!" });

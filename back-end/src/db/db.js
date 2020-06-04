@@ -44,7 +44,7 @@ module.exports.insert = function insert(table, data, cb) {
   sql = sql.concat(mysql.escapeId(table));
   sql = sql.concat(" SET ? ");
   sql = mysql.format(sql, data);
-  console.log(sql);
+  // console.log(sql);
   con.query(sql, cb);
 };
 
@@ -55,7 +55,7 @@ module.exports.bulk_insert = function insert(table, columns, data, cb) {
   sql = mysql.format(sql, [columns]);
   sql = sql.concat(" VALUES ?");
   sql = mysql.format(sql, [data]);
-  console.log(sql);
+  // console.log(sql);
   con.query(sql, cb);
 };
 
@@ -73,7 +73,7 @@ module.exports.update = function update(table, params, data, cb) {
     conditions = conditions.slice(0, -4);
   }
   sql = sql.concat(conditions);
-  console.log(sql);
+  // console.log(sql);
   con.query(sql, cb);
 };
 
@@ -84,7 +84,7 @@ module.exports.bulk_update = function bulk_update(
   cb
 ) {
   if (param_array.length != data_array.length) {
-    console.log("param_array and data array_should be equal in length");
+    // console.log("param_array and data array_should be equal in length");
     return Promise.reject({ message: "unmatched param size" });
   }
   sql = "";
@@ -122,7 +122,7 @@ module.exports.delete = function del(table, params, cb) {
     });
     conditions = conditions.slice(0, -4);
   } else {
-    console.log("no conditions given");
+    // console.log("no conditions given");
     return Promise.reject({ message: "no condition given for delete" });
   }
   sql = sql.concat(conditions);

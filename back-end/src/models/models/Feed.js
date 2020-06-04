@@ -80,7 +80,7 @@ Feed.prototype.get_projects_from_followers = function get_projects_from_follower
     return this.automate('get_projects_from_followers', params, this.scores.follower)
 }
 
-const refineFeed = (projects) => {
+const refineFeed = (projects,index) => {
 
     return new Promise(async (resolve, reject) => {
         var projectArr = []
@@ -92,7 +92,9 @@ const refineFeed = (projects) => {
         }
         await projectArr.sort((a, b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0))
 
-        projectArr = projectArr.slice(0, 10)
+        if(index+2>projectArr.length){resolve([])}
+        
+        projectArr = projectArr.slice(index, index+2)
 
         var resultArr = []
         var promiseArr = []
@@ -121,7 +123,7 @@ const refineFeed = (projects) => {
     })
 }
 
-Feed.prototype.getFeed = function getFeed() {
+Feed.prototype.getFeed = function getFeed(index) {
 
     return new Promise((resolve, reject) => {
 
@@ -130,7 +132,7 @@ Feed.prototype.getFeed = function getFeed() {
                 this.get_followed_projects([this.researcher.id, 1000]).then(() => {
                     this.get_projects_from_followers([this.researcher.id, 1000]).then(() => {
 
-                        refineFeed(this.projects).then((resArr) => {
+                        refineFeed(this.projects,index).then((resArr) => {
                             resolve(resArr)
                         }).catch(err => { resolve([]) })
                        

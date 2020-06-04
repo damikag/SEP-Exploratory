@@ -9,7 +9,7 @@ class CollaborateService {
       var researcher = new Researcher(id);
       var response = await researcher
         .find_by_id()
-        .then((res) => console.log(res))
+        .then((res) => console.log("found"))
         .catch((err) => console.log(err.message));
       researcherList.push(response);
     });

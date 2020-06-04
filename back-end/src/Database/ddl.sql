@@ -75,7 +75,7 @@ CREATE TABLE institution
     poster_image text DEFAULT "default.jpg",  
     creator int
             (10),
-    visibility_public boolean DEFAULT TRUE,
+    visibility_public boolean NOT NULL DEFAULT FALSE,
     final_paper text DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
