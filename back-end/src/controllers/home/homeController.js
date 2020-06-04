@@ -12,12 +12,38 @@ module.exports.SearchAction = (req, res) => {
   }
 
   var search = new Search(req.body.searchString);
-  search
-    .getSearch()
-    .then((result) => {
-      return res.status(200).json(result);
-    })
-    .catch((err) => {
-      return res.status(500).json({ error: err.message });
-    });
+
+  if (req.body.type == "projects") {
+
+    search.getProjects(req.body.index)
+      .then((result) => {
+        return res.status(200).json(result);
+      })
+      .catch((err) => {
+        return res.status(500).json({ error: err.message });
+      });
+
+  }
+  else if (req.body.type == "researchers") {
+
+    search.getResearchers(req.body.index)
+      .then((result) => {
+        return res.status(200).json(result);
+      })
+      .catch((err) => {
+        return res.status(500).json({ error: err.message });
+      });
+
+  }
+  else {
+    search.getInstitutions(req.body.index)
+      .then((result) => {
+        return res.status(200).json(result);
+      })
+      .catch((err) => {
+        return res.status(500).json({ error: err.message });
+      });
+  }
+
+
 };
