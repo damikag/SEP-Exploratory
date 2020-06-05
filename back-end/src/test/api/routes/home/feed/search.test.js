@@ -1,5 +1,5 @@
 const supertest = require("supertest");
-const { app } = require("../../../../app");
+const { app } = require("../../../../../app");
 const { searchObject_validation } = require("./validation");
 
 expect.extend({

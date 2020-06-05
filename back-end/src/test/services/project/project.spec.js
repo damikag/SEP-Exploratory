@@ -9,15 +9,15 @@ let body = {
   tags: [10001, 10002],
 };
 
-let insertId = 6;
+var insertId = 150;
 
-// test("1. Create project", async (done) => {
-//   await projectService.createProject(body).then((res) => {
-//     insertId = res.insertId;
-//     expect(res.insertId).toBeGreaterThanOrEqual(1);
-//   });
-//   done();
-// });
+test("1. Create project", async (done) => {
+  await projectService.createProject(body).then((res) => {
+    insertId = res.insertId;
+    expect(res.insertId).toBeGreaterThanOrEqual(1);
+  });
+  done();
+});
 
 test("2. project details match", async (done) => {
   await projectService.getProject({ id: insertId }).then((res) => {
@@ -29,9 +29,9 @@ test("2. project details match", async (done) => {
   done();
 });
 
-// test("3. Delete project", async (done) => {
-//   await projectService.softDeleteProject({ project_id: 2 }).then((res) => {
-//     expect(res).toBe(true);
-//   });
-//   done();
-// });
+test("3. Delete project", async (done) => {
+  await projectService.softDeleteProject({ project_id: 2 }).then((res) => {
+    expect(res).toBe(true);
+  });
+  done();
+});

@@ -5,7 +5,6 @@ var Researcher = require("../../models/models/Researcher");
 
 module.exports.valid_jwt_needed = function (req, res, next) {
   const token = req.header("Authorization").replace("Bearer ", "");
-
   if (!token) {
     return res.status(401).json({ error: "Access Denied. Valid JWT needed" });
   }
@@ -13,7 +12,6 @@ module.exports.valid_jwt_needed = function (req, res, next) {
     const verified = jwt.verify(token, process.env.TOKEN_SECRET);
     var researcher = new Researcher();
     req.user = verified;
-
     researcher
       .find_by_email(req.user.email)
       .then((result) => {
@@ -21,7 +19,7 @@ module.exports.valid_jwt_needed = function (req, res, next) {
           next();
         } else {
           return res
-            .status(401)
+            .status(402)
             .json({ isAuth: false, error: "Invalid Token" });
         }
       })
@@ -32,7 +30,7 @@ module.exports.valid_jwt_needed = function (req, res, next) {
         });
       });
   } catch (error) {
-    return res.status(401).json({ error: "Invalid Token" });
+    return res.status(403).json({ error: "Invalid Token" });
   }
 };
 
