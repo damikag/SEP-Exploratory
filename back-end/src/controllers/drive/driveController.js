@@ -75,7 +75,7 @@ module.exports.getGroupTxtFilesAction = (req, res) => {
   gfs.collection("uploads"); //set collection name to lookup into
   /** First check if file exists */
   gfs.files
-    .find({ "metadata.group": req.body.group, contentType: "text/plain" })
+    .find({ "metadata.group": req.body.group, contentType: "text/plain","length" : {$lt : 3000} })
     .toArray(function (err, files) {
       if (err) return res.status(400).send(err);
       res.status(200).json({ success: true, files });
@@ -149,6 +149,7 @@ module.exports.softDeleteFilesAction = (req, res) => {
             return res.json({ success: true });
         })
 } 
+
 module.exports.deleteFilesAction = (req, res) => {
   gfs.collection("uploads");
   console.log(req.body.id);
@@ -167,7 +168,6 @@ module.exports.createFolderAction= (req, res) => {
     })
 }
 module.exports.deleteFolderAction= (req, res) => {
-    console.log(req.body)
     Folder.deleteOne({ "_id": req.body.folderId })
         .exec((err,obj) => {
             if (err) return res.status(400).send(err);

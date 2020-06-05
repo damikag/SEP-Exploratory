@@ -3,7 +3,7 @@ const app = require("../../../../app").app;
 const mongoose = require("mongoose");
 const { folder_validation } = require('./validation')
 const { file_validation } = require('./validation')
-const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hZEAxMjMuY29tIiwiaWF0IjoxNTkxMDgzNDUwfQ.FsrHPwCHXTb5RvtqOlrLiYTpsBDy79cJvXPOn8pdGuQ"
+const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hZEAxMjMuY29tIiwiaWF0IjoxNTkxMzYyNjk2fQ.hkki9ybqa6Ie6AiVmU4FBOgB8pxrk5eblY8PtXczBCM"
 const wrong_token="absfh3567yhgtfbhuji8"
 beforeAll((done) => {
   done();
@@ -117,6 +117,34 @@ it("Test API call with wrong token", async () => {
 	.expect(401)
 		
   });
+/*
+it("Test to verify creation of a folder api call", async () => {
+	const response = await supertest(app)
+	.post("/drive/createfolder")
+	.send({
+	  group: "10012",
+	  name: "New2",
+	  folder:'root'
+	})
+	.set({ Authorization: token })
+	.expect(200)
+
+  });
+
+it("Test to verify deletion of a folder api call", async () => {
+	const response = await supertest(app)
+	.post("/drive/deletefolder")
+	.send({
+	  folderId:'5ec65d2c082e8640e07cda8e'
+	})
+	.set({ Authorization: token })
+	.expect(200)
+	.expect({
+        success: true
+      })
+
+  });
+*/
 ////////////////////////////////////////////////////
 
 expect.extend({
@@ -262,7 +290,7 @@ it("Test API call to share file with public", async () => {
 	  filename:"db19386b39e67fc4b8784a2523c6d913.txt"
 	})
 	.set({ Authorization: token })
-	.expect(401)
+	.expect(200)
 	.expect({
         success: true
       })
@@ -276,12 +304,13 @@ it("Test API call to stop share file with public", async () => {
 	  filename:"db19386b39e67fc4b8784a2523c6d913.txt"
 	})
 	.set({ Authorization: token })
-	.expect(401)
+	.expect(200)
 	.expect({
         success: true
       })
 		
   });
+
 
 afterAll((done) => {
   mongoose.connection.close(() => {

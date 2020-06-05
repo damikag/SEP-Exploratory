@@ -1,7 +1,7 @@
 const supertest = require("supertest");
 const app = require("../../../../app").app;
 const mongoose = require("mongoose");
-const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hZEAxMjMuY29tIiwiaWF0IjoxNTkxMDgzNDUwfQ.FsrHPwCHXTb5RvtqOlrLiYTpsBDy79cJvXPOn8pdGuQ"
+const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hZEAxMjMuY29tIiwiaWF0IjoxNTkxMzYyNjk2fQ.hkki9ybqa6Ie6AiVmU4FBOgB8pxrk5eblY8PtXczBCM"
 const wrong_token="absfh3567yhgtfbhuji8"
 const { editorBlog_validation } = require('./validation')
 
@@ -114,6 +114,46 @@ it("Test to get specific document API call", async () => {
     expect(response.status).toBe(200);
   });
 
+/*
+it("Test to verify creation of document", async () => {
+    const response = await supertest(app)
+    .post("/editor/createpost")
+    .send({
+      name:"Aragorn The son of Arathorn",
+      group:"10012",
+      content:"<p>My first test document. Here lies the power of Anduin. The sword once broken and came into the hands of one and only heir of Gondor; the Elessar</p>"
+    })
+    .set({ Authorization: token });
+  
+    expect(response.status).toBe(200);
+  });
+
+it("Test to verify soft deletion of document ", async () => {
+    const response = await supertest(app)
+    .post("/editor/softdeletepost")
+    .send({
+      postId:"5ecd213f9315bf1228adfee1"
+    })
+    .set({ Authorization: token })
+    .expect(200)
+    .expect({
+      success: true
+    })
+  });
+
+it("Test to verify deletion of document ", async () => {
+    const response = await supertest(app)
+    .post("/editor/deletepost")
+    .send({
+      postId:"5ecd1a489315bf1228adfede"
+    })
+    .set({ Authorization: token })
+    .expect(200)
+    .expect({
+      success: true
+    })
+  });
+*/
 it("Test to verify document with correct group and correct postId ", async () => {
     const response = await supertest(app)
     .post("/editor/findpost")
