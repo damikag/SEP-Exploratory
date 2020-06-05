@@ -77,6 +77,8 @@ module.exports.transaction_insert_update = function transaction_insert_update(
       }
     };
 
+    // console.log(sql);
+
     db.exec_transaction_query(sql, cb);
   });
 };

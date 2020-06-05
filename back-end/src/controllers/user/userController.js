@@ -16,6 +16,7 @@ module.exports.temporaryUserRegisterAction = async (req, res) => {
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
   }
+
   const salt = await bcrypt.genSalt(10);
   const hashed_password = await bcrypt.hash(req.body.password, salt);
   req.body.password = hashed_password;
@@ -28,7 +29,7 @@ module.exports.temporaryUserRegisterAction = async (req, res) => {
         var date = new Date(result.created_at);
         date.setDate(date.getDate() + 1);
         if (today < date) {
-          return res.status(400).json({ error: "duplicate entry" });
+          return res.status(401).json({ error: "duplicate entry" });
         }
         await temporaryUser
           .delete_by_email()
@@ -69,7 +70,7 @@ module.exports.temporaryUserRegisterAction = async (req, res) => {
 
 module.exports.registerAction = (req, res) => {
   var temporaryUser = new TemporaryUser({ id: req.body.id });
-
+  console.log(req.body);
   temporaryUser
     .find_by_id()
     .then(async (result) => {
@@ -165,7 +166,6 @@ module.exports.authAction = (req, res) => {
 };
 module.exports.logoutAction = (req, res) => {
   var researcher = new Researcher();
-  //console.log(req.user);
   researcher
     .find_by_email(req.user.email)
     .then(async (user) => {
