@@ -1,4 +1,4 @@
-const { getProfileById, editProfile, getProjectsByUserId } = require("../../models/models/UserProfile");
+const { getProfileById, editProfile, getProjectsByUserId, getInstitutions } = require("../../models/models/UserProfile");
 
 module.exports = {
   getProfileById: (req, res) => {
@@ -46,6 +46,21 @@ module.exports = {
         return res.status(500).json({
           success: 0,
           message: "Get projects error",
+        });
+      }
+      return res.status(200).json({
+        success: 1,
+        data: results,
+      });
+    });
+  },
+
+  getInstitutions: (req, res) => {
+    getInstitutions((err, results) => {
+      if (err) {
+        return res.status(500).json({
+          success: 0,
+          message: "Get institutions error",
         });
       }
       return res.status(200).json({

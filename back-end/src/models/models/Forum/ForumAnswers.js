@@ -133,4 +133,17 @@ module.exports = {
       }
     });
   },
+
+  getAnswerLikes: (callBack) => {
+    db.query(
+      "SELECT * FROM answer_rating",
+      [],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
 };
