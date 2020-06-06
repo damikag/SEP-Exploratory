@@ -15,8 +15,13 @@
     "socket.io": "latest"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "test": "jest --setupFiles dotenv/config --watch"
   },
   "author": "Devan",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^26.0.1",
+    "supertest": "^4.0.2"
+  }
 }

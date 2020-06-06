@@ -24,7 +24,6 @@
 
         function init() {
           //add new room
-          console.log(roomName, userData);
           socket.emit("new-user", roomName, userData);
           socket.on("on-connected", (onlineUsers) => {
             console.log("on connected", onlineUsers);
@@ -668,6 +667,7 @@
         }
 
         function onDrawCircle(data) {
+          console.log("draw circle");
           var w = canvaso.width;
           var h = canvaso.height;
           drawCircle(

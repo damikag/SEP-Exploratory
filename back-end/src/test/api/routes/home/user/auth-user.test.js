@@ -1,6 +1,8 @@
 const supertest = require("supertest");
 const { app } = require("../../../../../app");
 
+/////////////////////////////////// use a valid user here //////////////////////////////////////////
+
 var token;
 
 beforeAll(async (done) => {

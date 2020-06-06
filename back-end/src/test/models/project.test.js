@@ -1,6 +1,6 @@
 const Project = require("../../models/models/Project");
 
-let project_id = 1;
+let project_id = 100;
 
 test("01. Upload final paper ", async (done) => {
   var project = new Project({ final_paper: `${project_id}.pdf` });
