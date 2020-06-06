@@ -3,7 +3,7 @@ const db = require("../../../db/db");
 module.exports = {
   getTasksByProjectId: (id, callBack) => {
     db.query(
-      "SELECT task.id AS id,title,task.description,researcher.first_name AS first_name,researcher.last_name AS last_name,start_date,end_date,progress,remark,task.created_at from task,researcher WHERE task.assigned_to=researcher.id AND task.is_visible=1 AND project_id=?;",
+      "SELECT task.id AS id,title,task.description,researcher.id AS aId, researcher.first_name AS first_name,researcher.last_name AS last_name,start_date,end_date,progress,remark,task.created_at from task,researcher WHERE task.assigned_to=researcher.id AND task.is_visible=1 AND project_id=?;",
       [id],
       (error, results, fields) => {
         if (error) {

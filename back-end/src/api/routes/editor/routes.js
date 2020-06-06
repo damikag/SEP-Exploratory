@@ -13,6 +13,7 @@ router.post('/getpost',valid_jwt_needed,editorController.getPostAction);
 router.post('/searchblog',valid_jwt_needed,editorController.searchBlogAction);
 router.post('/deletepost',valid_jwt_needed,editorController.deletePostAction);
 router.post('/softdeletepost',valid_jwt_needed,editorController.softDeleteAction);
+router.post('/findpost',editorController.FindAction);
 
 
 module.exports = router

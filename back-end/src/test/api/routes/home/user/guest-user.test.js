@@ -5,7 +5,7 @@ var user_id;
 var valid_entry;
 
 var user = {
-  email: "test9@gmail.com",
+  email: `test${Math.floor(Math.random() * 20000) + 100}@gmail.com`,
   password: "123456@",
   first_name: "Test",
   last_name: "User",
@@ -29,15 +29,21 @@ test("1.1 register using duplicate entry", async (done) => {
 });
 
 test("1.2 register using invalid email", async (done) => {
-  user["email"] = "test.com";
-  const response = await supertest(app).post("/temp-register").send(user);
+  var invalid_email = Object.assign({}, user);
+  invalid_email["email"] = "test.com";
+  const response = await supertest(app)
+    .post("/temp-register")
+    .send(invalid_email);
   expect(response.status).toBe(400);
   done();
 });
 
 test("1.3 register using weak password", async (done) => {
-  user["password"] = "123456";
-  const response = await supertest(app).post("/temp-register").send(user);
+  var invalid_password = Object.assign({}, user);
+  invalid_password["password"] = "12345";
+  const response = await supertest(app)
+    .post("/temp-register")
+    .send(invalid_password);
   expect(response.status).toBe(400);
   done();
 });
@@ -51,7 +57,7 @@ test("2.0 confirm email", async (done) => {
 test("3.0 login user with correct credentials", async (done) => {
   const response = await supertest(app)
     .post("/login")
-    .send({ email: "test7@gmail.com", password: "123456@" });
+    .send({ email: user.email, password: user.password });
 
   expect(response.status).toBe(200);
 
@@ -65,7 +71,7 @@ test("3.0 login user with correct credentials", async (done) => {
 test("3.1 login user with invalid password", async (done) => {
   const response = await supertest(app)
     .post("/login")
-    .send({ email: "test7@gmail.com", password: "12345" });
+    .send({ email: user.email, password: "12345" });
   expect(response.status).toBe(406);
   done();
 });

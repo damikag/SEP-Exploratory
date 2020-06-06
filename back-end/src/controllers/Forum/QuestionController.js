@@ -6,6 +6,7 @@ const {
   editQuestion,
   likeQuestion,
   getPopularQuestions,
+  getQuestionLikes,
 } = require("../../models/models/Forum/ForumQuestion");
 
 module.exports = {
@@ -137,4 +138,19 @@ module.exports = {
   //     });
   //   });
   // },
+
+  getQuestionLikes: (req, res) => {
+    getQuestionLikes((err, results) => {
+      if (err) {
+        return res.status(500).json({
+          success: 0,
+          message: " Get Question likes error",
+        });
+      }
+      return res.status(200).json({
+        success: 1,
+        data: results,
+      });
+    });
+  },
 };
