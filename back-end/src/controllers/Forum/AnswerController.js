@@ -5,6 +5,7 @@ const {
   editAnswer,
   likeAnswer,
   getPopularAnswers,
+  getAnswerLikes,
 } = require("../../models/models/Forum/ForumAnswers");
 
 module.exports = {
@@ -100,6 +101,21 @@ module.exports = {
       return res.status(200).json({
         success: 1,
         message: "Answer liked successfully",
+      });
+    });
+  },
+
+  getAnswerLikes: (req, res) => {
+    getAnswerLikes((err, results) => {
+      if (err) {
+        return res.status(500).json({
+          success: 0,
+          message: " Get Answer likes error",
+        });
+      }
+      return res.status(200).json({
+        success: 1,
+        data: results,
       });
     });
   },

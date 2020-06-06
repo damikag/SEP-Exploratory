@@ -8,6 +8,7 @@ const {
   editQuestion,
   likeQuestion,
   getPopularQuestions,
+  getQuestionLikes,
 } = require("../../../controllers/Forum/QuestionController");
 const {
   getAnswers,
@@ -16,11 +17,15 @@ const {
   editAnswer,
   likeAnswer,
   getPopularAnswers,
+  getAnswerLikes,
 } = require("../../../controllers/Forum/AnswerController");
 const {
   getForumUsers,
   getFreqUsers,
 } = require("../../../controllers/Forum/ForumUsersController");
+const {
+  getQuestionsOnSearch,
+} = require("../../../controllers/Forum/SearchController");
 const { valid_jwt_needed } = require("../../middleware/authorization");
 
 router.get("/questioncategory", getQuestionCategory);
@@ -38,5 +43,8 @@ router.get("/users", getForumUsers);
 router.get("/frequsers", getFreqUsers);
 router.post("/likequestion", likeQuestion);
 router.post("/likeanswer", likeAnswer);
+router.post("/search/questions", getQuestionsOnSearch);
+router.get("/questionlikes", getQuestionLikes);
+router.get("/answerlikes", getAnswerLikes);
 
 module.exports = router;

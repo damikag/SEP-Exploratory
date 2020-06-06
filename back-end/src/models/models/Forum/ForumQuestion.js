@@ -204,4 +204,17 @@ module.exports = {
   //     }
   //   });
   // },
+
+  getQuestionLikes: (callBack) => {
+    db.query(
+      "SELECT * FROM question_rating",
+      [],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
 };

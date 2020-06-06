@@ -22,6 +22,7 @@ router.post('/softdeletefile',valid_jwt_needed,driveController.softDeleteFilesAc
 router.post('/downloadfile',valid_jwt_needed,driveController.getFileAction);
 router.post('/searchfile',valid_jwt_needed,driveController.searchFilesAction);
 router.post('/turntopdf',valid_jwt_needed,driveController.ToPdfAction);
-router.post('/getpublicfiles',valid_jwt_needed,driveController.getPublicFilesAction);
+router.post('/getpublicfiles',driveController.getPublicFilesAction);
+router.post('/findfolder',driveController.FindAction);
 module.exports = router;
 //  body-parser multer multer-gridfs-storage gridfs-stream method-override

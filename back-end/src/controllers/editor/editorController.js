@@ -80,3 +80,18 @@ module.exports.softDeleteAction = (req, res) => {
     });
   });
 };
+
+module.exports.FindAction= (req, res) => {
+    
+    EditorBlog.findOne({ "_id": req.body.postId, "group":req.body.group })
+    .exec((err, folders) => {
+        if (err) return res.status(404).send(err);
+        if(!folders || folders.length === 0){
+            return res.status(404).json({
+                success: false
+            });
+          }
+        res.status(200).json({ success: true});
+    })
+}
+
