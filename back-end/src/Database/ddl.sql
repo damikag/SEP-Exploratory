@@ -452,9 +452,7 @@ CREATE TABLE forum_answer
 ALTER TABLE `forum_question`ADD `like_count` int(10) NOT NULL DEFAULT 0 AFTER `Q_deleted_at`;
 ALTER TABLE `forum_answer`ADD `like_count` int(10) NOT NULL DEFAULT 0 AFTER `deleted_at`;
 ALTER TABLE `researcher` CHANGE `contact_no` `contact_no` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL;
-ALTER TABLE question_category ADD FULLTEXT(category_name);
-ALTER TABLE forum_question ADD FULLTEXT(title);
-ALTER TABLE forum_question ADD FULLTEXT(description);
+
 
 
 CREATE TABLE question_rating

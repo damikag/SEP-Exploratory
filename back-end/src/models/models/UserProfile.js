@@ -38,6 +38,22 @@ module.exports = {
     );
   },
 
+  editProfilePicture: (data, callBack) => {
+    db.query(
+      "UPDATE researcher SET profile_picture = ? WHERE id=?",
+      [
+        data.url,
+        data.researcher_id,
+      ],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
+
   getProjectsByUserId: (id, callBack) => {
     db.query(
       "SELECT project.id AS project_id,project.title,project.description,project.creator AS creator_id,collaborate.researcher_id AS colloborator_id,researcher.first_name,researcher.last_name,project.visibility_public FROM project RIGHT OUTER JOIN collaborate on project.id=collaborate.project_id LEFT OUTER JOIN researcher ON researcher.id=project.creator WHERE collaborate.researcher_id=? ORDER BY project.id;",
