@@ -37,4 +37,10 @@ router.post("/insert-image-files", imageController.insertImageFilesAction);
 
 router.post("/remove-final-paper", projectController.removeFinalPaperAction);
 
+router.post(
+  "/edit-abstract",
+  valid_jwt_needed,
+  projectController.editAbstractAction
+);
+
 module.exports = router;

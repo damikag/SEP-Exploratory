@@ -65,4 +65,13 @@ Project.prototype.soft_delete_project = function (project_id) {
   return this.update(params);
 };
 
+Project.prototype.update_abstract = function (project_id) {
+  var params = [];
+  params.push(
+    mysql.escapeId("id").concat(" = ").concat(mysql.escape(project_id))
+  );
+  params.push(mysql.escapeId("deleted_at").concat(" IS ").concat(" NULL "));
+  return this.update(params);
+};
+
 module.exports = Project;

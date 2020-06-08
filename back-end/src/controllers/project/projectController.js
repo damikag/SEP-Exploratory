@@ -30,7 +30,7 @@ module.exports.createProjectAction = (req, res) => {
 module.exports.finalPaperAction = (req, res) => {
   var project = new Project({
     final_paper: req.body.files[0],
-    updated_at: new Date.now(),
+    updated_at: Date.now(),
   });
   project
     .upload_final_paper(req.body.project_id)
@@ -135,5 +135,20 @@ module.exports.getCollaboratorIdsAction = (req, res) => {
     })
     .catch((err) => {
       return res.status(500).json(err.message);
+    });
+};
+
+module.exports.editAbstractAction = (req, res) => {
+  var project = new Project({
+    abstract: req.body.abstract,
+    updated_at: Date.now(),
+  });
+  project
+    .update_abstract(req.body.project_id)
+    .then(async (result) => {
+      return res.status(200).json(result);
+    })
+    .catch((error) => {
+      return res.status(500).json({ error: error.message });
     });
 };
