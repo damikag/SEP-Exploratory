@@ -72,7 +72,7 @@ CREATE TABLE institution
             (255) NOT NULL,
     description text NULL DEFAULT NULL,  
     abstract text DEFAULT NULL,
-    poster_image text DEFAULT "default.jpg",  
+    poster_image text ,  
     creator int
             (10),
     visibility_public boolean NOT NULL DEFAULT FALSE,
@@ -390,7 +390,7 @@ CREATE TABLE institution
                                                     (
                                                         id int(10)
                                                         AUTO_INCREMENT,
-    category varchar
+    category_name varchar
                                                         (255),
     
     PRIMARY KEY

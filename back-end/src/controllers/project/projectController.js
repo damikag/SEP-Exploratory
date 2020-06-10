@@ -7,6 +7,7 @@ var ProjectModel = require("../../models/models/Collaborate");
 var Image = require("../../models/models/Image");
 var CollaborateResearcherInstitute = require("../../models/views/CollaborateResearcherInstitute");
 var moment = require("moment");
+var date = moment(Date.now()).format("YYYY-MM-DD HH:mm:ss");
 
 module.exports.indexAction = (req, res) => {
   return res.status(200).send("You are at project index");
@@ -28,9 +29,11 @@ module.exports.createProjectAction = (req, res) => {
 };
 
 module.exports.finalPaperAction = (req, res) => {
+  var date = new Date();
   var project = new Project({
     final_paper: req.body.files[0],
-    updated_at: new Date.now(),
+    updated_at: date.now(),
+    published_at: date.now(),
   });
   project
     .upload_final_paper(req.body.project_id)
@@ -97,17 +100,22 @@ module.exports.getProjectCollabAction = (req, res) => {
 
 module.exports.saveFileAction = (req, res) => {
   if (req.body.type === "final_paper") {
-    var project = new Project({ final_paper: req.body.name });
+    var project = new Project({
+      final_paper: req.body.name,
+      updated_at: date,
+      published_at: date,
+    });
     project
       .upload_final_paper(req.body.project_id)
       .then((result) => {
         return res.status(200).json({ message: "Saved!" });
       })
       .catch((err) => {
-        return res.status(500).json({ message: "Error!" });
+        return res.status(500).json({ message: "Error" });
       });
+  } else {
+    res.status(200).json({ message: "Image Saved!" });
   }
-  res.status(200).json({ message: "Image Saved!" });
 };
 
 module.exports.removeFinalPaperAction = (req, res) => {
@@ -135,5 +143,20 @@ module.exports.getCollaboratorIdsAction = (req, res) => {
     })
     .catch((err) => {
       return res.status(500).json(err.message);
+    });
+};
+
+module.exports.editAbstractAction = (req, res) => {
+  var project = new Project({
+    abstract: req.body.abstract,
+    updated_at: Date.now(),
+  });
+  project
+    .update_abstract(req.body.project_id)
+    .then(async (result) => {
+      return res.status(200).json(result);
+    })
+    .catch((error) => {
+      return res.status(500).json({ error: error.message });
     });
 };
