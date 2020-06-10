@@ -31,6 +31,12 @@ router.post(
 
 router.post("/save-file", save_file.upload, projectController.saveFileAction);
 
+// router.post(
+//   "/save-poster-image",
+//   save_file.upload,
+//   projectController.saveFileAction
+// );
+
 router.post("/retrieve-file", imageController.retreiveImageFileAction);
 
 router.post("/insert-image-files", imageController.insertImageFilesAction);

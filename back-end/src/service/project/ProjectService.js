@@ -127,11 +127,11 @@ class ProjectService {
   static softDeleteProject(body) {
     return new Promise(async (resolve, reject) => {
       var project = new Project({ deleted_at: Date.now() });
-      var collaborate = new Collaborate({ deleted_at: Date.now() });
-      var tag_project = new TagProject({ deleted_at: Date.now() });
+      // var collaborate = new Collaborate({ deleted_at: Date.now() });
+      // var tag_project = new TagProject({ deleted_at: Date.now() });
       var promise1 = project.soft_delete_project(body.project_id);
-      var promise2 = collaborate.soft_delete_collaborators(body.project_id);
-      var promise3 = tag_project.soft_delete_tags(body.project_id);
+      // var promise2 = collaborate.soft_delete_collaborators(body.project_id);
+      // var promise3 = tag_project.soft_delete_tags(body.project_id);
 
       await Promise.all([promise1, promise2, promise3])
         .then((result) => {
