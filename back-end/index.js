@@ -5,6 +5,8 @@ const express = require("express");
 
 app.use(express.static("public"));
 
-app.listen(process.env.PORT, () => {
+const port = process.env.PORT || 8888;
+
+app.listen(port, () => {
   console.log("server running on port 8888");
 });
