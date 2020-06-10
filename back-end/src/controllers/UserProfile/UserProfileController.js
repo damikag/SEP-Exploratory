@@ -1,4 +1,10 @@
-const { getProfileById, editProfile, getProjectsByUserId, getInstitutions } = require("../../models/models/UserProfile");
+const {
+  getProfileById,
+  editProfile,
+  getProjectsByUserId,
+  getInstitutions,
+  editProfilePicture,
+} = require("../../models/models/UserProfile");
 
 module.exports = {
   getProfileById: (req, res) => {
@@ -35,6 +41,22 @@ module.exports = {
       return res.status(200).json({
         success: 1,
         message: "Profile updated successfully",
+      });
+    });
+  },
+
+  editProfilePicture: (req, res) => {
+    const body = req.body;
+    editProfilePicture(body, (err, results) => {
+      if (err) {
+        return res.status(500).json({
+          success: 0,
+          message: "Failed to edit profile picture",
+        });
+      }
+      return res.status(200).json({
+        success: 1,
+        message: "Profile picture updated successfully",
       });
     });
   },
