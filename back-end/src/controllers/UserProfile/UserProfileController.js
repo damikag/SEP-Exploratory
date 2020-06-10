@@ -4,6 +4,7 @@ const {
   getProjectsByUserId,
   getInstitutions,
   editProfilePicture,
+  getProjectPostsByUserId
 } = require("../../models/models/UserProfile");
 
 module.exports = {
@@ -83,6 +84,22 @@ module.exports = {
         return res.status(500).json({
           success: 0,
           message: "Get institutions error",
+        });
+      }
+      return res.status(200).json({
+        success: 1,
+        data: results,
+      });
+    });
+  },
+
+  getProjectPostsByUserId: (req, res) => {
+    const id = req.params.id;
+    getProjectPostsByUserId(id, (err, results) => {
+      if (err) {
+        return res.status(500).json({
+          success: 0,
+          message: "Get projects error",
         });
       }
       return res.status(200).json({
