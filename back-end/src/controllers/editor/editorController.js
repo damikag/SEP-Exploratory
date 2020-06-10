@@ -36,7 +36,7 @@ module.exports.searchBlogAction= (req, res) => {
 
 module.exports.getBlogAction= (req, res) => {
     console.log(req.body.group)
-    EditorBlog.find({ "group": req.body.group,folder:"root" })
+    EditorBlog.find({ "group": req.body.group,folder:"root" }).sort({"updatedAt": -1})
         .exec((err, blogs) => {
             if (err) return res.status(400).send(err);
             res.status(200).json({ success: true, blogs });
