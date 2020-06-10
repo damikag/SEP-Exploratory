@@ -3,11 +3,16 @@ const app = require("../../../../app").app;
 const mongoose = require("mongoose");
 const { folder_validation } = require('./validation')
 const { file_validation } = require('./validation')
-const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hZEAxMjMuY29tIiwiaWF0IjoxNTkxMzYyNjk2fQ.hkki9ybqa6Ie6AiVmU4FBOgB8pxrk5eblY8PtXczBCM"
+//const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hZEAxMjMuY29tIiwiaWF0IjoxNTkxMzYyNjk2fQ.hkki9ybqa6Ie6AiVmU4FBOgB8pxrk5eblY8PtXczBCM"
 const wrong_token="absfh3567yhgtfbhuji8"
-beforeAll((done) => {
-  done();
-});
+
+beforeAll(async(done) => {
+	var login_entry = await supertest(app)
+	  .post("/login")
+	  .send({ email: "mad@123.com", password: "123456" });
+	token = JSON.parse(login_entry.text).token;
+	done();
+  });
 
 expect.extend({
 	checkFolderResult(res) {
@@ -114,7 +119,7 @@ it("Test API call with wrong token", async () => {
 	  folder:'root'
 	})
 	.set({ Authorization: wrong_token })
-	.expect(401)
+	.expect(403)
 		
   });
 /*
@@ -279,7 +284,7 @@ it("Test API call with wrong token", async () => {
 	  folder:'root'
 	})
 	.set({ Authorization: wrong_token })
-	.expect(401)
+	.expect(403)
 		
   });
 
