@@ -98,11 +98,15 @@ const refineFeed = (projects, index) => {
       a.score > b.score ? -1 : b.score > a.score ? 1 : 0
     );
 
-    if (index + 2 > projectArr.length) {
-      resolve([]);
+    if (index + 5 > projectArr.length) {
+      // resolve([]);
+      projectArr = projectArr.slice(index);
+    }
+    else{
+      projectArr = projectArr.slice(index, index + 5);
     }
 
-    projectArr = projectArr.slice(index, index + 2);
+    
 
     var resultArr = [];
     var promiseArr = [];
