@@ -7,6 +7,7 @@ const attrs = [
   "password",
   "first_name",
   "last_name",
+  "token",
   "created_at",
   "confirmed_at",
 ];
@@ -29,6 +30,9 @@ TemporaryUser.prototype.find_by_email = function () {
 TemporaryUser.prototype.find_by_id = function () {
   var params = [];
   params.push(mysql.escapeId("id").concat(" = ").concat(mysql.escape(this.id)));
+  params.push(
+    mysql.escapeId("token").concat(" = ").concat(mysql.escape(this.token))
+  );
   params.push(mysql.escapeId("confirmed_at").concat(" IS ").concat(" NULL "));
   return this.find_first(params);
 };

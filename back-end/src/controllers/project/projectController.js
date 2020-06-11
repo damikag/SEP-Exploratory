@@ -29,11 +29,10 @@ module.exports.createProjectAction = (req, res) => {
 };
 
 module.exports.finalPaperAction = (req, res) => {
-  var date = new Date();
   var project = new Project({
     final_paper: req.body.files[0],
-    updated_at: date.now(),
-    published_at: date.now(),
+    updated_at: date,
+    published_at: date,
   });
   project
     .upload_final_paper(req.body.project_id)
@@ -149,7 +148,7 @@ module.exports.getCollaboratorIdsAction = (req, res) => {
 module.exports.editAbstractAction = (req, res) => {
   var project = new Project({
     abstract: req.body.abstract,
-    updated_at: Date.now(),
+    updated_at: date,
   });
   project
     .update_abstract(req.body.project_id)

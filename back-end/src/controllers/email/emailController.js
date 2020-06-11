@@ -7,12 +7,13 @@ module.exports.newUserAction = (req, res, next) => {
   var name = req.body.name;
   var email = req.body.email;
   var id = req.body.message;
+  var token = req.body.token;
 
   ejs.renderFile(
     __dirname + "/emails/user/email.ejs",
     {
       name: name,
-      url: `${process.env.FRONT_END}/user/join-exploratory/${id}`,
+      url: `${process.env.FRONT_END}/user/join-exploratory/${id}/${token}`,
       react_end: `${process.env.FRONT_END}`,
     },
 
