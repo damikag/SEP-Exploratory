@@ -100,7 +100,7 @@ class ProjectService {
       var promise_4 = await collaborate.delete_collaborators(body.id);
 
       var promise_5 = body.collaborators.map(async (collaborator) => {
-        console.log(collaborator);
+        // console.log(collaborator);
         var new_collaborate = new Collaborate({
           researcher_id: collaborator.id,
           project_id: body.id,
@@ -120,7 +120,7 @@ class ProjectService {
       await Promise.all(promises)
         .then((res) => resolve(true))
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
           reject(false);
         });
     });
