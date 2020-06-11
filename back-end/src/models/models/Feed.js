@@ -131,7 +131,45 @@ const refineFeed = (projects, index) => {
         await resultArr.sort((a, b) =>
           a.score > b.score ? -1 : b.score > a.score ? 1 : 0
         );
-        resolve(resultArr);
+        // console.log(resultArr)
+
+        var promiseArrLoadImg = []
+        resultArr.forEach((project, ind) => {
+          console.log(project.id)
+
+          promiseArrLoadImg.push(
+            new Promise((resolve3, reject3) => {
+              var sql = mysql.format(
+                "SELECT url FROM image WHERE project_id=? AND deleted_at IS NULL;",
+                [project.id]
+              );
+              db.query(sql, (error, results, fields) => {
+                if (error) {
+                  resolve3();
+                } else {
+                  // resultArr.push(Object.assign({ score: score }, results[0]));
+                  var imgArr = []
+                  results.forEach(img => {
+                    imgArr.push(process.env.BACK_END+":"+process.env.PORT+"/related_images/"+ img.url)
+                  })
+                  resultArr[ind].poster_image = imgArr
+                  resolve3();
+                }
+              });
+            })
+          );
+
+
+        })
+
+        Promise.all(promiseArrLoadImg)
+          .then(() => {
+            resolve(resultArr)
+          })
+          .catch(err => {
+            resolve(resultArr)
+          })
+        // resolve(resultArr);
       })
       .catch((err) => {
         console.log(err);
