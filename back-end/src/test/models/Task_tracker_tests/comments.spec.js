@@ -17,7 +17,7 @@ describe("Task tracker comments Endpoints", () => {
 
 it("should create a new comment", async () => {
   const res = await request(app).post("/project/tasktracker/addcomment").send({
-    project_id: 10011,
+    project_id: 10001,
     comment: "Lorem ipsum",
     commentor_id: 10002,
     created_at: "2020-06-10",
@@ -32,7 +32,7 @@ it("should delete a comment", async () => {
     .patch("/project/tasktracker/deletecomment")
     .send({
       deleted_at: "2020-06-05",
-      comment_id: 1,
+      comment_id: 10001,
       project_id: 10001,
     });
   expect(res.statusCode).toEqual(200);
@@ -45,7 +45,7 @@ it("should edit a comment", async () => {
     .send({
       comment: "Lorem ipsum",
       updated_at: "2020-06-10",
-      comment_id: 1,
+      comment_id: 10001,
       project_id: 10001,
     });
   expect(res.statusCode).toEqual(200);

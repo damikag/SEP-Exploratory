@@ -36,7 +36,7 @@ it("should create a new task", async () => {
 it("should delete a task", async () => {
   const res = await request(app).patch("/project/tasktracker/deletetask").send({
     deleted_at: "2020-06-05",
-    task_id: 1,
+    task_id: 10001,
     project_id: 10001,
   });
   expect(res.statusCode).toEqual(200);
@@ -53,7 +53,7 @@ it("should edit a task", async () => {
     progress: "Completed",
     remark: "test remark",
     updated_at: "2020-06-10",
-    task_id: 1,
+    task_id: 10001,
     project_id: 10001,
   });
   expect(res.statusCode).toEqual(200);
