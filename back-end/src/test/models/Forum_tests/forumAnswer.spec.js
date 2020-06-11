@@ -28,7 +28,7 @@ describe("Forum Answer Endpoints", () => {
 
   it("should create a new answer", async () => {
     const res = await request(app).post("/forum/addanswer").send({
-      question_id: 1,
+      question_id: 10001,
       answer: "test is cool",
       researcher_id: 10001,
     });
@@ -68,9 +68,9 @@ describe("Forum Answer Endpoints", () => {
 
   it("should like an answer", async () => {
     const res = await request(app).post("/forum/likeanswer").send({
-      question_id: 1,
+      question_id: 10001,
       researcher_id: 10001,
-      answer_id:1
+      answer_id:10001
     });
     expect(res.statusCode).toEqual(200);
     expect(res.body.success).toEqual(1);

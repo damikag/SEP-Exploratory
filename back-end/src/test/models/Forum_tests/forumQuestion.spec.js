@@ -33,10 +33,10 @@ describe("Forum Question Endpoints", () => {
 
   it("should create a new question", async () => {
     const res = await request(app).post("/forum/addquestion").send({
-      category_id: 1,
+      category_id: 10001,
       title: "test is cool",
       description: "Lorem ipsum",
-      researcher_id: 10009,
+      researcher_id: 10001,
     });
     expect(res.statusCode).toEqual(200);
     expect(res.body.success).toEqual(1);
@@ -77,7 +77,7 @@ describe("Forum Question Endpoints", () => {
 
   it("should like a question", async () => {
     const res = await request(app).post("/forum/likequestion").send({
-      question_id: 1,
+      question_id: 10001,
       researcher_id: 10001,
     });
     expect(res.statusCode).toEqual(200);
