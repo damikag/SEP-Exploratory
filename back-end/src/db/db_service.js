@@ -22,7 +22,7 @@ module.exports.transaction_insert = function transaction_insert(models) {
       }
     };
 
-    // console.log(sql);
+    console.log(sql);
     db.exec_transaction_query(sql, cb);
   });
 };

@@ -80,7 +80,7 @@ module.exports.registerAction = (req, res) => {
     .find_by_id()
     .then(async (result) => {
       const body = await getBody(result);
-      var researcher = new Researcher(body);
+      var researcher = new Researcher({ ...body, institution: 10001 });
       var newTemporaryUser = new TemporaryUser({
         confirmed_at: new Date(),
       });
