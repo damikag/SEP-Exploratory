@@ -75,7 +75,7 @@ class ChatroomServices {
           resolve(result_array)
         }
       }
-      var sql = 'SELECT researcher.id AS id, first_name AS first_name, last_name,profile_picture, researcher.email, institution.name as institution FROM researcher,institution WHERE researcher.deleted_at IS NULL AND researcher.institution=institution.id'
+      var sql = 'SELECT researcher.id AS id, first_name AS first_name, last_name,profile_picture, researcher.email, institution.name as institution FROM researcher LEFT JOIN institution ON researcher.institution = institution.id ORDER BY researcher.first_name, researcher.last_name;'
       db.query(sql, cb);
     });
   }
