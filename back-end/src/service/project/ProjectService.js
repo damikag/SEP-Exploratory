@@ -86,7 +86,6 @@ class ProjectService {
       var promise_2 = await tagProject.delete_tags(body.id);
 
       var promise_3 = body.tags.map(async (tag) => {
-        // console.log();
         var tagProject = new TagProject({
           tag_id: tag.tag_id,
           project_id: body.id,
@@ -101,6 +100,7 @@ class ProjectService {
       var promise_4 = await collaborate.delete_collaborators(body.id);
 
       var promise_5 = body.collaborators.map(async (collaborator) => {
+        console.log(collaborator);
         var new_collaborate = new Collaborate({
           researcher_id: collaborator.id,
           project_id: body.id,
