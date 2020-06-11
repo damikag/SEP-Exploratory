@@ -40,13 +40,13 @@ module.exports.searchBlogAction = (req, res) => {
   });
 };
 
-module.exports.getBlogAction = (req, res) => {
-  EditorBlog.find({ group: req.body.group, folder: "root" }).exec(
-    (err, blogs) => {
-      if (err) return res.status(400).send(err);
-      res.status(200).json({ success: true, blogs });
-    }
-  );
+module.exports.getBlogAction= (req, res) => {
+    console.log(req.body.group)
+    EditorBlog.find({ "group": req.body.group,folder:"root" }).sort({"updatedAt": -1})
+        .exec((err, blogs) => {
+            if (err) return res.status(400).send(err);
+            res.status(200).json({ success: true, blogs });
+        });
 };
 
 module.exports.getPostAction = (req, res) => {

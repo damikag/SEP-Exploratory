@@ -79,4 +79,17 @@ module.exports = {
       }
     );
   },
+
+  getProjectPostsByUserId: (id, callBack) => {
+    db.query(
+      "SELECT project.id, project.title, project.description,poster_image, project.published_at, project.creator FROM project WHERE project.creator=? ORDER BY project.published_at DESC;",
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      }
+    );
+  },
 };
