@@ -364,6 +364,9 @@ CREATE TABLE institution
                                                 (20) NOT NULL,
     last_name varchar
                                                 (20) NOT NULL,
+
+    token varchar
+                                                (255) NOT NULL,
     created_at TIMESTAMP NOT NULL,
     confirmed_at TIMESTAMP NULL DEFAULT NULL,
     PRIMARY KEY
