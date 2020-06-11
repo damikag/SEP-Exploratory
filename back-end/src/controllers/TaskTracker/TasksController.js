@@ -1,9 +1,14 @@
-const {getTasksByProjectId, addTask, deleteTask, editTask} = require("../../models/models/TaskTracker/Tasks");
+const {
+  getTasksByProjectId,
+  addTask,
+  deleteTask,
+  editTask,
+} = require("../../models/models/TaskTracker/Tasks");
 
 module.exports = {
   getTasksByProjectId: (req, res) => {
     const id = req.params.id;
-    console.log(id);
+    // console.log(id);
     getTasksByProjectId(id, (err, results) => {
       if (err) {
         return res.status(500).json({
