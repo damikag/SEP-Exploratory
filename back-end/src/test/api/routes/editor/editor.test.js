@@ -34,7 +34,7 @@ expect.extend({
 beforeAll(async(done) => {
   var login_entry = await supertest(app)
     .post("/login")
-    .send({ email: "mad@123.com", password: "123456" });
+    .send({ email: "kamalp@gmail.com", password: "123456@" });
   token = JSON.parse(login_entry.text).token;
   done();
 });
@@ -43,7 +43,7 @@ it("Test to get documents API call", async () => {
   const response = await supertest(app)
   .post("/editor/getblogs")
   .send({
-    group: "10024"
+    group: "10001"
   })
   .set({ Authorization: token });
 
@@ -70,7 +70,7 @@ it("Test to get documents API call with a wrong token", async () => {
   const response = await supertest(app)
   .post("/editor/getblogs")
   .send({
-    group: "10024"
+    group: "10001"
   })
   .set({ Authorization: wrong_token });
 
@@ -81,8 +81,8 @@ it("Test to search for documents API call", async () => {
     const response = await supertest(app)
     .post("/editor/searchblog")
     .send({
-      group: "10024",
-      name:"Corona and Mental Health"
+      group: "10001",
+      name:"Introductory Processing"
     })
     .set({ Authorization: token });
   
@@ -111,7 +111,7 @@ it("Test to get specific document API call", async () => {
     const response = await supertest(app)
     .post("/editor/getpost")
     .send({
-      postId:"5ec959c37c359a2860e280d2"
+      postId:"5ee2009bd21b830338fa3ea8"
     })
     .set({ Authorization: token });
   
@@ -162,8 +162,8 @@ it("Test to verify document with correct group and correct postId ", async () =>
     const response = await supertest(app)
     .post("/editor/findpost")
     .send({
-      postId:"5ec659f89e036b05e01585f5",
-      group:"10012"
+      postId:"5ee2009bd21b830338fa3ea8",
+      group:"10001"
     })
     .set({ Authorization: token });
   
@@ -174,7 +174,7 @@ it("Test to verify document with incorrect group and correct postId", async () =
     const response = await supertest(app)
     .post("/editor/findpost")
     .send({
-      postId:"5ec659f89e036b05e01585f5",
+      postId:"5ee2009bd21b830338fa3ea8",
       group:"10023"
     })
     .set({ Authorization: token });

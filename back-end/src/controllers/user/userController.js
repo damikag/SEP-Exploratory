@@ -20,7 +20,8 @@ module.exports.temporaryUserRegisterAction = async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashed_password = await bcrypt.hash(req.body.password, salt);
   req.body.password = hashed_password;
-  var temporaryUser = new TemporaryUser(req.body);
+  var token = jwt.sign({ email: req.body.email }, process.env.TOKEN_SECRET);
+  var temporaryUser = new TemporaryUser({ ...req.body, token: token });
   temporaryUser
     .find_by_email()
     .then(async (result) => {
@@ -55,7 +56,9 @@ module.exports.temporaryUserRegisterAction = async (req, res) => {
           .insert()
           .then((result) => {
             if (result) {
-              res.status(200).json({ inserted_id: result.insertId });
+              res
+                .status(200)
+                .json({ inserted_id: result.insertId, token: token });
             }
           })
           .catch((err) => {
@@ -69,8 +72,10 @@ module.exports.temporaryUserRegisterAction = async (req, res) => {
 };
 
 module.exports.registerAction = (req, res) => {
-  var temporaryUser = new TemporaryUser({ id: req.body.id });
-  console.log(req.body);
+  var temporaryUser = new TemporaryUser({
+    id: req.body.id,
+    token: req.body.token,
+  });
   temporaryUser
     .find_by_id()
     .then(async (result) => {
@@ -87,7 +92,6 @@ module.exports.registerAction = (req, res) => {
           return res.status(500).json({ error: error.message });
         });
     })
-
     .catch((error) => {
       return res.status(500).json({ error: error.message });
     });
@@ -101,7 +105,6 @@ module.exports.loginAction = (req, res) => {
   }
 
   var researcher = new Researcher();
-
   researcher
     .find_by_email(req.body.email)
     .then(async (user) => {
