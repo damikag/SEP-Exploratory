@@ -44,7 +44,7 @@ module.exports.insert = function insert(table, data, cb) {
   sql = sql.concat(mysql.escapeId(table));
   sql = sql.concat(" SET ? ");
   sql = mysql.format(sql, data);
-  // console.log(sql);
+  console.log(sql);
   con.query(sql, cb);
 };
 
