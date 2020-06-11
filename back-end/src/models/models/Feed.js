@@ -135,7 +135,7 @@ const refineFeed = (projects, index) => {
 
         var promiseArrLoadImg = []
         resultArr.forEach((project, ind) => {
-          console.log(project.id)
+          // console.log(project.id)
 
           promiseArrLoadImg.push(
             new Promise((resolve3, reject3) => {
