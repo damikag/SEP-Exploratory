@@ -9,7 +9,7 @@ const wrong_token="absfh3567yhgtfbhuji8"
 beforeAll(async(done) => {
 	var login_entry = await supertest(app)
 	  .post("/login")
-	  .send({ email: "mad@123.com", password: "123456" });
+	  .send({ email: "kamalp@gmail.com", password: "123456@" });
 	token = JSON.parse(login_entry.text).token;
 	done();
   });
@@ -44,7 +44,7 @@ it("Test to get folder API call", async () => {
   const response = await supertest(app)
   .post("/drive/getfolders")
   .send({
-    group: "10024",
+    group: "10001",
     folder:'root'
   })
   .set({ Authorization: token });
@@ -73,8 +73,8 @@ it("Test to verify folder with correct group and correct folder", async () => {
 	const response = await supertest(app)
 	.post("/drive/findfolder")
 	.send({
-	  group: "10012",
-	  folder:'5ec65c71082e8640e07cda8b'
+	  group: "10001",
+	  folder:'5ee201e6d21b830338fa3eab'
 	})
 	.expect(200)
 	.expect({
@@ -83,12 +83,12 @@ it("Test to verify folder with correct group and correct folder", async () => {
 
   });
 
-it("Test to verify folder with incorrect group and correct folder", async () => {
+it("Test to verify folder with correct group and incorrect folder", async () => {
 	const response = await supertest(app)
 	.post("/drive/findfolder")
 	.send({
-	  group: "10024",
-	  folder:'5ec65c71082e8640e07cda8b'
+	  group: "10001",
+	  folder:'5ee2op01e6d21b830338fa3eabu'
 	})
 	.expect(200)
 	.expect({
@@ -102,7 +102,7 @@ it("Test to verify folder with incorrect group and correct folder", async () => 
 	.post("/drive/findfolder")
 	.send({
 	  group: "100244",
-	  folder:'5ec6556c71082e8640e07cda8b'
+	  folder:'5ee201e6d21b830338fa3eab'
 	})
 	.expect(200)
 	.expect({
@@ -115,7 +115,7 @@ it("Test API call with wrong token", async () => {
 	const response = await supertest(app)
 	.post("/drive/getfolders")
 	.send({
-	  group: "10024",
+	  group: "10001",
 	  folder:'root'
 	})
 	.set({ Authorization: wrong_token })
@@ -183,7 +183,7 @@ it("Test to get group files API call", async () => {
 	const response = await supertest(app)
 	.post("/drive/getfiles")
 	.send({
-	  group: "10024",
+	  group: "10001",
 	  folder:'root'
 	})
 	.set({ Authorization: token })
@@ -215,7 +215,7 @@ it("Test to get public files API call", async () => {
 	const response = await supertest(app)
 	.post("/drive/getpublicfiles")
 	.send({
-	  group: "10024"
+	  group: "10001"
 	})
   
 	expect(response.status).toBe(200);
@@ -226,9 +226,9 @@ it("Test to search files API call", async () => {
 	const response = await supertest(app)
 	.post("/drive/searchfile")
 	.send({
-	  group: "10024",
-	  folder:'5ec95d187c359a2860e280d4',
-	  name:"songs.txt"
+	  group: "10001",
+	  folder:'root',
+	  name:"Digital Images.txt"
 	})
 	.set({ Authorization: token });
   
@@ -241,7 +241,7 @@ it("Test to get empty array on search files API call", async () => {
 	.post("/drive/searchfile")
 	.send({
 	  group: "10024",
-	  folder:'5ec95d187c359a2860e280d4',
+	  folder:'root',
 	  name:"films.txt"
 	})
 	.set({ Authorization: token })
@@ -257,7 +257,7 @@ it("Test to get text files API call", async () => {
 	const response = await supertest(app)
 	.post("/drive/gettxtfiles")
 	.send({
-	  group: "10024"
+	  group: "10001"
 	})
 	.set({ Authorization: token });
   
@@ -269,7 +269,7 @@ it("Test to read text files API call", async () => {
 	const response = await supertest(app)
 	.post("/drive/readtxtfile")
 	.send({
-	  filename: "438463dc188dd39caf36789f45110ecd.txt"
+	  filename: "32fed924a63bba12f310a7601b46377b.txt"
 	})
 	.set({ Authorization: token });
   
@@ -280,7 +280,7 @@ it("Test API call with wrong token", async () => {
 	const response = await supertest(app)
 	.post("/drive/getfiles")
 	.send({
-	  group: "10024",
+	  group: "10001",
 	  folder:'root'
 	})
 	.set({ Authorization: wrong_token })
@@ -292,7 +292,7 @@ it("Test API call to share file with public", async () => {
 	const response = await supertest(app)
 	.post("/drive/sharefile")
 	.send({
-	  filename:"db19386b39e67fc4b8784a2523c6d913.txt"
+	  filename:"32fed924a63bba12f310a7601b46377b.txt"
 	})
 	.set({ Authorization: token })
 	.expect(200)
@@ -306,7 +306,7 @@ it("Test API call to stop share file with public", async () => {
 	const response = await supertest(app)
 	.post("/drive/notsharefile")
 	.send({
-	  filename:"db19386b39e67fc4b8784a2523c6d913.txt"
+	  filename:"32fed924a63bba12f310a7601b46377b.txt"
 	})
 	.set({ Authorization: token })
 	.expect(200)
