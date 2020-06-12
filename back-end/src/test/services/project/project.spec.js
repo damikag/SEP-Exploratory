@@ -9,7 +9,7 @@ let body = {
   tags: [10001, 10002],
 };
 
-var insertId = 150;
+var insertId = 10020;
 
 test("1. Create project", async (done) => {
   await projectService.createProject(body).then((res) => {
