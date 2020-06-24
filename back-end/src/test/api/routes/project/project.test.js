@@ -9,12 +9,12 @@ let body = {
   title: "Test project",
   description: "This is the test project description",
   creator: 10001, // admin
-  collaborators: [10001, 10002, 10004],
+  collaborators: [10001, 10002, 10003],
   tags: [10001, 10002],
 };
 
 let update_body = {
-  id: 12,
+  id: 10022,
   title: "Test project",
   description: "This is the test project description",
   abstract: "This is test abstract",

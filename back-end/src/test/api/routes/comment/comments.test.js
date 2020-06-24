@@ -3,7 +3,7 @@ const { app } = require("../../../../app");
 const { comment_view_validation } = require("./validation");
 
 let new_comment = {
-  project_id: 100,
+  project_id: 10021,
   message: "This is a opening comment",
   author_id: 10001,
   no_of_likes: 0,

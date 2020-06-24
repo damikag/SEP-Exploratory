@@ -135,7 +135,7 @@ class ProjectService {
       // var promise2 = collaborate.soft_delete_collaborators(body.project_id);
       // var promise3 = tag_project.soft_delete_tags(body.project_id);
 
-      await Promise.all([promise1, promise2, promise3])
+      await Promise.all([promise1])
         .then((result) => {
           resolve(true);
         })

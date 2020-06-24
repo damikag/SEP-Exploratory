@@ -14,6 +14,7 @@ var user = {
 beforeAll(async (done) => {
   valid_entry = await supertest(app).post("/temp-register").send(user);
   user_id = JSON.parse(valid_entry.text).inserted_id;
+  token = JSON.parse(valid_entry.text).token;
   done();
 });
 
@@ -49,7 +50,9 @@ test("1.3 register using weak password", async (done) => {
 });
 
 test("2.0 confirm email", async (done) => {
-  const response = await supertest(app).post("/register").send({ id: user_id });
+  const response = await supertest(app)
+    .post("/register")
+    .send({ id: user_id, token: token });
   expect(response.status).toBe(200);
   done();
 });
@@ -96,7 +99,7 @@ test("3.4 login user with valid but incorrect password", async (done) => {
   const response = await supertest(app)
     .post("/login")
     .send({ email: "test7@gmail.com", password: "1234567@" });
-  expect(response.status).toBe(401);
+  expect(response.status).toBe(404);
   done();
 });
 

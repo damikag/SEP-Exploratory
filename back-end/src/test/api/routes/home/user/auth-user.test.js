@@ -8,7 +8,7 @@ var token;
 beforeAll(async (done) => {
   var login_entry = await supertest(app)
     .post("/login")
-    .send({ email: "test6@gmail.com", password: "123456@" });
+    .send({ email: "test1767@gmail.com", password: "123456@" });
   token = JSON.parse(login_entry.text).token;
   done();
 });
