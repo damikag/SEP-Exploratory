@@ -139,9 +139,17 @@ module.exports.uploadFilesAction = (req, res) => {
       }
       
 }
+module.exports.renameFileAction= (req, res) => {
+    gfs.collection('uploads');
+    gfs.files.update(
+        { filename:  req.body.filename },
+        { $set: { 'metadata.originalname': req.body.changedname  } }, (err) => {
+            if (err) return res.status(500).json({ success: false })
+            return res.json({ success: true });
+        })
+} 
 module.exports.softDeleteFilesAction = (req, res) => {
     gfs.collection('uploads');
-    console.log(req.body.filename)
     gfs.files.update(
         { filename:  req.body.filename },
         { $set: { 'metadata.folder': 'deleted'  } }, (err) => {
@@ -158,6 +166,24 @@ module.exports.deleteFilesAction = (req, res) => {
     return res.json({ success: true });
   });
 };
+  
+module.exports.getLimitAction= (req, res) => {
+    gfs.collection("uploads");
+    gfs.files.aggregate([
+        {
+            $group: {
+              _id: null,
+              total: {
+                $sum: "$length"
+              }
+            }
+          }
+        ]).toArray(function(err, storage){
+            if (err) return res.status(400).send(err);
+            res.status(200).json({ success: true, storage })
+        });
+    
+};
 //////////////////////////////////////folder actions
 module.exports.createFolderAction= (req, res) => {
     let folder = new Folder({  group: req.body.group, name:req.body.name,folder:req.body.folder });
@@ -172,6 +198,26 @@ module.exports.deleteFolderAction= (req, res) => {
         .exec((err,obj) => {
             if (err) return res.status(400).send(err);
             res.status(200).json({ success: true })
+        })
+}
+module.exports.softDeleteFolderAction= (req, res) => {
+    Folder.update(
+        { "_id": req.body.folder },
+        { $set:
+           {folder: 'deleted'}
+        }, (err) => {
+            if (err) return res.status(500).json({ success: false })
+            return res.json({ success: true })
+        })
+}
+module.exports.renameFolderAction= (req, res) => {
+    Folder.update(
+        { "_id": req.body.folder },
+        { $set:
+           {name: req.body.name}
+        }, (err) => {
+            if (err) return res.status(500).json({ success: false })
+            return res.json({ success: true })
         })
 }
 module.exports.getFoldersAction= (req, res) => {
@@ -201,6 +247,7 @@ module.exports.FindAction= (req, res) => {
         
     });
 }
+//fs.chunks.find().count() * 255
 //////////////////////// turn to pdf 
 var pdf = require('html-pdf');
 const crypto = require('crypto');

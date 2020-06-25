@@ -31,7 +31,6 @@ var storage = GridFsStorage({
   url: config.mongoURI,
   db:db,
   file: (req, file) => {
-    console.log(req.body)
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {
         if (err) {
