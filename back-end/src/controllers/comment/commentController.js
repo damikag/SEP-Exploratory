@@ -76,7 +76,10 @@ module.exports.deleteCommentAction = async (req, res) => {
 };
 
 module.exports.editReplyAction = async (req, res) => {
-  var commentReply = new CommentReply(req.body);
+  var commentReply = new CommentReply({
+    ...req.body,
+    updated_at: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+  });
 
   commentReply
     ._update()
