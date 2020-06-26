@@ -8,7 +8,10 @@
   border-radius: 5px;
 }
 body {
-  background: rgb(55, 55, 55) !important;
+  background: rgb(236, 239, 241) !important;
+}
+.body-content {
+  background-image: url(/images/bg4.png);
 }
 #imageView {
   border: 1px solid #000;

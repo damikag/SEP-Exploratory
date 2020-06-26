@@ -29,6 +29,7 @@
 	</head>
     
   <body >
+    <div class="body-content">
 
     <!-- top navbar -->
     <nav class="navbar fixed-top navbar-dark bg-primary" style="margin-bottom: 0px; ">
@@ -41,12 +42,12 @@
         Collaborative White-Board
       </a>  
       <div style="display: flex; flex-direction: row; justify-content: flex-end;">
-        <a href="http://localhost:3000/"> <button type="button" class="btn btn-info btn-md" style="margin:10px; ">HOME</button></a>
-        <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal" style="margin:10px">MEMBERS</button>
-        <button type="button" class="btn btn-info btn-md" id= "download-canvas" style="margin: 10px">DOWNLOAD</button>
+        <a href="http://localhost:3000/"> <button type="button" class="btn btn-primary btn-md" style="margin:10px; ">HOME</button></a>
+        <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal" style="margin:10px">MEMBERS</button>
+        <button type="button" class="btn btn-primary btn-md" id= "download-canvas" style="margin: 10px">DOWNLOAD</button>
         <form action="/leave" method="POST">
           <!-- <input value="<%= userData %>" style="display: none;"> -->
-          <button type="submit" class="btn btn-info btn-md" id= "leave-room" style="margin: 10px 150px 10px 10px">LEAVE ROOM</button>
+          <button type="submit" class="btn btn-primary btn-md" id= "leave-room" style="margin: 10px 150px 10px 10px">LEAVE ROOM</button>
         </form>
       </div>
     </nav>
@@ -120,6 +121,7 @@
         </p>
 
       </div>
+      <br>
 
         <!-- canvas  -->
         <div id="container" style="margin: auto;">
@@ -142,7 +144,7 @@
     
       <!-- Modal content-->
       <div class="modal-content">
-        <div class="modal-header" style="background-color: #06f;">
+        <div class="modal-header" style="background-color: #337ab7;">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Online Users</h4>
         </div>
@@ -183,6 +185,6 @@
           $('.linkToBoard').attr("href",board_url);
       });
     </script>
-
+    </div>
 	</body>
 </html>
