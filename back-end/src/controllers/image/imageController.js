@@ -3,7 +3,8 @@ var Image = require("../../models/models/Image");
 module.exports.retreiveImageFileAction = (req, res) => {
   res
     .status(200)
-    .sendFile(`${process.cwd()}/public/related_images/${req.body.file}`);
+    // .sendFile(`${process.cwd()}/public/related_images/${req.body.file}`);
+    .sendFile(`${process.env.BACK_END}/public/related_images/${req.body.file}`);
 };
 
 module.exports.insertImageFilesAction = (req, res) => {
