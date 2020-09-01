@@ -154,7 +154,7 @@ const refineFeed = (projects, index) => {
                   // resultArr.push(Object.assign({ score: score }, results[0]));
                   var imgArr = []
                   results.forEach(img => {
-                    imgArr.push(process.env.BACK_END+":"+process.env.PORT+"/related_images/"+ img.url)
+                    imgArr.push(process.env.BACK_END+"/related_images/"+ img.url)
                   })
                   resultArr[ind].poster_image = imgArr
                   resolve3();
